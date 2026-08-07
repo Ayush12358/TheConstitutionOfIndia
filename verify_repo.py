@@ -18,7 +18,7 @@ Checks:
   d. docs/amendments.csv parses and is consistent with the filesystem
      (zip_file matches an actual file for 1..96); every row carries a title,
      key changes, and a YYYY-MM-DD assent date
-  e. docs/ deliverables exist: amendments.csv, AMENDMENTS.md, INVENTORY.md,
+  e. docs/ deliverables exist: amendments.csv, amendments.md, AMENDMENTS.md, INVENTORY.md,
      bill_gaps.md
 """
 import csv
@@ -147,9 +147,10 @@ def check_amendments(by_number):
 
 
 def check_docs():
-    """docs/ deliverables: the four files the README points at must exist."""
+    """docs/ deliverables: the five files the README points at must exist."""
     fails = []
-    for name in ('amendments.csv', 'AMENDMENTS.md', 'INVENTORY.md', 'bill_gaps.md'):
+    for name in ('amendments.csv', 'amendments.md', 'AMENDMENTS.md', 'INVENTORY.md',
+                 'bill_gaps.md'):
         if not os.path.isfile(os.path.join(ROOT, 'docs', name)):
             fails.append('docs: %s missing at docs/' % name)
     return fails
@@ -194,7 +195,7 @@ def main():
         ('b. AMENDMENTS/ acts+bills (106 acts, bills per CSV)', check_amendments(by_number)),
         ('c. bundle zips (all testzip + PREAMBLE; 97-106: 78 members + PART_9_B)', check_zips()),
         ('d. docs/amendments.csv (parse + filesystem consistency)', csv_fails),
-        ('e. docs/ deliverables (amendments.csv, AMENDMENTS.md, INVENTORY.md, bill_gaps.md)', check_docs()),
+        ('e. docs/ deliverables (amendments.csv, amendments.md, AMENDMENTS.md, INVENTORY.md, bill_gaps.md)', check_docs()),
     ]
     all_fail = []
     for title, fails in groups:

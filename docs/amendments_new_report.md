@@ -2,7 +2,7 @@
 
 Scope: for every enacted constitutional amendment 97..N as of 2026-08-07, this report covers the
 Bill PDF (as introduced/passed in Parliament) and the Act PDF (Gazette / Legislative Department).
-All files live in `AMENDMENTS/`; index rows in `docs/amendments_new.csv`.
+All files live in `AMENDMENTS/`; index rows in `docs/amendments_new.md`.
 
 ## 1. Enacted amendment list — 3-source cross-check
 

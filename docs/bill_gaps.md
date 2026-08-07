@@ -1,8 +1,9 @@
 # Bill gaps — amendments 01–96 (as of 2026-08-07)
 
 Provenance ledger for the `status = MISSING_BILL` rows in `docs/amendments.csv`, so the hunt is not
-repeated. Source: `docs/backfill_report.csv` (worker report, 2026-08-07) — no separate notes file
-was produced by that worker; this file preserves the URL-attempt provenance verbatim from the CSV.
+repeated. Source: `docs/backfill_report.md` (worker report, 2026-08-07, converted from CSV) —
+no separate notes file was produced by that worker; this file preserves the URL-attempt
+provenance verbatim.
 
 ## Summary
 
@@ -49,12 +50,12 @@ These are the same files now on disk as `AMENDMENTS/AMENDMENT_01_ACT.pdf` … `A
   `AMENDMENT_88ACTUAL_11022003_but_enforced_15012004.zip`; the plain
   `AMENDMENT_88_11022003_but_enforced_15012004.zip` bundle is erroneous (missing Arts 268A, the
   Art 270 change, and Ninth-Schedule entry 92C — see `docs/INVENTORY.md` §3). The merged CSV's
-  `zip_file` for row 88 is the plain 88 (verbatim from `backfill_report.csv`); 88ACTUAL is tracked
+  `zip_file` for row 88 is the plain 88 (verbatim from `backfill_report.md`); 88ACTUAL is tracked
   in git and documented in INVENTORY.
 - **97/98 bill URL caveats** (from `docs/INVENTORY.md` §6): the 97th Act's bill is the
   111th Amendment Bill 2009 (PRS page verified live); the 98th bill is the Constitution (98th
   Amendment) Bill, 2012, introduced in Rajya Sabha — no PRS billtrack page exists (404s on both
   candidate slugs). Both rows in the merged CSV carry their verified bill URLs from
-  `amendments_new.csv`.
+  `amendments_new.md`.
 - **105th assent date**: `docs/amendments.csv` row 105 uses **2021-08-19** (Gazette extraordinary
   date, authoritative) — the source CSV said 2021-08-18.

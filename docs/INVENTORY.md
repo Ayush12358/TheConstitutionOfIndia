@@ -228,9 +228,9 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
 
 - **`docs/amendments.csv` was rewritten** as the single merged manifest (header
   `number,title,assent_date,key_changes,bill_file,act_file,bill_url,act_url,zip_file,status`):
-  rows 01–96 merged from `docs/backfill_report.csv` (status `OK` only for 03 and 16, else
-  `MISSING_BILL`), rows 097–106 from `docs/amendments_new.csv`. One `#` comment line records the
-  **105th assent-date reconciliation: 2021-08-19** (Gazette date; `amendments_new.csv` said
+  rows 01–96 merged from `docs/backfill_report.md` (status `OK` only for 03 and 16, else
+  `MISSING_BILL`), rows 097–106 from `docs/amendments_new.md`. One `#` comment line records the
+  **105th assent-date reconciliation: 2021-08-19** (Gazette date; `amendments_new.md` said
   2021-08-18). The previous 7-column CSV (97–106 prose + PRS billtrack URLs) was superseded;
   the richer key_changes (court outcomes) for 97–106 live in the amendment worker's report
   `docs/amendments_new_report.md`. Validated: 106 rows × 10 fields, quoting round-trip clean,
@@ -260,7 +260,7 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
   candidates was ambiguous, so nothing was skipped.
 - **`docs/bill_gaps.md`** (new): provenance for the 94 `MISSING_BILL` rows — the backfill worker
   produced no separate notes file, so this preserves its URL-attempt record verbatim from
-  `docs/backfill_report.csv` (eparlib found only 03 and 16; legislative.gov.in/PRS/indiacode have
+  `docs/backfill_report.md` (eparlib found only 03 and 16; legislative.gov.in/PRS/indiacode have
   no pre-1997 bills), plus the 88/88ACTUAL canonical note.
 - **No commit made** — the lead runs final verification and commits after the content worker lands.
 

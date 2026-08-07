@@ -45,9 +45,10 @@ AMENDMENT_NN_<date>.zip   (108 at repo root)
       AMENDMENT_88ACTUAL_…zip is the canonical post-88 bundle (the plain 88 zip is erroneous);
       AMENDMENT_ORIGINAL_26011950.zip is the 1950 original
 docs/
-    → INVENTORY.md (authoritative audit), amendments.csv (manifest, 106 rows),
-      AMENDMENTS.md (human-readable amendment index), amendments_new.csv / backfill_report.csv
-      (worker sources), bill_gaps.md (bill provenance)
+    → INVENTORY.md (authoritative audit), amendments.csv (machine source, 106 rows),
+      amendments.md (manifest, human-readable view), AMENDMENTS.md (human-readable amendment
+      index), amendments_new.md / backfill_report.md (worker sources, converted from CSV),
+      bill_gaps.md (bill provenance)
 ```
 
 **Tags**: every bundle release is annotated-tagged `STABLE_AMENDMENT_NN` (files as they stood
