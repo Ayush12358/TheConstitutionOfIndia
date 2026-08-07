@@ -51,7 +51,7 @@ docs/
 website/
     → minimal Constitution site: Preamble + parts/schedules index served from the repo
       markdown via `/api/content/:key`; run: `cd website && bun dev` (or `bun start`);
-      build: `bun run build` → `website/dist/`
+      build: `bun run build` → `website/dist/` (see website/README.md)
 ```
 
 **Tags**: every bundle release is annotated-tagged `STABLE_AMENDMENT_NN` (files as they stood
@@ -71,7 +71,7 @@ binary cleanup, **each tag tree still contains its bundle zip** — that is the 
 | `create_bundle.sh` | bash + `zip` | LEGACY (2026-08-07): bundles removed from the working tree; recreates them if needed (zips preserved in git tags/history) |
 | `convert_modified_txt_to_pdf.sh` | bash + `enscript` + `ps2pdf` | Convert a txt edit to PDF (legacy: operates on .txt; content is now .md) |
 | `convert_all_pdfs_to_texts.sh` | bash + `pdftotext` (poppler) | Re-extract all PDFs to txt (legacy: operates on .txt; content is now .md) |
-| `website/` | Bun (any OS) | Minimal Constitution site (Preamble + parts/schedules index served from the repo markdown via `/api/content/:key`); run: `cd website && bun dev` (or `bun start`); build: `bun run build` |
+| `website/` | Bun (any OS) | Minimal Constitution site (Preamble + parts/schedules index served from the repo markdown via `/api/content/:key`); run: `cd website && bun dev` (or `bun start`); build: `bun run build` (see website/README.md) |
 
 CI: `.github/workflows/verify.yml` runs `verify_repo.py` on every push/PR (GitHub Actions).
 
