@@ -5,10 +5,10 @@ Python 3, stdlib only. Exits 0 only when every check passes; otherwise lists
 every failure and exits 1.
 
 Checks:
-  a. all 39 content dirs exist with both .txt and .pdf (>100 bytes each):
+  a. all 39 content dirs exist with both .md and .pdf (>100 bytes each):
      PREAMBLE, PART_1..PART_22, PART_4_A, PART_9_A, PART_9_B, PART_14_A,
      SCHEDULE_1..SCHEDULE_12 (file naming mirrors the bundle zips:
-     dir "PART_4_A" holds "PART4A.txt/.pdf"; PREAMBLE holds "Preamble.txt/.pdf")
+     dir "PART_4_A" holds "PART4A.md/.pdf"; PREAMBLE holds "Preamble.md/.pdf")
   b. AMENDMENTS/: for every amendment 1..106 an ACT pdf exists (%PDF magic,
      >10KB) and a BILL pdf exists OR docs/amendments.csv marks that number
      MISSING_BILL (CSV is the source of truth for filenames + status)
@@ -35,9 +35,9 @@ ZIP_PREAMBLE_MEMBER = 'PREAMBLE/Preamble.txt'
 
 # Files that are legitimately smaller than MIN_SIZE and must not fail the size
 # check: PART_7 is repealed (Part VII, States in Part B of the First Schedule,
-# deleted by the 7th Amendment, 1956) — its file is heading-only, 132 bytes.
-# SCHEDULE_8 (342 B, the 22-languages list) passes the >100 B threshold as-is.
-KNOWN_SMALL = {'PART_7/PART7.txt'}
+# deleted by the 7th Amendment, 1956) — its file is heading-only, 134 bytes (md).
+# SCHEDULE_8 (344 B as md, the 22-languages list) passes the >100 B threshold.
+KNOWN_SMALL = {'PART_7/PART7.md'}
 
 
 def content_dirs():
@@ -63,7 +63,7 @@ def is_pdf(path):
 def check_content():
     fails = []
     for d, stem in sorted(content_dirs().items()):
-        for ext in ('.txt', '.pdf'):
+        for ext in ('.md', '.pdf'):
             p = os.path.join(ROOT, d, stem + ext)
             rel = os.path.join(d, stem + ext)
             if not os.path.isfile(p):
@@ -190,7 +190,7 @@ def main():
     rows = load_csv() if not csv_fails else []
     by_number = {r[0]: r for r in rows[1:]} if rows else {}
     groups = [
-        ('a. content dirs (39 x txt+pdf >100B)', check_content()),
+        ('a. content dirs (39 x md+pdf >100B)', check_content()),
         ('b. AMENDMENTS/ acts+bills (106 acts, bills per CSV)', check_amendments(by_number)),
         ('c. bundle zips (all testzip + PREAMBLE; 97-106: 78 members + PART_9_B)', check_zips()),
         ('d. docs/amendments.csv (parse + filesystem consistency)', csv_fails),

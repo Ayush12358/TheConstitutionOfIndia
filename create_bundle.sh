@@ -11,4 +11,5 @@ if [[ $# -ne 2 ]] ; then
     exit 1
 fi
 
-find . \( -type f -name "*.pdf" -o -name "*.txt" \) -exec zip -g AMENDMENT_"$amendment_number"_"$date_of_enforcement".zip {} \;
+# Content text files are markdown now; the bundles up to the 106th (historical) use txt.
+find . \( -type f -name "*.pdf" -o -name "*.md" \) -exec zip -g AMENDMENT_"$amendment_number"_"$date_of_enforcement".zip {} \;

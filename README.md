@@ -1,7 +1,7 @@
 # The Constitution of India
 
 Git archive of the Constitution of India: every Part (Articles), Schedule and the Preamble in
-both `.txt` and `.pdf`, plus per-amendment snapshot bundles and the full text of every Amendment
+both `.md` and `.pdf`, plus per-amendment snapshot bundles and the full text of every Amendment
 Act (and the surviving Bills) through the **106th Amendment (2023)** — the latest enacted as of
 **2026-08-07**.
 
@@ -16,6 +16,8 @@ Act (and the surviving Bills) through the **106th Amendment (2023)** — the lat
   Department pocket editions through the 105th) with the 106th Amendment applied from the Gazette —
   i.e. the post-106th state; extraction defects found in audit were fixed against the printed pages
   (see `docs/INVENTORY.md`, `verify_repo.py`).
+- **All 39 content files are Markdown** (converted 2026-08-07); the historical bundle zips keep
+  their .txt members.
 - Amendment **105's** assent date is recorded as **2021-08-19** (Gazette extraordinary date); some
   secondary sources say 18 Aug 2021.
 
@@ -24,8 +26,8 @@ Act (and the surviving Bills) through the **106th Amendment (2023)** — the lat
 ```
 PREAMBLE/  PART_1/ … PART_22/  PART_4_A/  PART_9_A/  PART_9_B/  PART_14_A/
 SCHEDULE_1/ … SCHEDULE_12/
-    → 39 content dirs, each with <NAME>.txt + <NAME>.pdf (e.g. PART_4_A/PART4A.txt,
-      PREAMBLE/Preamble.txt); mirrors the bundle-zip layout
+    → 39 content dirs, each with <NAME>.md + <NAME>.pdf (e.g. PART_4_A/PART4A.md,
+      PREAMBLE/Preamble.md); mirrors the bundle-zip layout
 AMENDMENTS/
     → Act PDFs for ALL 106 amendments (AMENDMENT_NN_ACT.pdf, zero-padded: 01–96 two-digit,
       097–106 three-digit) — 106/106 acts
@@ -61,9 +63,9 @@ restored and 97–106 added on 2026-08-07). Plus `STABLE_AMENDMENT_88_ACTUAL`,
 | `download_amendments.py` | Python 3, any OS (stdlib urllib) | Download a bill/act PDF into `AMENDMENTS/` (`--auto N` lists expected filenames; `--force` to overwrite; %PDF + size verified) |
 | `create_directories.sh` | bash (Git Bash/WSL) | Create PART_1..22 / SCHEDULE_1..12 dirs |
 | `create_extension_directories.sh` | bash | Create PART_<n>_A dirs |
-| `create_bundle.sh` | bash + `zip` | Bundle all txt/pdf into `AMENDMENT_<n>_<date>.zip` (re-running appends — delete first!) |
-| `convert_modified_txt_to_pdf.sh` | bash + `enscript` + `ps2pdf` | Convert a txt edit to PDF |
-| `convert_all_pdfs_to_texts.sh` | bash + `pdftotext` (poppler) | Re-extract all PDFs to txt |
+| `create_bundle.sh` | bash + `zip` | Bundle all md/pdf into `AMENDMENT_<n>_<date>.zip` (re-running appends — delete first!) |
+| `convert_modified_txt_to_pdf.sh` | bash + `enscript` + `ps2pdf` | Convert a txt edit to PDF (legacy: operates on .txt; content is now .md) |
+| `convert_all_pdfs_to_texts.sh` | bash + `pdftotext` (poppler) | Re-extract all PDFs to txt (legacy: operates on .txt; content is now .md) |
 
 `download_pdfs.py` was **removed** (2026-08-07): it was Python 2 only and its source
 (`lawmin.nic.in`) no longer hosts the files — superseded by `download_amendments.py`.

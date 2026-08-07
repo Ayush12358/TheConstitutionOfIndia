@@ -292,6 +292,9 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
   dates and key changes (source = Wikipedia list of amendments cross-checked with the act
   PDFs in AMENDMENTS/ — printed assent lines; zip-filename dates overridden where they
   record bill/enforcement dates). docs/AMENDMENTS.md regenerated from the completed manifest.
+- **Markdown conversion (2026-08-07)**: all 39 content files converted txt→md (fidelity-gated:
+  markup-stripped md == original txt, whitespace-normalized); .txt removed from the working tree
+  (still inside the bundle zips); verify_repo.py + create_bundle.sh updated.
 
 ### Lineage comparison (2026-08-07)
 
