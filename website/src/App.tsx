@@ -7,6 +7,33 @@ import "./index.css";
 type IndexItem = { key: string; title: string };
 type Content = { key: string; title: string; markdown: string };
 
+// Part keys in display order: part1..part22, then the lettered parts.
+const PART_KEYS = [
+  "part1", "part2", "part3", "part4", "part5", "part6", "part7", "part8", "part9",
+  "part10", "part11", "part12", "part13", "part14", "part15", "part16", "part17",
+  "part18", "part19", "part20", "part21", "part22",
+  "part4a", "part9a", "part9b", "part14a",
+];
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+// Post-pass over marked's HTML: give every <h2>/<h3> a slugified id for deep links.
+function withHeadingAnchors(html: string): string {
+  return html.replace(/<h([23])>([^<]*)<\/h\1>/g, (_, level, text) => {
+    const id = slugify(text);
+    return id ? `<h${level} id="${id}">${text}</h${level}>` : `<h${level}>${text}</h${level}>`;
+  });
+}
+
+function render(markdown: string): string {
+  return withHeadingAnchors(marked.parse(markdown, { async: false }));
+}
+
 export function App() {
   const [preamble, setPreamble] = useState("");
   const [items, setItems] = useState<IndexItem[]>([]);
@@ -30,6 +57,29 @@ export function App() {
     setSelected(data);
   };
 
+  // Group the index into Parts (explicit display order) and Schedules (numeric).
+  const parts = items
+    .filter(item => PART_KEYS.includes(item.key))
+    .sort((a, b) => PART_KEYS.indexOf(a.key) - PART_KEYS.indexOf(b.key));
+  const schedules = items
+    .filter(item => /^schedule\d+$/.test(item.key))
+    .sort((a, b) => Number(a.key.slice(8)) - Number(b.key.slice(8)));
+
+  const indexButtons = (group: IndexItem[]) => (
+    <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-4">
+      {group.map(item => (
+        <Button
+          key={item.key}
+          variant="outline"
+          className="h-auto justify-start py-2 text-left text-xs leading-snug"
+          onClick={() => open(item)}
+        >
+          {item.title}
+        </Button>
+      ))}
+    </div>
+  );
+
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6 p-6">
       <header>
@@ -50,7 +100,7 @@ export function App() {
             // Trusted content: markdown is served from this repo's own files via /api/content/:key.
             <div
               className="markdown max-w-prose"
-              dangerouslySetInnerHTML={{ __html: marked.parse(preamble, { async: false }) }}
+              dangerouslySetInnerHTML={{ __html: render(preamble) }}
             />
           ) : (
             <p className="text-muted-foreground text-sm">Loading…</p>
@@ -62,18 +112,14 @@ export function App() {
         <CardHeader>
           <CardTitle>Parts &amp; Schedules</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
-            {items.map(item => (
-              <Button
-                key={item.key}
-                variant="outline"
-                className="h-auto justify-start py-2 text-left text-xs leading-snug"
-                onClick={() => open(item)}
-              >
-                {item.title}
-              </Button>
-            ))}
+        <CardContent className="space-y-4">
+          <div>
+            <h2 className="text-sm font-semibold">Parts</h2>
+            {indexButtons(parts)}
+          </div>
+          <div>
+            <h2 className="text-sm font-semibold">Schedules</h2>
+            {indexButtons(schedules)}
           </div>
         </CardContent>
       </Card>
@@ -86,7 +132,7 @@ export function App() {
           <CardContent>
             <div
               className="markdown max-h-[70vh] max-w-prose overflow-y-auto pr-4"
-              dangerouslySetInnerHTML={{ __html: marked.parse(selected.markdown, { async: false }) }}
+              dangerouslySetInnerHTML={{ __html: render(selected.markdown) }}
             />
           </CardContent>
         </Card>

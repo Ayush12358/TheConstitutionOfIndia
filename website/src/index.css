@@ -16,11 +16,11 @@
 }
 
 .markdown h2 {
-  @apply mt-6 mb-3 text-xl font-semibold;
+  @apply scroll-mt-6 mt-6 mb-3 text-xl font-semibold;
 }
 
 .markdown h3 {
-  @apply mt-4 mb-2 text-lg font-semibold;
+  @apply scroll-mt-6 mt-4 mb-2 text-lg font-semibold;
 }
 
 .markdown p {
