@@ -16,7 +16,10 @@ Checks:
      a PREAMBLE member; the 97-106 bundles (new convention) must additionally
      have 78 members including PART_9_B/PART9B.txt
   d. docs/amendments.csv parses and is consistent with the filesystem
-     (zip_file matches an actual file for 1..96)
+     (zip_file matches an actual file for 1..96); every row carries a title,
+     key changes, and a YYYY-MM-DD assent date
+  e. docs/ deliverables exist: amendments.csv, AMENDMENTS.md, INVENTORY.md,
+     bill_gaps.md
 """
 import csv
 import glob
@@ -109,6 +112,15 @@ def check_csv():
         z = r[8]
         if z and not os.path.isfile(os.path.join(ROOT, z)):
             fails.append('csv: zip_file %r (row %s) not found at repo root' % (z, num))
+    # manifest fields: every data row needs a title, key changes, and a valid
+    # YYYY-MM-DD assent date (manifest completed 2026-08-07; guards regressions)
+    for num, r in sorted(by_number.items()):
+        if not r[1].strip():
+            fails.append('csv: row %s has empty title' % num)
+        if not r[3].strip():
+            fails.append('csv: row %s has empty key_changes' % num)
+        if not re.match(r'^\d{4}-\d{2}-\d{2}$', r[2]):
+            fails.append('csv: row %s assent_date %r not YYYY-MM-DD' % (num, r[2]))
     return fails
 
 
@@ -131,6 +143,15 @@ def check_amendments(by_number):
             if not os.path.isfile(bill):
                 fails.append('amendments: bill %s (row %s, status %s) missing'
                              % (r[4], num, r[9]))
+    return fails
+
+
+def check_docs():
+    """docs/ deliverables: the four files the README points at must exist."""
+    fails = []
+    for name in ('amendments.csv', 'AMENDMENTS.md', 'INVENTORY.md', 'bill_gaps.md'):
+        if not os.path.isfile(os.path.join(ROOT, 'docs', name)):
+            fails.append('docs: %s missing at docs/' % name)
     return fails
 
 
@@ -173,6 +194,7 @@ def main():
         ('b. AMENDMENTS/ acts+bills (106 acts, bills per CSV)', check_amendments(by_number)),
         ('c. bundle zips (all testzip + PREAMBLE; 97-106: 78 members + PART_9_B)', check_zips()),
         ('d. docs/amendments.csv (parse + filesystem consistency)', csv_fails),
+        ('e. docs/ deliverables (amendments.csv, AMENDMENTS.md, INVENTORY.md, bill_gaps.md)', check_docs()),
     ]
     all_fail = []
     for title, fails in groups:

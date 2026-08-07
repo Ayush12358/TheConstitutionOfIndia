@@ -85,4 +85,4 @@ None. Every amendment 97–106 has both a bill and an act PDF on disk.
   (it is a 404-page Constitution of India booklet) — the correct bill is the "Bill Text" PDF listed above.
 - All scanned/image PDFs (98 Act, 102/103/105 Acts, 98/106 Bills) were OCR-verified page 1–2 with a vision
   model; every title/date matched the expected amendment.
-- Verification artifacts: AMENDMENTS/manifest.json records the final URL + size per file.
+- Verification artifacts: the final URL + size per file are recorded in docs/amendments.csv (rows 97-106); the original per-file download records were superseded 2026-08-07.
