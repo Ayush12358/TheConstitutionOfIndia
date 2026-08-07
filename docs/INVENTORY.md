@@ -334,3 +334,5 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
 
 2026-08-07 (final): GitHub Actions verify workflow confirmed green on push (runs 31169570697, 31169653985 — success incl. 'Run verify_repo.py (5 checks)'); fork description + topics set via gh; license status documented in README (no license file upstream or in this fork; Constitution text is a Government of India work).
 
+2026-08-07 (upstream issues): this update resolves the four open items on upstream anoopdixith/TheConstitutionOfIndia — #7 outdated preamble (Preamble.md now carries the post-42nd text incl. SOCIALIST/SECULAR/INTEGRITY), #8 'Corrected preamble!' PR (superseded by the regenerated preamble), #5 broken markdown headings (fidelity-gated #/## structure), #2 clean text-only complete version (post-106th .md content).
+
