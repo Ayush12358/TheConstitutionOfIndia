@@ -332,3 +332,5 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
   88 vs 88ACTUAL precedent (corrected snapshot at HEAD, historical artifacts preserved under
   tags/branches).
 
+2026-08-07 (final): GitHub Actions verify workflow confirmed green on push (runs 31169570697, 31169653985 — success incl. 'Run verify_repo.py (5 checks)'); fork description + topics set via gh; license status documented in README (no license file upstream or in this fork; Constitution text is a Government of India work).
+

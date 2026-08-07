@@ -1,5 +1,7 @@
 # The Constitution of India
 
+![verify](https://github.com/Ayush12358/TheConstitutionOfIndia/actions/workflows/verify.yml/badge.svg)
+
 Git archive of the Constitution of India: every Part (Articles), Schedule and the Preamble in
 both `.md` and `.pdf`, plus per-amendment snapshot bundles and the full text of every Amendment
 Act (and the surviving Bills) through the **106th Amendment (2023)** — the latest enacted as of
