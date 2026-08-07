@@ -17,8 +17,8 @@ through the **106th Amendment (2023)** — the latest enacted as of **2026-08-07
   Department pocket editions through the 105th) with the 106th Amendment applied from the Gazette —
   i.e. the post-106th state; extraction defects found in audit were fixed against the printed pages
   (see `docs/INVENTORY.md`, `verify_repo.py`).
-- **All 39 content files are Markdown** (converted 2026-08-07); the historical bundle zips keep
-  their .txt members.
+- **All 39 content files are Markdown** (converted 2026-08-07); the bundle zips (removed
+  from the working tree) keep their .txt members in the tag trees.
 - Amendment **105's** assent date is recorded as **2021-08-19** (Gazette extraordinary date); some
   secondary sources say 18 Aug 2021.
 
