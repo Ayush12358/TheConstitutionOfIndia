@@ -15,6 +15,12 @@
   @apply mb-4 text-2xl font-bold;
 }
 
+/* Content files start with the same heading the card title shows ("PREAMBLE",
+   "PART III FUNDAMENTAL RIGHTS …") — drop the duplicated h1, keep the card one. */
+.markdown > h1:first-child {
+  display: none;
+}
+
 .markdown h2 {
   @apply scroll-mt-6 mt-6 mb-3 text-xl font-semibold;
 }

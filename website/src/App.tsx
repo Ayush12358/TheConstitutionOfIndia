@@ -285,7 +285,7 @@ export function App() {
   };
 
   const renderHistoryText = (text: string) => (
-    <pre className="text-muted-foreground max-h-[70vh] max-w-prose overflow-y-auto whitespace-pre-wrap pr-4 font-serif text-[13px] leading-relaxed">
+    <pre className="text-foreground max-h-[70vh] max-w-prose overflow-y-auto whitespace-pre-wrap pr-4 font-serif text-[13px] leading-relaxed">
       {text}
     </pre>
   );
@@ -579,10 +579,10 @@ export function App() {
                           {p.title}
                         </button>
                         {changedBy(p.key, nA).length > 0 && (
-                          <p className="text-muted-foreground mt-1 text-[11px]">
+                          <p className="text-muted-foreground mt-1 text-xs">
                             amended by{" "}
                             {changedBy(p.key, nA).map(f => (
-                              <button key={f} className="hover:text-primary underline" onClick={() => openAmendment(f)}>
+                              <button key={f} className="hover:text-primary underline inline-block py-0.5" onClick={() => openAmendment(f)}>
                                 {f === 0 ? "orig" : f}
                               </button>
                             )).reduce<React.ReactNode[]>((acc, chip, i) => (i === 0 ? [chip] : [...acc, ", ", chip]), [])}
@@ -605,10 +605,10 @@ export function App() {
                           {s.title}
                         </button>
                         {changedBy(s.key, nA).length > 0 && (
-                          <p className="text-muted-foreground mt-1 text-[11px]">
+                          <p className="text-muted-foreground mt-1 text-xs">
                             amended by{" "}
                             {changedBy(s.key, nA).map(f => (
-                              <button key={f} className="hover:text-primary underline" onClick={() => openAmendment(f)}>
+                              <button key={f} className="hover:text-primary underline inline-block py-0.5" onClick={() => openAmendment(f)}>
                                 {f === 0 ? "orig" : f}
                               </button>
                             )).reduce<React.ReactNode[]>((acc, chip, i) => (i === 0 ? [chip] : [...acc, ", ", chip]), [])}
@@ -716,12 +716,12 @@ export function App() {
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6 p-6">
       <header className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold">The Constitution of India</h1>
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold sm:text-3xl">The Constitution of India</h1>
           <p className="text-muted-foreground text-sm">
             As amended up to the 106th Amendment (in force 16-04-2026)
           </p>
-          <nav className="mt-3 flex gap-2">
+          <nav className="mt-3 flex flex-wrap gap-2">
             {(
               [
                 ["constitution", "Constitution"],
