@@ -1,5 +1,6 @@
 import { serve } from "bun";
 import path from "node:path";
+import { amendmentPdfName, parseCSV } from "./lib/content";
 import index from "./index.html";
 
 // Whitelist of content keys -> repo-root-relative markdown paths.
@@ -64,41 +65,6 @@ type Amendment = {
   has_bill: boolean;
 };
 
-// Tiny RFC4180 CSV parser: quoted fields may contain commas, "" escapes a
-// quote, and lines starting with '#' are comments (skipped). No dependencies.
-function parseCSV(text: string): string[][] {
-  const rows: string[][] = [];
-  let row: string[] = [];
-  let field = "";
-  let inQuotes = false;
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i];
-    if (inQuotes) {
-      if (c === '"') {
-        if (text[i + 1] === '"') {
-          field += '"';
-          i++;
-        } else inQuotes = false;
-      } else field += c;
-    } else if (c === '"') inQuotes = true;
-    else if (c === ",") {
-      row.push(field);
-      field = "";
-    } else if (c === "\n" || c === "\r") {
-      if (c === "\r" && text[i + 1] === "\n") i++;
-      row.push(field);
-      field = "";
-      rows.push(row);
-      row = [];
-    } else field += c;
-  }
-  if (field !== "" || row.length > 0) {
-    row.push(field);
-    rows.push(row);
-  }
-  return rows;
-}
-
 // docs/amendments.csv, parsed once and cached at module level. Columns:
 // number,title,assent_date,key_changes,bill_file,act_file,bill_url,act_url,zip_file,status
 let amendmentsCache: Amendment[] | null = null;
@@ -126,11 +92,10 @@ async function loadAmendments(): Promise<Amendment[] | null> {
   }
 }
 
-// Amendment PDFs live in repoRoot/AMENDMENTS as AMENDMENT_NN_<KIND>.pdf
-// (2-digit zero-padded for n <= 96, 3-digit for n > 96, e.g. AMENDMENT_096_ACT.pdf).
+// Amendment PDFs live in repoRoot/AMENDMENTS as AMENDMENT_NN_<KIND>.pdf; the
+// pure name derivation lives in lib/content.ts (amendmentPdfName).
 function amendmentPdfPath(kind: "act" | "bill", n: number): string | null {
-  const padded = n <= 96 ? String(n).padStart(2, "0") : String(n).padStart(3, "0");
-  const full = path.resolve(repoRoot, "AMENDMENTS", `AMENDMENT_${padded}_${kind.toUpperCase()}.pdf`);
+  const full = path.resolve(repoRoot, "AMENDMENTS", amendmentPdfName(kind, n));
   // Defense in depth: the name is derived from a validated int, but stay inside the repo root.
   if (!full.startsWith(repoRoot + path.sep)) return null;
   return full;

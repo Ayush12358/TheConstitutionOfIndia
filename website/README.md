@@ -58,7 +58,10 @@ The static build has **no API server** — it can't fetch content — so serve t
 ## CI
 
 `.github/workflows/verify.yml` job `website-build` runs on every push/PR:
-`bun install --frozen-lockfile` + `bun run build`, then a smoke test that starts the server
+`bun install --frozen-lockfile` + `bun run build`, then `bun test` (unit tests for the
+pure content helpers in `src/lib/content.ts` — the RFC4180 CSV parser and the
+`AMENDMENT_NN_<KIND>.pdf` filename derivation — plus a check that the real manifest
+parses to 106 rows), then a smoke test that starts the server
 and checks `GET /api/content/preamble` returns the Preamble text, `GET /api/search?q=secular`
 returns a result (plus `GET /` → 200).
 
@@ -71,7 +74,8 @@ src/frontend.tsx          React entry (loaded by index.html)
 src/index.html            page shell
 src/index.css             styles (imports styles/globals.css)
 src/components/ui/        shadcn components (button, card, select, …)
-src/lib/utils.ts          cn() helper
+src/lib/content.ts      pure helpers: RFC4180 CSV parser + PDF filename derivation
+src/lib/utils.ts        cn() helper
 build.ts                  static build script (bun-plugin-tailwind)
 components.json           shadcn config
 ```
