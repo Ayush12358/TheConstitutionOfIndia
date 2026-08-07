@@ -286,6 +286,10 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
   `AMENDMENT_*.zip` (testzip + PREAMBLE member for every one) and additionally requires the 97–106
   bundles to have 78 members including `PART_9_B/PART9B.txt`. Full PASS at 108 zips.
 - **`docs/AMENDMENTS.md` added**: human-readable index of amendments 1–106 generated from
-  `docs/amendments.csv` (97–106 fully populated; 1–96 show bundle-zip dates with names/key changes
-  pending backfill, never fabricated).
+  `docs/amendments.csv` (97–106 fully populated; 1–96 then showed bundle-zip dates with
+  names/key changes pending backfill, never fabricated — fully backfilled below).
+- **Amendment manifest completed**: docs/amendments.csv rows 1–96 now carry titles, assent
+  dates and key changes (source = Wikipedia list of amendments cross-checked with the act
+  PDFs in AMENDMENTS/ — printed assent lines; zip-filename dates overridden where they
+  record bill/enforcement dates). docs/AMENDMENTS.md regenerated from the completed manifest.
 

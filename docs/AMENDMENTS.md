@@ -2,111 +2,111 @@
 
 Human-readable index generated 2026-08-07 from `docs/amendments.csv` (source of truth).
 
-- Rows 1–96: the manifest does not yet carry titles/assent dates/key changes (backfill
-  target); the date shown is the **bundle-zip filename date** (the author's convention,
-  not necessarily the assent date — see docs/INVENTORY.md §3; amendment 88's zip is dated
-  by bill date 11-02-2003, its assent/enforcement was 15-01-2004). Names and one-line
-  changes for 1–96 are pending backfill — see docs/bill_gaps.md and docs/INVENTORY.md §5.
+- Rows 1–96: titles, assent dates and one-line key changes from the completed manifest.
+  Assent dates come from the printed assent lines in the act PDFs (AMENDMENTS/AMENDMENT_NN_ACT.pdf),
+  cross-checked with the Wikipedia list of amendments; they are authoritative — the
+  bundle-zip filename dates (the author's convention) may record bill or enforcement dates
+  instead (see docs/INVENTORY.md §3).
 - Rows 97–106: fully populated from the manifest (titles, assent dates, key changes).
 
 | # | Year | Name | Assent date | Key changes |
 |---|------|------|-------------|-------------|
-| 1 | 1951 | — | 18 Jun 1951 | — |
-| 2 | 1953 | — | 1 May 1953 | — |
-| 3 | 1955 | — | 22 Feb 1955 | — |
-| 4 | 1955 | — | 27 Apr 1955 | — |
-| 5 | 1955 | — | 24 Dec 1955 | — |
-| 6 | 1956 | — | 11 Sep 1956 | — |
-| 7 | 1956 | — | 1 Nov 1956 | — |
-| 8 | 1960 | — | 5 Jan 1960 | — |
-| 9 | 1960 | — | 28 Dec 1960 | — |
-| 10 | 1961 | — | 11 Aug 1961 | — |
-| 11 | 1961 | — | 19 Dec 1961 | — |
-| 12 | 1961 | — | 20 Dec 1961 | — |
-| 13 | 1963 | — | 1 Dec 1963 | — |
-| 14 | 1962 | — | 28 Dec 1962 | — |
-| 15 | 1963 | — | 5 Oct 1963 | — |
-| 16 | 1963 | — | 5 Oct 1963 | — |
-| 17 | 1964 | — | 20 Jun 1964 | — |
-| 18 | 1966 | — | 27 Aug 1966 | — |
-| 19 | 1966 | — | 11 Dec 1966 | — |
-| 20 | 1966 | — | 22 Dec 1966 | — |
-| 21 | 1967 | — | 10 Apr 1967 | — |
-| 22 | 1969 | — | 25 Sep 1969 | — |
-| 23 | 1970 | — | 23 Jan 1970 | — |
-| 24 | 1971 | — | 5 Nov 1971 | — |
-| 25 | 1972 | — | 20 Apr 1972 | — |
-| 26 | 1971 | — | 28 Dec 1971 | — |
-| 27 | 1972 | — | 15 Feb 1972 | — |
-| 28 | 1972 | — | 29 Aug 1972 | — |
-| 29 | 1972 | — | 9 Jun 1972 | — |
-| 30 | 1973 | — | 27 Feb 1973 | — |
-| 31 | 1973 | — | 17 Oct 1973 | — |
-| 32 | 1974 | — | 1 Jul 1974 | — |
-| 33 | 1974 | — | 19 May 1974 | — |
-| 34 | 1974 | — | 7 Sep 1974 | — |
-| 35 | 1975 | — | 1 Mar 1975 | — |
-| 36 | 1975 | — | 26 Apr 1975 | — |
-| 37 | 1975 | — | 3 May 1975 | — |
-| 38 | 1975 | — | 1 Aug 1975 | — |
-| 39 | 1975 | — | 10 Aug 1975 | — |
-| 40 | 1976 | — | 27 May 1976 | — |
-| 41 | 1976 | — | 7 Sep 1976 | — |
-| 42 | 1977 | — | 1 Apr 1977 | — |
-| 43 | 1978 | — | 13 Apr 1978 | — |
-| 44 | 1979 | — | 6 Sep 1979 | — |
-| 45 | 1980 | — | 25 Jan 1980 | — |
-| 46 | 1983 | — | 2 Feb 1983 | — |
-| 47 | 1984 | — | 26 Aug 1984 | — |
-| 48 | 1985 | — | 1 Apr 1985 | — |
-| 49 | 1984 | — | 11 Sep 1984 | — |
-| 50 | 1984 | — | 11 Sep 1984 | — |
-| 51 | 1986 | — | 16 Jun 1986 | — |
-| 52 | 1985 | — | 1 Mar 1985 | — |
-| 53 | 1987 | — | 20 Feb 1987 | — |
-| 54 | 1987 | — | 14 Mar 1987 | — |
-| 55 | 1986 | — | 23 Dec 1986 | — |
-| 56 | 1987 | — | 23 May 1987 | — |
-| 57 | 1987 | — | 15 Sep 1987 | — |
-| 58 | 1987 | — | 9 Dec 1987 | — |
-| 59 | 1988 | — | 30 Mar 1988 | — |
-| 60 | 1988 | — | 20 Dec 1988 | — |
-| 61 | 1989 | — | 28 Mar 1989 | — |
-| 62 | 1990 | — | 25 Jan 1990 | — |
-| 63 | 1990 | — | 6 Jan 1990 | — |
-| 64 | 1990 | — | 16 Apr 1990 | — |
-| 65 | 1990 | — | 7 Jun 1990 | — |
-| 66 | 1990 | — | 7 Jun 1990 | — |
-| 67 | 1990 | — | 4 Oct 1990 | — |
-| 68 | 1991 | — | 12 Mar 1991 | — |
-| 69 | 1992 | — | 1 Feb 1992 | — |
-| 70 | 1991 | — | 21 Dec 1991 | — |
-| 71 | 1992 | — | 31 Aug 1992 | — |
-| 72 | 1992 | — | 5 Dec 1992 | — |
-| 73 | 1993 | — | 24 Apr 1993 | — |
-| 74 | 1993 | — | 1 Jun 1993 | — |
-| 75 | 1994 | — | 15 May 1994 | — |
-| 76 | 1994 | — | 31 Aug 1994 | — |
-| 77 | 1995 | — | 17 Jun 1995 | — |
-| 78 | 1995 | — | 30 Aug 1995 | — |
-| 79 | 2000 | — | 25 Jan 2000 | — |
-| 80 | 2000 | — | 9 Jun 2000 | — |
-| 81 | 2000 | — | 9 Jun 2000 | — |
-| 82 | 2000 | — | 8 Sep 2000 | — |
-| 83 | 2000 | — | 8 Sep 2000 | — |
-| 84 | 2002 | — | 21 Feb 2002 | — |
-| 85 | 2002 | — | 4 Jan 2002 | — |
-| 86 | 2002 | — | 12 Dec 2002 | — |
-| 87 | 2003 | — | 22 Jun 2003 | — |
-| 88 | 2003 | — | 11 Feb 2003 | — |
-| 89 | 2003 | — | 28 Sep 2003 | — |
-| 90 | 2003 | — | 28 Sep 2003 | — |
-| 91 | 2004 | — | 1 Jan 2004 | — |
-| 92 | 2004 | — | 7 Jan 2004 | — |
-| 93 | 2006 | — | 20 Jan 2006 | — |
-| 94 | 2006 | — | 12 Jun 2006 | — |
-| 95 | 2010 | — | 25 Jan 2010 | — |
-| 96 | 2011 | — | 23 Sep 2011 | — |
+| 1 | 1951 | The Constitution (First Amendment) Act, 1951 | 18 Jun 1951 | Amended Articles 15, 19, 85, 87, 174, 176, 341, 342, 372 and 376; inserted Articles 31A and 31B and the Ninth Schedule; secured zamindari abolition laws against constitutional challenge, added special provisions for SCs/STs and backward classes, and placed reasonable restrictions on freedom of speech. |
+| 2 | 1953 | The Constitution (Second Amendment) Act, 1952 | 1 May 1953 | Amended Article 81(1)(b) to remove the upper limit of 750,000 people, allowing a single member to represent a larger population in a parliamentary constituency. |
+| 3 | 1955 | The Constitution (Third Amendment) Act, 1954 | 22 Feb 1955 | Re-enacted entry 33 of the Concurrent List (Seventh Schedule) to include trade and commerce in, and the production, supply and distribution of, four classes of essential commodities: foodstuffs, cattle fodder, raw cotton and raw jute. |
+| 4 | 1955 | The Constitution (Fourth Amendment) Act, 1955 | 27 Apr 1955 | Amended Articles 31, 31A and 305 and the Ninth Schedule: dealt with property rights and the state's power of acquisition, fixed limits on agricultural land holdings, and gave the state full control over mineral and oil resources. |
+| 5 | 1955 | The Constitution (Fifth Amendment) Act, 1955 | 24 Dec 1955 | Amended Article 3 to empower the President to prescribe a time limit for a State Legislature to convey its views on proposed Central laws relating to the formation of new States and alteration of areas, boundaries or names of existing States. |
+| 6 | 1956 | The Constitution (Sixth Amendment) Act, 1956 | 11 Sep 1956 | Amended Articles 269 and 286 and the Union and State Lists (Seventh Schedule) with respect to raising of taxes. |
+| 7 | 1956 | The Constitution (Seventh Amendment) Act, 1956 | 19 Oct 1956 | Reorganisation of states on linguistic lines, abolition of Class A, B, C and D states and introduction of Union territories: amended Articles 1, 3, 49, 80, 81, 82, 131, 153, 158, 168, 170, 171, 216, 217, 220, 222, 224, 230, 231, 232 and Schedules 1, 2, 4, 7; inserted Articles 258A, 290A, 298, 350A, 350B, 371, 372A, 378A. |
+| 8 | 1960 | The Constitution (Eighth Amendment) Act, 1959 | 5 Jan 1960 | Amended Article 334 to extend reservation of seats for SCs, STs and Anglo-Indians in the Lok Sabha and State Legislative Assemblies till 1970. |
+| 9 | 1960 | The Constitution (Ninth Amendment) Act, 1960 | 28 Dec 1960 | Amended the First Schedule for minor adjustments to the territory of the Indian Union consequent to the agreement with Pakistan for settlement of disputes by demarcation of border villages. |
+| 10 | 1961 | The Constitution (Tenth Amendment) Act, 1961 | 16 Aug 1961 | Amended Article 240 and the First Schedule to incorporate Dadra and Nagar Haveli as a Union Territory, consequent to acquisition from Portugal. |
+| 11 | 1961 | The Constitution (Eleventh Amendment) Act, 1961 | 19 Dec 1961 | Amended Articles 66 and 71 to provide for election of the Vice President by an electoral college of members of both Houses of Parliament instead of a joint sitting. |
+| 12 | 1962 | The Constitution (Twelfth Amendment) Act, 1962 | 27 Mar 1962 | Amended Article 240 and the First Schedule to incorporate Goa, Daman and Diu as a Union Territory, consequent to acquisition from Portugal. |
+| 13 | 1962 | The Constitution (Thirteenth Amendment) Act, 1962 | 28 Dec 1962 | Amended Article 170 and inserted Article 371A - special protection for the newly created State of Nagaland. |
+| 14 | 1962 | The Constitution (Fourteenth Amendment) Act, 1962 | 28 Dec 1962 | Amended Articles 81 and 240 and Schedules 1 and 4; inserted Article 239A - incorporation of Pondicherry into the Union and creation of Legislative Assemblies for Himachal Pradesh, Tripura, Manipur and Goa. |
+| 15 | 1963 | The Constitution (Fifteenth Amendment) Act, 1963 | 5 Oct 1963 | Amended Articles 124, 128, 217, 222, 224, 226, 297, 311 and 316 and inserted Article 224A - raised the retirement age of High Court judges from 60 to 62. |
+| 16 | 1963 | The Constitution (Sixteenth Amendment) Act, 1963 | 5 Oct 1963 | Amended Articles 19, 84 and 173 and the Third Schedule to make it obligatory for seekers of public office to swear allegiance to the Indian Republic and prescribe the obligatory templates. |
+| 17 | 1964 | The Constitution (Seventeenth Amendment) Act, 1964 | 20 Jun 1964 | Amended Article 31A and the Ninth Schedule to secure the constitutional validity of acquisition of estates and place land acquisition laws in Schedule 9. |
+| 18 | 1966 | The Constitution (Eighteenth Amendment) Act, 1966 | 27 Aug 1966 | Amended Article 3 (technical) to include Union Territories and hence permit reorganisation of Union Territories. |
+| 19 | 1966 | The Constitution (Nineteenth Amendment) Act, 1966 | 11 Dec 1966 | Amended Article 324 to abolish Election Tribunals and enable trial of election petitions by regular High Courts. |
+| 20 | 1966 | The Constitution (Twentieth Amendment) Act, 1966 | 22 Dec 1966 | Inserted Article 233A to indemnify and validate judgments, decrees, orders and sentences passed by judges and to validate the appointment, posting, promotion and transfer of judges, barring a few ineligible under Article 233. |
+| 21 | 1967 | The Constitution (Twenty-first Amendment) Act, 1967 | 10 Apr 1967 | Amended the Eighth Schedule to include Sindhi as an official language. |
+| 22 | 1969 | The Constitution (Twenty-second Amendment) Act, 1969 | 25 Sep 1969 | Amended Article 275 and inserted Articles 244A and 371B - provision to form autonomous states within the State of Assam. |
+| 23 | 1970 | The Constitution (Twenty-third Amendment) Act, 1969 | 23 Jan 1970 | Amended Articles 330, 332, 333 and 334 - discontinued reservation of seats for STs in Nagaland, and extended SC/ST reservation and Anglo-Indian nomination in the Lok Sabha and State Assemblies for another ten years, up to 1980. |
+| 24 | 1971 | The Constitution (Twenty-fourth Amendment) Act, 1971 | 5 Nov 1971 | Amended Articles 13 and 368 (Article 13(4) added) - enabled Parliament to dilute Fundamental Rights through constitutional amendments; made it compulsory for the President to give consent to a Constitution Amendment Bill. |
+| 25 | 1972 | The Constitution (Twenty-fifth Amendment) Act, 1971 | 20 Apr 1972 | Amended Article 31 and inserted Article 31C to restrict property rights and compensation in case the state takes over private property. |
+| 26 | 1971 | The Constitution (Twenty-sixth Amendment) Act, 1971 | 28 Dec 1971 | Amended Article 366, inserted Article 363A and removed Articles 291 and 362 - abolition of privy purse paid to former rulers of princely states. |
+| 27 | 1971 | The Constitution (Twenty-seventh Amendment) Act, 1971 | 30 Dec 1971 | Amended Articles 239A and 240 and inserted Articles 239B and 371C - reorganisation of Mizoram into a Union Territory with a legislature and council of ministers. |
+| 28 | 1972 | The Constitution (Twenty-eighth Amendment) Act, 1972 | 27 Aug 1972 | Inserted Article 312A and removed Article 314 to rationalise Civil Service rules and make them uniform across those appointed prior to and post Independence. |
+| 29 | 1972 | The Constitution (Twenty-ninth Amendment) Act, 1972 | 9 Jun 1972 | Amended the Ninth Schedule to place the 'Kerala land reform acts' and amendments to these acts beyond challenge. |
+| 30 | 1973 | The Constitution (Thirtieth Amendment) Act, 1972 | 22 Feb 1973 | Amended Article 133 to change the basis for appeals to the Supreme Court in civil suits from value criteria to a substantial question of law. |
+| 31 | 1973 | The Constitution (Thirty-first Amendment) Act, 1973 | 17 Oct 1973 | Amended Articles 81, 330 and 332 to increase the size of Parliament from 525 to 545 seats, with adjustment consequent to the 1971 Delimitation. |
+| 32 | 1974 | The Constitution (Thirty-second Amendment) Act, 1973 | 3 May 1974 | Amended Article 371 and the Seventh Schedule and inserted Articles 371D and 371E - protection of regional rights in the Telangana and Andhra regions of the State of Andhra Pradesh. |
+| 33 | 1974 | The Constitution (Thirty-third Amendment) Act, 1974 | 19 May 1974 | Amended Articles 101 and 190 to prescribe the procedure for resignation of members of Parliament and State Legislatures and its verification and acceptance by the Speaker. |
+| 34 | 1974 | The Constitution (Thirty-fourth Amendment) Act, 1974 | 7 Sep 1974 | Amended the Ninth Schedule to place land reform acts and amendments to these acts beyond challenge. |
+| 35 | 1975 | The Constitution (Thirty-fifth Amendment) Act, 1974 | 22 Feb 1975 | Amended Articles 80 and 81, inserted Article 2A and a Tenth Schedule - terms and conditions for the incorporation of Sikkim into the Union of India. |
+| 36 | 1975 | The Constitution (Thirty-sixth Amendment) Act, 1975 | 16 May 1975 | Amended Articles 80 and 81 and Schedules 1 and 4; inserted Article 371F and removed Article 2A and the temporary Tenth Schedule - formation of Sikkim as a State within the Indian Union. |
+| 37 | 1975 | The Constitution (Thirty-seventh Amendment) Act, 1975 | 3 May 1975 | Amended Articles 239A and 240 to provide for the formation of the Arunachal Pradesh Legislative Assembly. |
+| 38 | 1975 | The Constitution (Thirty-eighth Amendment) Act, 1975 | 1 Aug 1975 | Amended Articles 123, 213, 239B, 352, 356, 359 and 360 to enhance the powers of the President and Governors to pass ordinances. |
+| 39 | 1975 | The Constitution (Thirty-ninth Amendment) Act, 1975 | 10 Aug 1975 | Amended Articles 71 and 329 and the Ninth Schedule; inserted Article 329A to negate the Allahabad High Court judgment in Raj Narain invalidating PM Indira Gandhi's election and restrict judicial scrutiny of the posts of President, Vice President, Speaker of the Lok Sabha and Prime Minister. |
+| 40 | 1976 | The Constitution (Fortieth Amendment) Act, 1976 | 27 May 1976 | Amended Article 297 and the Ninth Schedule to enable Parliament to make laws with respect to the Exclusive Economic Zone, vest mineral wealth with the Union of India, and place land reform and other acts in Schedule 9. |
+| 41 | 1976 | The Constitution (Forty-first Amendment) Act, 1976 | 7 Sep 1976 | Amended Article 316 to raise the retirement age of Chairmen and Members of Joint Public Service Commissions and State Public Service Commissions from 60 to 62. |
+| 42 | 1976 | The Constitution (Forty-second Amendment) Act, 1976 | 18 Dec 1976 | Passed during the Internal Emergency: amended the Preamble ('Sovereign Socialist Secular Democratic Republic') and Articles 31, 31C, 39, 55, 74, 77, 81, 82, 83, 100, 102, 103, 105, 118, 145, 150, 166, 170, 172, 189, 191, 192, 194, 208, 217, 225, 226, 227, 228, 311, 312, 330, 352, 353, 356, 357, 358, 359, 366, 368 and 371F and the Seventh Schedule; inserted Part IVA (Fundamental Duties), Part XIVA (Tribunals) and Articles 31D, 32A, 39A, 43A, 48A, 131A, 139A, 144A, 226A, 228A and 257A. |
+| 43 | 1978 | The Constitution (Forty-third Amendment) Act, 1977 | 13 Apr 1978 | Passed after revocation of the Internal Emergency: amended Articles 145, 226, 228 and 366 and removed Articles 31D, 32A, 131A, 144A, 226A and 228A - repealed some of the more anti-freedom amendments enacted through the 42nd Amendment Bill. |
+| 44 | 1979 | The Constitution (Forty-fourth Amendment) Act, 1978 | 30 Apr 1979 | Passed after revocation of the Internal Emergency: amended Articles 19, 22, 30, 31A, 31C, 38, 71, 74, 77, 83, 103, 105, 123, 132, 133, 134, 139A, 150, 166, 172, 192, 194, 213, 217, 225, 226, 227, 239B, 329, 352, 356, 358, 359, 360 and 371F; inserted Articles 134A and 361A; removed Articles 31, 257A and 329A; omitted Article 19(1)(f) (right to property) - restored human rights safeguards and checks on executive and legislative authority. |
+| 45 | 1980 | The Constitution (Forty-fifth Amendment) Act, 1980 | 14 Apr 1980 | Amended Article 334 to extend reservation for SCs and STs and nomination of Anglo-Indian members in Parliament and State Assemblies for another ten years, up to 1990. |
+| 46 | 1983 | The Constitution (Forty-sixth Amendment) Act, 1982 | 2 Feb 1983 | Amended Articles 269, 286 and 366 and the Seventh Schedule to negate judicial pronouncements on the scope and applicability of sales tax. |
+| 47 | 1984 | The Constitution (Forty-seventh Amendment) Act, 1984 | 26 Aug 1984 | Amended the Ninth Schedule to place land reform acts and amendments to these acts beyond challenge. |
+| 48 | 1984 | The Constitution (Forty-eighth Amendment) Act, 1984 | 26 Aug 1984 | Amended Article 356 to permit President's rule for up to two years in the State of Punjab. |
+| 49 | 1984 | The Constitution (Forty-ninth Amendment) Act, 1984 | 11 Sep 1984 | Amended Article 244 and Schedules 5 and 6 to recognise Tripura as a tribal state and enable the creation of a Tripura Tribal Areas Autonomous District Council. |
+| 50 | 1984 | The Constitution (Fiftieth Amendment) Act, 1984 | 11 Sep 1984 | Amended Article 33 (technical) to extend the curtailment of Fundamental Rights under Part III to security personnel protecting property and communication infrastructure. |
+| 51 | 1985 | The Constitution (Fifty-first Amendment) Act, 1984 | 29 Apr 1985 | Amended Articles 330 and 332 to provide reservation to Scheduled Tribes in Nagaland, Meghalaya, Mizoram and Arunachal Pradesh in the Lok Sabha and their Legislative Assemblies. |
+| 52 | 1985 | The Constitution (Fifty-second Amendment) Act, 1985 | 15 Feb 1985 | Inserted the Tenth Schedule (Anti-Defection Law) and amended Articles 101, 102, 190 and 191 - disqualification of members of Parliament and State Legislatures on defection from one party to another. |
+| 53 | 1986 | The Constitution (Fifty-third Amendment) Act, 1986 | 14 Aug 1986 | Inserted Article 371G - special provision with respect to the State of Mizoram. |
+| 54 | 1987 | The Constitution (Fifty-fourth Amendment) Act, 1986 | 14 Mar 1987 | Amended Articles 125 and 221 and the Second Schedule to increase the salary of the Chief Justice of India and other judges and provide for determining future increases without constitutional amendment. |
+| 55 | 1986 | The Constitution (Fifty-fifth Amendment) Act, 1986 | 23 Dec 1986 | Inserted Article 371H - special powers to the Governor consequent to the formation of the State of Arunachal Pradesh. |
+| 56 | 1987 | The Constitution (Fifty-sixth Amendment) Act, 1987 | 23 May 1987 | Inserted Article 371I - transition provision to enable the formation of the State of Goa. |
+| 57 | 1987 | The Constitution (Fifty-seventh Amendment) Act, 1987 | 15 Sep 1987 | Amended Article 332 to provide reservation to Scheduled Tribes in the Legislative Assemblies of Nagaland, Meghalaya, Mizoram and Arunachal Pradesh. |
+| 58 | 1987 | The Constitution (Fifty-eighth Amendment) Act, 1987 | 9 Dec 1987 | Inserted Article 394A - provision to publish an authentic Hindi translation of the Constitution as on date and of future amendments. |
+| 59 | 1988 | The Constitution (Fifty-ninth Amendment) Act, 1988 | 30 Mar 1988 | Amended Article 356 to permit President's rule up to three years in the State of Punjab; inserted Article 359A to permit imposing emergency in Punjab or in specific districts thereof. |
+| 60 | 1988 | The Constitution (Sixtieth Amendment) Act, 1988 | 20 Dec 1988 | Amended Article 276 to increase the profession tax ceiling from Rs 250 to Rs 2,500 per annum. |
+| 61 | 1989 | The Constitution (Sixty-first Amendment) Act, 1988 | 28 Mar 1989 | Amended Article 326 to reduce the age for voting rights from 21 to 18. |
+| 62 | 1990 | The Constitution (Sixty-second Amendment) Act, 1989 | 25 Jan 1990 | Amended Article 334 to extend reservation for SCs and STs and nomination of Anglo-Indian members in Parliament and State Assemblies for another ten years, up to 2000. |
+| 63 | 1990 | The Constitution (Sixty-third Amendment) Act, 1989 | 6 Jan 1990 | Amended Article 356 and removed Article 359A - repealed the special emergency powers applicable to the State of Punjab. |
+| 64 | 1990 | The Constitution (Sixty-fourth Amendment) Act, 1990 | 16 Apr 1990 | Amended Article 356 to permit President's rule up to three years and six months in the State of Punjab. |
+| 65 | 1990 | The Constitution (Sixty-fifth Amendment) Act, 1990 | 7 Jun 1990 | Amended Article 338 - the National Commission for Scheduled Castes and Scheduled Tribes formed with its statutory powers specified in the Constitution. |
+| 66 | 1990 | The Constitution (Sixty-sixth Amendment) Act, 1990 | 7 Jun 1990 | Amended the Ninth Schedule to place land reform acts and amendments to these acts beyond challenge. |
+| 67 | 1990 | The Constitution (Sixty-seventh Amendment) Act, 1990 | 4 Oct 1990 | Amended Article 356 to permit President's rule up to four years in the State of Punjab. |
+| 68 | 1991 | The Constitution (Sixty-eighth Amendment) Act, 1991 | 12 Mar 1991 | Amended Article 356 to permit President's rule up to five years in the State of Punjab. |
+| 69 | 1991 | The Constitution (Sixty-ninth Amendment) Act, 1991 | 21 Dec 1991 | Inserted Articles 239AA and 239AB to provide a Legislative Assembly and Council of Ministers for the National Capital Territory of Delhi (which continues to be a Union Territory). |
+| 70 | 1992 | The Constitution (Seventieth Amendment) Act, 1992 | 12 Aug 1992 | Amended Articles 54 and 239AA to include the National Capital Territory of Delhi and the Union Territory of Pondicherry in the electoral college for the presidential election. |
+| 71 | 1992 | The Constitution (Seventy-first Amendment) Act, 1992 | 31 Aug 1992 | Amended the Eighth Schedule to include Konkani, Manipuri and Nepali as official languages. |
+| 72 | 1992 | The Constitution (Seventy-second Amendment) Act, 1992 | 4 Dec 1992 | Amended Article 332 to provide reservation to Scheduled Tribes in the Tripura State Legislative Assembly. |
+| 73 | 1993 | The Constitution (Seventy-third Amendment) Act, 1992 | 20 Apr 1993 | Inserted Part IX (Panchayats) and the Eleventh Schedule - statutory provisions for Panchayati Raj as the third level of administration in villages. |
+| 74 | 1993 | The Constitution (Seventy-fourth Amendment) Act, 1992 | 20 Apr 1993 | Inserted Part IXA (Municipalities) and the Twelfth Schedule and amended Article 280 - statutory provisions for local administrative bodies as the third level of administration in urban areas. |
+| 75 | 1994 | The Constitution (Seventy-fifth Amendment) Act, 1993 | 5 Feb 1994 | Amended Article 323B to provide for the setting up of Rent Control Tribunals. |
+| 76 | 1994 | The Constitution (Seventy-sixth Amendment) Act, 1994 | 31 Aug 1994 | Amended the Ninth Schedule to enable continuance of 69% reservation in Tamil Nadu by including the relevant Tamil Nadu Act beyond challenge. |
+| 77 | 1995 | The Constitution (Seventy-seventh Amendment) Act, 1995 | 17 Jun 1995 | Amended Article 16 (technical) to protect reservation to SCs and STs employees in promotions. |
+| 78 | 1995 | The Constitution (Seventy-eighth Amendment) Act, 1995 | 30 Aug 1995 | Amended the Ninth Schedule to place land reform acts and amendments to these acts beyond challenge. |
+| 79 | 2000 | The Constitution (Seventy-ninth Amendment) Act, 1999 | 21 Jan 2000 | Amended Article 334 to extend reservation for SCs and STs and nomination of Anglo-Indian members in Parliament and State Assemblies for another ten years, up to 2010. |
+| 80 | 2000 | The Constitution (Eightieth Amendment) Act, 2000 | 9 Jun 2000 | Amended Articles 269 and 270 and removed Article 272 - implement the Tenth Finance Commission recommendation to pool and share all taxes between the states and the centre. |
+| 81 | 2000 | The Constitution (Eighty-first Amendment) Act, 2000 | 9 Jun 2000 | Amended Article 16 to protect SCs and STs reservation in filling backlog of vacancies. |
+| 82 | 2000 | The Constitution (Eighty-second Amendment) Act, 2000 | 8 Sep 2000 | Amended Article 335 to permit relaxation of qualifying marks and other criteria in reservation in promotion for SCs and STs candidates. |
+| 83 | 2000 | The Constitution (Eighty-third Amendment) Act, 2000 | 8 Sep 2000 | Amended Article 243M to exempt Arunachal Pradesh from reservation for Scheduled Castes in Panchayati Raj institutions. |
+| 84 | 2002 | The Constitution (Eighty-fourth Amendment) Act, 2002 | 21 Feb 2002 | Amended Articles 55, 81, 82, 170, 330 and 332 to extend the usage of 1971 census population figures for statewise distribution of parliamentary seats. |
+| 85 | 2002 | The Constitution (Eighty-fifth Amendment) Act, 2001 | 4 Jan 2002 | Amended Article 16 (technical) to protect consequential seniority in case of promotions of SCs and STs employees. |
+| 86 | 2002 | The Constitution (Eighty-sixth Amendment) Act, 2002 | 12 Dec 2002 | Amended Articles 45 and 51A and inserted Article 21A - provides the Right to Education for children until the age of fourteen. |
+| 87 | 2003 | The Constitution (Eighty-seventh Amendment) Act, 2003 | 22 Jun 2003 | Amended Articles 81, 82, 170 and 330 to extend the usage of 2001 census population figures for statewise distribution of parliamentary seats. |
+| 88 | 2004 | The Constitution (Eighty-eighth Amendment) Act, 2003 | 15 Jan 2004 | Amended Article 270 and the Seventh Schedule and inserted Article 268A - to extend statutory cover for the levy and utilisation of service tax. |
+| 89 | 2003 | The Constitution (Eighty-ninth Amendment) Act, 2003 | 28 Sep 2003 | Amended Article 338 and inserted Article 338A - the National Commission for Scheduled Castes and Scheduled Tribes was bifurcated into the National Commission for Scheduled Castes and the National Commission for Scheduled Tribes. |
+| 90 | 2003 | The Constitution (Ninetieth Amendment) Act, 2003 | 28 Sep 2003 | Amended Article 332 - reservation in the Assam Assembly relating to the Bodoland Territorial Area. |
+| 91 | 2004 | The Constitution (Ninety-first Amendment) Act, 2003 | 1 Jan 2004 | Amended Articles 75 and 164 and the Tenth Schedule and inserted Article 361B - restrict the size of the Council of Ministers to 15% of legislative members and strengthen the Anti-Defection law. |
+| 92 | 2004 | The Constitution (Ninety-second Amendment) Act, 2003 | 7 Jan 2004 | Amended the Eighth Schedule to include Bodo, Dogri, Santali and Maithili as official languages. |
+| 93 | 2006 | The Constitution (Ninety-third Amendment) Act, 2005 | 20 Jan 2006 | Amended Article 15 - to enable provision of reservation (27%) for Other Backward Classes (OBCs) in government as well as private educational institutions. |
+| 94 | 2006 | The Constitution (Ninety-fourth Amendment) Act, 2006 | 12 Jun 2006 | Amended Article 164 to provide for a Minister of Tribal Welfare in the newly created States of Jharkhand and Chhattisgarh, including Madhya Pradesh and Odisha. |
+| 95 | 2010 | The Constitution (Ninety-fifth Amendment) Act, 2009 | 18 Jan 2010 | Amended Article 334 to extend reservation for SCs and STs and nomination of Anglo-Indian members in Parliament and State Assemblies for another ten years, up to 2020. |
+| 96 | 2011 | The Constitution (Ninety-sixth Amendment) Act, 2011 | 23 Sep 2011 | Amended the Eighth Schedule to substitute 'Odia' in the place of 'Oriya'. |
 | 97 | 2012 | The Constitution (Ninety-seventh Amendment) Act, 2011 | 12 Jan 2012 | Added the words "or co-operative societies" after "or unions" in Art 19(1)(c); inserted Art 43B (DPSP on promotion of co-operative societies) and Part IXB 'The Co-operative Societies' (Arts 243ZH-243ZT). |
 | 98 | 2013 | The Constitution (Ninety-eighth Amendment) Act, 2012 | 1 Jan 2013 | Inserted Art 371J - special provisions for the Hyderabad-Karnataka region: separate development board, equitable allocation of funds, reservation in education and employment for local residents. |
 | 99 | 2014 | The Constitution (Ninety-ninth Amendment) Act, 2014 | 31 Dec 2014 | Inserted Arts 124A, 124B, 124C - National Judicial Appointments Commission (NJAC); amended Arts 127, 128, 217, 222, 224A, 231. Notified 13 Apr 2015; struck down by Supreme Court 16 Oct 2015 (collegium system restored). |
