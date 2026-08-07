@@ -8,7 +8,12 @@ Checks:
   a. all 39 content dirs exist with both .md and .pdf (>100 bytes each):
      PREAMBLE, PART_1..PART_22, PART_4_A, PART_9_A, PART_9_B, PART_14_A,
      SCHEDULE_1..SCHEDULE_12 (file naming mirrors the bundle zips:
-     dir "PART_4_A" holds "PART4A.md/.pdf"; PREAMBLE holds "Preamble.md/.pdf")
+     dir "PART_4_A" holds "PART4A.md/.pdf"; PREAMBLE holds "Preamble.md/.pdf").
+     Every content .pdf must additionally start with b'%PDF' and contain
+     b'%%EOF' within its final 1KB — a cheap truncation/corruption guard
+     (stdlib bytes only, no PDF library in CI). Zip-member PDFs are NOT
+     checked here: opening ~3,700 PDFs per push is too heavy for CI; the
+     one-off integrity scan (PyMuPDF + pypdf, 2026-08-07) covers them.
   b. AMENDMENTS/: for every amendment 1..106 an ACT pdf exists (%PDF magic,
      >10KB) and a BILL pdf exists OR docs/amendments.csv marks that number
      MISSING_BILL (CSV is the source of truth for filenames + status)
@@ -61,6 +66,29 @@ def is_pdf(path):
         return False
 
 
+def check_pdf_truncation(path, rel):
+    """Cheap corruption guard for content PDFs (stdlib only): the file must
+    start with b'%PDF' and carry b'%%EOF' within its final 1KB. Catches
+    truncated/overwritten files without pulling a PDF library into CI."""
+    fails = []
+    try:
+        with open(path, 'rb') as f:
+            head = f.read(4)
+            f.seek(0, 2)
+            size = f.tell()
+            f.seek(max(0, size - 1024))
+            tail = f.read()
+    except OSError as e:
+        return ['content: %s unreadable: %s' % (rel, e)]
+    if head != b'%PDF':
+        fails.append('content: %s does not start with %%PDF (got %r)'
+                     % (rel, head))
+    if b'%%EOF' not in tail:
+        fails.append('content: %s has no %%EOF marker in its final 1KB '
+                     '(truncated?)' % rel)
+    return fails
+
+
 def check_content():
     fails = []
     for d, stem in sorted(content_dirs().items()):
@@ -72,6 +100,8 @@ def check_content():
             elif rel not in KNOWN_SMALL and os.path.getsize(p) <= MIN_SIZE:
                 fails.append('content: %s too small (%d bytes <= %d)'
                              % (rel, os.path.getsize(p), MIN_SIZE))
+            if ext == '.pdf' and os.path.isfile(p):
+                fails.extend(check_pdf_truncation(p, rel))
     return fails
 
 
