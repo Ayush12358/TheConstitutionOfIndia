@@ -297,4 +297,4 @@ Provided that nothing in this clause shall apply for the purposes of clause (3) 
 
 Explanation.—For the purposes of clauses (1) and (2), the expression “Central List” means the list of socially and educationally backward classes prepared and maintained by and for the Central Government.
 
-(3) Notwithstanding any contained in clauses (1) and (2), every State or Union territory may, by law, prepare and maintain, for its own purposes, a list of socially and educationally backward classes, entries in which may be different from the Central List.
+(3) Notwithstanding anything contained in clauses (1) and (2), every State or Union territory may, by law, prepare and maintain, for its own purposes, a list of socially and educationally backward classes, entries in which may be different from the Central List.
