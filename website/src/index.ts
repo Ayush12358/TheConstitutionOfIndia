@@ -53,6 +53,89 @@ const repoRoot = path.resolve(process.cwd(), "..");
 // reused by /api/content and /api/index afterwards.
 const contentCache = new Map<string, { title: string; markdown: string }>();
 
+// --- Amendments manifest (docs/amendments.csv) ---
+
+type Amendment = {
+  number: string;
+  title: string;
+  assent_date: string;
+  key_changes: string;
+  status: string;
+  has_bill: boolean;
+};
+
+// Tiny RFC4180 CSV parser: quoted fields may contain commas, "" escapes a
+// quote, and lines starting with '#' are comments (skipped). No dependencies.
+function parseCSV(text: string): string[][] {
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let field = "";
+  let inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') {
+          field += '"';
+          i++;
+        } else inQuotes = false;
+      } else field += c;
+    } else if (c === '"') inQuotes = true;
+    else if (c === ",") {
+      row.push(field);
+      field = "";
+    } else if (c === "\n" || c === "\r") {
+      if (c === "\r" && text[i + 1] === "\n") i++;
+      row.push(field);
+      field = "";
+      rows.push(row);
+      row = [];
+    } else field += c;
+  }
+  if (field !== "" || row.length > 0) {
+    row.push(field);
+    rows.push(row);
+  }
+  return rows;
+}
+
+// docs/amendments.csv, parsed once and cached at module level. Columns:
+// number,title,assent_date,key_changes,bill_file,act_file,bill_url,act_url,zip_file,status
+let amendmentsCache: Amendment[] | null = null;
+
+async function loadAmendments(): Promise<Amendment[] | null> {
+  if (amendmentsCache) return amendmentsCache;
+  const full = path.resolve(repoRoot, "docs/amendments.csv");
+  if (!full.startsWith(repoRoot + path.sep)) return null;
+  try {
+    const text = await Bun.file(full).text();
+    const rows = parseCSV(text).filter(r => r.length > 0 && !r[0].startsWith("#"));
+    // Drop the header row ("number,title,...").
+    const data = rows[0]?.[0] === "number" ? rows.slice(1) : rows;
+    amendmentsCache = data.map(r => ({
+      number: r[0],
+      title: r[1],
+      assent_date: r[2],
+      key_changes: r[3],
+      status: r[9],
+      has_bill: r[9] !== "MISSING_BILL",
+    }));
+    return amendmentsCache;
+  } catch {
+    return null;
+  }
+}
+
+// Amendment PDFs live in repoRoot/AMENDMENTS as AMENDMENT_NN_<KIND>.pdf
+// (2-digit zero-padded for n <= 96, 3-digit for n > 96, e.g. AMENDMENT_096_ACT.pdf).
+function amendmentPdfPath(kind: "act" | "bill", n: number): string | null {
+  const padded = n <= 96 ? String(n).padStart(2, "0") : String(n).padStart(3, "0");
+  const full = path.resolve(repoRoot, "AMENDMENTS", `AMENDMENT_${padded}_${kind.toUpperCase()}.pdf`);
+  // Defense in depth: the name is derived from a validated int, but stay inside the repo root.
+  if (!full.startsWith(repoRoot + path.sep)) return null;
+  return full;
+}
+
 function contentPath(key: string): string | null {
   const rel = contentMap[key];
   if (!rel) return null;
@@ -120,6 +203,37 @@ const server = serve({
       }
       results.sort((a, b) => b.matches.length - a.matches.length);
       return Response.json(results.slice(0, 20));
+    },
+
+    "/api/amendments": async () => {
+      const amendments = await loadAmendments();
+      if (!amendments) {
+        return Response.json({ error: "Failed to load amendments manifest" }, { status: 500 });
+      }
+      return Response.json(amendments);
+    },
+
+    "/api/file/:kind/:n": async req => {
+      const { kind, n: nRaw } = req.params;
+      if (kind !== "act" && kind !== "bill") {
+        return Response.json({ error: "Not found" }, { status: 404 });
+      }
+      const n = Number(nRaw);
+      if (!Number.isInteger(n) || n < 1 || n > 106) {
+        return Response.json({ error: "Not found" }, { status: 404 });
+      }
+      const amendments = await loadAmendments();
+      if (kind === "bill" && amendments?.[n - 1]?.status === "MISSING_BILL") {
+        return Response.json({ error: "Not found" }, { status: 404 });
+      }
+      const full = amendmentPdfPath(kind, n);
+      if (!full) return Response.json({ error: "Not found" }, { status: 404 });
+      const file = Bun.file(full);
+      // Never serve a nonexistent file.
+      if (!(await file.exists())) {
+        return Response.json({ error: "Not found" }, { status: 404 });
+      }
+      return new Response(file, { headers: { "Content-Type": "application/pdf" } });
     },
 
     // Any other /api/* path is a 404, never the SPA fallback.

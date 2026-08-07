@@ -2,7 +2,8 @@
 
 A minimal single-page site for the [Constitution of India](https://github.com/Ayush12358/TheConstitutionOfIndia):
 the **Preamble**, an index of all **26 Parts** (including 4A, 9A, 9B, 14A) and **12 Schedules**,
-and a reading pane with slugified article anchors on every heading for deep links
+an **Amendments** list (all 106 amendment acts, with bills where available), and a reading pane
+with slugified article anchors on every heading for deep links
 (e.g. `#12-definition` for Article 12 in Part III). Content is served from the repo's own markdown —
 `../PREAMBLE`, `../PART_*/`, `../SCHEDULE_*/` — so the site stays in sync with the source files.
 
@@ -19,6 +20,17 @@ and a reading pane with slugified article anchors on every heading for deep link
   20 files, sorted by match count (descending). `q` must be at least 2 characters, else
   `400 { error: "query too short" }`. Search is plain substring matching (no regex), so
   there's no injection risk, and it never reads outside the whitelisted files.
+- `GET /api/amendments` → `[{ number, title, assent_date, key_changes, status, has_bill }, …]`
+  for all 106 constitutional amendments, in CSV order. `number` is the zero-padded manifest
+  number (`01`…`96`, `097`…`106`); `key_changes` is returned in full. The manifest
+  (`../docs/amendments.csv`) is parsed once (RFC4180: quoted fields, `""` escapes, `#` comments)
+  and cached in memory; `has_bill` is `false` when the row's status is `MISSING_BILL`.
+- `GET /api/file/:kind/:n` → the amendment PDF for `kind` = `act` | `bill` and `n` = 1…106.
+  Filenames follow `AMENDMENT_NN_<KIND>.pdf` (2-digit zero-padded for `n` ≤ 96) and
+  `AMENDMENT_0NN_<KIND>.pdf` (3-digit for `n` > 96), resolved inside `../AMENDMENTS/` with a
+  repo-root containment check. `404` for an invalid kind, an out-of-range or non-integer `n`,
+  a bill whose CSV row is `MISSING_BILL`, or a file that doesn't exist on disk. Responses are
+  `Content-Type: application/pdf`.
 
 **Security model:** keys are looked up in a hard-coded whitelist (`key` → repo-relative path)
 and are never derived from the request path; the resolved path is additionally checked to stay
