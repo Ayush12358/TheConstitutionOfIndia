@@ -24,8 +24,11 @@ corresponding Amendment Act text in `AMENDMENTS/AMENDMENT_NN_ACT.pdf` (extracted
 to `acts/`); (2) closed loop — the stage-97 diff against the official
 `AMENDMENT_96_23092011.zip` bundle yields exactly the 97th Amendment's changes,
 proving the chain is anchored correctly; (3) the final `stage_106` tree is the
-content of bundles `AMENDMENT_97_12012012.zip` … `AMENDMENT_106_28092023.zip`
-(78 members each, incl. `PART_9_B/PART9B.txt`), checked by `verify_repo.py`.
+content of bundles `AMENDMENT_97_12012012.zip` … `AMENDMENT_106_28092023.zip`.
+At build time, each bundle was verified: testzip clean, 78 members each (incl.
+`PART_9_B/PART9B.txt`), and every typeset PDF round-trips to its txt. After the
+2026-08-07 binary cleanup, the bundles live in the tag trees and `verify_repo.py`
+enforces that none remain in the working tree.
 
 ## Audit log — 92 edits, verbatim
 
