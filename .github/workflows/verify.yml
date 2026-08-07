@@ -24,3 +24,11 @@ jobs:
           bun-version: latest
       - name: Install deps and build website
         run: cd website && bun install --frozen-lockfile && bun run build
+      - name: Smoke test content API
+        run: |
+          cd website
+          bun start & server_pid=$!
+          trap 'kill $server_pid 2>/dev/null || true' EXIT
+          sleep 3
+          curl -fsS http://localhost:3000/api/content/preamble | grep -q 'WE, THE PEOPLE OF INDIA'
+          curl -fsS http://localhost:3000/ -o /dev/null
