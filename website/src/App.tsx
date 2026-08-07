@@ -206,7 +206,7 @@ export function App() {
         <Button
           key={item.key}
           variant="outline"
-          className="h-auto justify-start py-2 text-left text-xs leading-snug"
+          className="h-auto min-w-0 justify-start py-2 text-left text-xs leading-snug whitespace-normal"
           onClick={() => (onPick ? onPick(item) : open(item))}
         >
           {item.title}
