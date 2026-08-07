@@ -2,6 +2,7 @@
 #It uses Enscript to convert text to ps format and then from ps to pdf.
 #You MUST send the name of the txt file  as the first argument (withOUT extension).
 #pdf will be generated in the same path where the txt file exists.
+# LEGACY (2026-08-07): the txt->pdf edit workflow predates the Markdown conversion; the live content files are .md + .pdf. Requires enscript + ghostscript.
 
 if [[ $# -ne 1 ]] ; then
     echo 'Error in passing command line arguments. Check HELP at the top of this file.'

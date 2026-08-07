@@ -138,6 +138,8 @@ None of the `.sh` scripts run under Windows cmd/PowerShell without Git Bash or W
 need bash, and two additionally need `enscript`/`ps2pdf`/`pdftotext`. `download_pdfs.py` is
 Python-2-only and its source site is gone.
 
+2026-08-07: commit_chores.sh now uses git add -A + set -e; convert_* scripts marked legacy (content is .md).
+
 ## 5. Amendment manifest — 97..106, nothing beyond
 
 **`docs/amendments.csv`** (header `number,title,assent_date,key_changes,bill_url,act_url,zip_file`)
