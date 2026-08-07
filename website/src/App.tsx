@@ -201,7 +201,7 @@ export function App() {
     .sort((a, b) => Number(a.key.slice(8)) - Number(b.key.slice(8)));
 
   const indexButtons = (group: IndexItem[], onPick?: (item: IndexItem) => void) => (
-    <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-4">
+    <div className="mt-2 grid grid-cols-2 items-start gap-2 md:grid-cols-4">
       {group.map(item => (
         <Button
           key={item.key}
@@ -338,7 +338,7 @@ export function App() {
           <span className="text-green-700 dark:text-green-400">+{stats.add}</span>{" "}
           <span className="text-red-700 dark:text-red-400">−{stats.del}</span>
         </div>
-        <div className="max-h-[60vh] overflow-y-auto p-2 font-mono">
+        <div className="max-h-[60vh] overflow-y-auto whitespace-pre-wrap p-2 font-mono">
           {hunks.map((h, hi) => (
             <div key={hi} className="mb-2">
               {h.ctx.map((l, i) => (
@@ -866,14 +866,14 @@ export function App() {
                       className="flex items-start justify-between gap-2 border-b py-2 text-sm last:border-b-0"
                     >
                       <button className="min-w-0 text-left" onClick={() => setDetail(a)}>
-                        <span className="text-muted-foreground font-mono text-xs">{a.number}</span>
-                        <span className="block font-medium leading-snug hover:underline">{a.title}</span>
+                        <span className="text-muted-foreground font-mono text-xs">{a.number}</span>{" "}
+                        <span className="font-medium leading-snug hover:underline">{a.title}</span>
                         {a.key_changes && (
                           <span className="text-muted-foreground line-clamp-2 block text-xs">
                             {a.key_changes}
                           </span>
                         )}
-                        <span className="text-muted-foreground text-xs">
+                        <span className="text-muted-foreground block text-xs">
                           {a.assent_date}
                           {a.status === "MISSING_BILL" && (
                             <span className="italic"> · bill missing</span>
