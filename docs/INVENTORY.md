@@ -336,3 +336,5 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
 
 2026-08-07 (upstream issues): this update resolves the four open items on upstream anoopdixith/TheConstitutionOfIndia — #7 outdated preamble (Preamble.md now carries the post-42nd text incl. SOCIALIST/SECULAR/INTEGRITY), #8 'Corrected preamble!' PR (superseded by the regenerated preamble), #5 broken markdown headings (fidelity-gated #/## structure), #2 clean text-only complete version (post-106th .md content).
 
+2026-08-07 (final polish): docs/amendments-table.md has clickable relative links (214, all verified); link-integrity check added to verify_repo.py check e; generator committed as gen_amendments_table.py.
+

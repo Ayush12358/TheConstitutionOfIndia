@@ -19,7 +19,8 @@ Checks:
      (zip_file matches an actual file for 1..96); every row carries a title,
      key changes, and a YYYY-MM-DD assent date
   e. docs/ deliverables exist: amendments.csv, amendments-table.md, AMENDMENTS.md, INVENTORY.md,
-     bill_gaps.md, bundle_reconstruction_97_106.md
+     bill_gaps.md, bundle_reconstruction_97_106.md; every relative markdown link in README.md,
+     AMENDMENTS/README.md and docs/*.md resolves to a file on disk
 """
 import csv
 import glob
@@ -147,12 +148,34 @@ def check_amendments(by_number):
 
 
 def check_docs():
-    """docs/ deliverables: the files the README points at must exist."""
+    """docs/ deliverables: the files the README points at must exist, and every
+    relative markdown link in README.md, AMENDMENTS/README.md and docs/*.md must
+    resolve to a file on disk (http(s)://, mailto: and #anchor links skipped)."""
     fails = []
     for name in ('amendments.csv', 'amendments-table.md', 'AMENDMENTS.md', 'INVENTORY.md',
                  'bill_gaps.md', 'bundle_reconstruction_97_106.md'):
         if not os.path.isfile(os.path.join(ROOT, 'docs', name)):
             fails.append('docs: %s missing at docs/' % name)
+    link_re = re.compile(r'\[[^\]]*\]\(([^)#]+)\)')
+    for rel in ['README.md', os.path.join('AMENDMENTS', 'README.md')] \
+            + sorted(glob.glob(os.path.join('docs', '*.md'))):
+        path = os.path.join(ROOT, rel)
+        if not os.path.isfile(path):
+            continue
+        try:
+            with open(path, encoding='utf-8') as f:
+                text = f.read()
+        except OSError as e:
+            fails.append('docs: %s unreadable: %s' % (rel, e))
+            continue
+        for m in link_re.finditer(text):
+            target = m.group(1)
+            if (target.startswith(('http://', 'https://', 'mailto:'))
+                    or target.startswith('#')):
+                continue
+            if not os.path.isfile(os.path.join(os.path.dirname(path), target)):
+                fails.append('docs link: %s -> %s not found'
+                             % (rel.replace(os.sep, '/'), target))
     return fails
 
 
