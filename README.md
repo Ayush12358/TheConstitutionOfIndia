@@ -12,8 +12,8 @@ Act (and the surviving Bills) through the **106th Amendment (2023)** — the lat
 - **106 amendments enacted; nothing beyond.** The 106th Amendment (Nari Shakti Vandan Adhiniyam,
   women's reservation, assent 28 Sep 2023) is the newest Act. It was **brought into force on
   16-04-2026** by notification S.O. 1922(E) under s.1(2); the reserved seats themselves still
-  await delimitation after the next census. Amendments 107+ exist only as pending bills (e.g. the
-  ONOE bills); none has been enacted.
+  await delimitation after the next census. Amendments 107+ have not been enacted: the 129th/130th/131st
+  Bills (ONOE etc.) failed or were withdrawn in 2024–2026 (the 131st was negatived in the Lok Sabha on 17-04-2026).
 - **Content tree regenerated 2026-08-07** from the official consolidated text (Legislative
   Department pocket editions through the 105th) with the 106th Amendment applied from the Gazette —
   i.e. the post-106th state; extraction defects found in audit were fixed against the printed pages
@@ -49,8 +49,9 @@ AMENDMENT_NN_<date>.zip   (108 at repo root)
 docs/
     → INVENTORY.md (authoritative audit), amendments.csv (machine source, 106 rows),
       amendments-table.md (manifest, human-readable view), AMENDMENTS.md (human-readable amendment
-      index), amendments_new.md / backfill_report.md (worker sources, converted from CSV),
-      bill_gaps.md (bill provenance)
+      index), amendments_new.md / amendments_new_report.md / backfill_report.md (worker sources,
+      converted from CSV), bill_gaps.md (bill provenance), bundle_reconstruction_97_106.md
+      (97–106 bundle lineage + reconstruction audit log)
 ```
 
 **Tags**: every bundle release is annotated-tagged `STABLE_AMENDMENT_NN` (files as they stood
