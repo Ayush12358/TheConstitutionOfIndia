@@ -3,9 +3,8 @@
 ![verify](https://github.com/Ayush12358/TheConstitutionOfIndia/actions/workflows/verify.yml/badge.svg)
 
 Git archive of the Constitution of India: every Part (Articles), Schedule and the Preamble in
-both `.md` and `.pdf`, plus per-amendment snapshot bundles and the full text of every Amendment
-Act (and the surviving Bills) through the **106th Amendment (2023)** — the latest enacted as of
-**2026-08-07**.
+`.md`, plus the full text of every Amendment Act (and the surviving Bills) in `AMENDMENTS/`
+through the **106th Amendment (2023)** — the latest enacted as of **2026-08-07**.
 
 ## Current state (2026-08-07)
 
@@ -28,8 +27,9 @@ Act (and the surviving Bills) through the **106th Amendment (2023)** — the lat
 ```
 PREAMBLE/  PART_1/ … PART_22/  PART_4_A/  PART_9_A/  PART_9_B/  PART_14_A/
 SCHEDULE_1/ … SCHEDULE_12/
-    → 39 content dirs, each with <NAME>.md + <NAME>.pdf (e.g. PART_4_A/PART4A.md,
-      PREAMBLE/Preamble.md); mirrors the bundle-zip layout
+    → 39 content dirs, each with <NAME>.md (e.g. PART_4_A/PART4A.md,
+      PREAMBLE/Preamble.md); the companion .pdf files were removed 2026-08-07
+      (re-extractable from the official 2024 pocket edition)
 AMENDMENTS/
     → Act PDFs for ALL 106 amendments (AMENDMENT_NN_ACT.pdf, zero-padded: 01–96 two-digit,
       097–106 three-digit) — 106/106 acts
@@ -37,15 +37,11 @@ AMENDMENTS/
       web; the 94 gaps are documented with full provenance in docs/bill_gaps.md (never fabricated)
       — note PART_9_B (Co-operative Societies) was inserted by the 97th Amendment, so post-97
       bundles contain 39 content dirs vs 38 for 1..96
-AMENDMENT_NN_<date>.zip   (108 at repo root)
-    → per-amendment "bundle": the whole Constitution (all 39 content dirs of that era, txt+pdf)
-      as of after Amendment NN — i.e. a full post-N snapshot, not a single bill/act PDF.
-      Bundles now cover ALL amendments 1..106: AMENDMENT_01_18061951.zip … AMENDMENT_106_28092023.zip.
-      The 97..106 bundle PDFs are typeset from the txt (not official scans, unlike 1..96); the 99th
-      bundle reflects NJAC as enacted (struck down 16-10-2015); the 97..106 lineage is anchored on
-      the official post-96 bundle text + the act texts (see docs/INVENTORY.md §appendix).
-      AMENDMENT_88ACTUAL_…zip is the canonical post-88 bundle (the plain 88 zip is erroneous);
-      AMENDMENT_ORIGINAL_26011950.zip is the 1950 original
+Bundle zips removed 2026-08-07 (markdown-first): the 108 per-amendment bundles
+    (AMENDMENT_NN_<date>.zip) were deleted from the working tree; they are preserved
+    in the git tag trees STABLE_AMENDMENT_01..106 and in history.
+    Restore one with e.g.:
+        git checkout STABLE_AMENDMENT_106 -- AMENDMENT_106_28092023.zip
 docs/
     → INVENTORY.md (authoritative audit), amendments.csv (machine source, 106 rows),
       amendments-table.md (manifest, human-readable view), AMENDMENTS.md (human-readable amendment
@@ -57,17 +53,18 @@ docs/
 **Tags**: every bundle release is annotated-tagged `STABLE_AMENDMENT_NN` (files as they stood
 between the NNth and (NN+1)th Amendments). Tags now cover **01..106** (gaps 02–06, 54–57, 62, 65
 restored and 97–106 added on 2026-08-07). Plus `STABLE_AMENDMENT_88_ACTUAL`,
-`STABLE_ORIGINAL_VERSION`, `SPECIAL_FORWARD_COMMIT` — **109 tags total**.
+`STABLE_ORIGINAL_VERSION`, `SPECIAL_FORWARD_COMMIT` — **109 tags total**. Since the 2026-08-07
+binary cleanup, **each tag tree still contains its bundle zip** — that is the restore path.
 
 ## Tooling
 
 | Tool | Runs on | Purpose |
 |---|---|---|
-| `verify_repo.py` | Python 3, any OS (stdlib) | Completeness check: 39 content dirs, 106 acts + bills, 108 bundle zips (all testzip + PREAMBLE member; 97–106 must have 78 members incl. PART_9_B), CSV consistency; exit 0 = complete |
+| `verify_repo.py` | Python 3, any OS (stdlib) | Completeness check: 39 content dirs (.md), 106 acts + bills, no bundle zips in working tree (removed 2026-08-07; preserved in git tags/history), CSV consistency; exit 0 = complete |
 | `download_amendments.py` | Python 3, any OS (stdlib urllib) | Download a bill/act PDF into `AMENDMENTS/` (`--auto N` lists expected filenames; `--force` to overwrite; %PDF + size verified) |
 | `create_directories.sh` | bash (Git Bash/WSL) | Create PART_1..22 / SCHEDULE_1..12 dirs |
 | `create_extension_directories.sh` | bash | Create PART_<n>_A dirs |
-| `create_bundle.sh` | bash + `zip` | Bundle all md/pdf into `AMENDMENT_<n>_<date>.zip` (re-running appends — delete first!) |
+| `create_bundle.sh` | bash + `zip` | LEGACY (2026-08-07): bundles removed from the working tree; recreates them if needed (zips preserved in git tags/history) |
 | `convert_modified_txt_to_pdf.sh` | bash + `enscript` + `ps2pdf` | Convert a txt edit to PDF (legacy: operates on .txt; content is now .md) |
 | `convert_all_pdfs_to_texts.sh` | bash + `pdftotext` (poppler) | Re-extract all PDFs to txt (legacy: operates on .txt; content is now .md) |
 

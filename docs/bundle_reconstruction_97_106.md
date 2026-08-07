@@ -1,3 +1,5 @@
+> The bundle zips described here were removed from the working tree on 2026-08-07; they are preserved in the git tag trees STABLE_AMENDMENT_97..106 and in history.
+
 # Bundle reconstruction for amendments 97-106 (2026-08-07) — audit log of the reverse-chain edits, each verified against the corresponding Amendment Act text (AMENDMENTS/AMENDMENT_NN_ACT.pdf) and the closed-loop gate (stage 97 diff vs AMENDMENT_96_23092011.zip)
 
 ## Method

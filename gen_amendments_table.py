@@ -17,7 +17,9 @@ OUT = os.path.join(ROOT, 'docs', 'amendments-table.md')
 
 COMMENT = ('<!-- Generated 2026-08-07 from docs/amendments.csv (machine source of truth for '
            'verify_repo.py and download_amendments.py; docs/amendments-table.md is the '
-           'human-readable view). -->')
+           'human-readable view). -->\n'
+           '<!-- zip_file is plain text (no link): the bundle zips were removed from the '
+           'working tree 2026-08-07 and are preserved in git tags/history. -->')
 
 
 def cell(value):
@@ -47,7 +49,10 @@ def main():
         out = list(r)
         out[4] = file_cell(r[4], '../AMENDMENTS/')
         out[5] = file_cell(r[5], '../AMENDMENTS/')
-        out[8] = file_cell(r[8], '../')
+        # zip bundles preserved in git tags/history since 2026-08-07: the
+        # zip_file column is a historical reference, rendered as plain text
+        # (no clickable link — the files no longer exist on disk).
+        out[8] = r[8]
         lines.append('|' + '|'.join(cell(c) for c in out) + '|')
     with open(OUT, 'w', encoding='utf-8', newline='\n') as f:
         f.write('\n'.join(lines) + '\n')

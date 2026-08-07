@@ -5,24 +5,24 @@ Python 3, stdlib only. Exits 0 only when every check passes; otherwise lists
 every failure and exits 1.
 
 Checks:
-  a. all 39 content dirs exist with both .md and .pdf (>100 bytes each):
+  a. all 39 content dirs exist with the .md file (>100 bytes each):
      PREAMBLE, PART_1..PART_22, PART_4_A, PART_9_A, PART_9_B, PART_14_A,
      SCHEDULE_1..SCHEDULE_12 (file naming mirrors the bundle zips:
-     dir "PART_4_A" holds "PART4A.md/.pdf"; PREAMBLE holds "Preamble.md/.pdf").
-     Every content .pdf must additionally start with b'%PDF' and contain
-     b'%%EOF' within its final 1KB — a cheap truncation/corruption guard
-     (stdlib bytes only, no PDF library in CI). Zip-member PDFs are NOT
-     checked here: opening ~3,700 PDFs per push is too heavy for CI; the
-     one-off integrity scan (PyMuPDF + pypdf, 2026-08-07) covers them.
+     dir "PART_4_A" holds "PART4A.md"; PREAMBLE holds "Preamble.md").
+     Content PDFs were removed 2026-08-07 (markdown-first repo); they are
+     re-extractable from the official 2024 pocket edition, so only the .md is
+     required here.
   b. AMENDMENTS/: for every amendment 1..106 an ACT pdf exists (%PDF magic,
      >10KB) and a BILL pdf exists OR docs/amendments.csv marks that number
      MISSING_BILL (CSV is the source of truth for filenames + status)
-  c. every AMENDMENT_*.zip at repo root passes zipfile.testzip() and contains
-     a PREAMBLE member; the 97-106 bundles (new convention) must additionally
-     have 78 members including PART_9_B/PART9B.txt
-  d. docs/amendments.csv parses and is consistent with the filesystem
-     (zip_file matches an actual file for 1..96); every row carries a title,
-     key changes, and a YYYY-MM-DD assent date
+  c. no AMENDMENT_*.zip exists in the working tree: the 108 bundle zips were
+     removed 2026-08-07 and are preserved in the git tag trees
+     STABLE_AMENDMENT_01..106 (each tag tree still contains its bundle zip)
+     and in history — this check guards that invariant
+  d. docs/amendments.csv parses and is consistent with the manifest: the
+     zip_file column is a HISTORICAL reference since 2026-08-07 (the zips live
+     in git tags, not on disk) and is NOT required to exist on disk; every row
+     still carries a title, key changes, and a YYYY-MM-DD assent date
   e. docs/ deliverables exist: amendments.csv, amendments-table.md, AMENDMENTS.md, INVENTORY.md,
      bill_gaps.md, bundle_reconstruction_97_106.md; every relative markdown link in README.md,
      AMENDMENTS/README.md and docs/*.md resolves to a file on disk
@@ -32,12 +32,10 @@ import glob
 import os
 import re
 import sys
-import zipfile
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 MIN_SIZE = 100          # content files must exceed this many bytes
 ACT_MIN_SIZE = 10240    # 10 KB
-ZIP_PREAMBLE_MEMBER = 'PREAMBLE/Preamble.txt'
 
 # Files that are legitimately smaller than MIN_SIZE and must not fail the size
 # check: PART_7 is repealed (Part VII, States in Part B of the First Schedule,
@@ -66,42 +64,19 @@ def is_pdf(path):
         return False
 
 
-def check_pdf_truncation(path, rel):
-    """Cheap corruption guard for content PDFs (stdlib only): the file must
-    start with b'%PDF' and carry b'%%EOF' within its final 1KB. Catches
-    truncated/overwritten files without pulling a PDF library into CI."""
-    fails = []
-    try:
-        with open(path, 'rb') as f:
-            head = f.read(4)
-            f.seek(0, 2)
-            size = f.tell()
-            f.seek(max(0, size - 1024))
-            tail = f.read()
-    except OSError as e:
-        return ['content: %s unreadable: %s' % (rel, e)]
-    if head != b'%PDF':
-        fails.append('content: %s does not start with %%PDF (got %r)'
-                     % (rel, head))
-    if b'%%EOF' not in tail:
-        fails.append('content: %s has no %%EOF marker in its final 1KB '
-                     '(truncated?)' % rel)
-    return fails
-
-
 def check_content():
+    # Content PDFs were removed 2026-08-07 (markdown-first repo; the .pdf files
+    # are re-extractable from the official 2024 pocket edition), so only the
+    # .md is required here — the old %PDF/%%EOF truncation guard went with them.
     fails = []
     for d, stem in sorted(content_dirs().items()):
-        for ext in ('.md', '.pdf'):
-            p = os.path.join(ROOT, d, stem + ext)
-            rel = os.path.join(d, stem + ext)
-            if not os.path.isfile(p):
-                fails.append('content: missing %s' % rel)
-            elif rel not in KNOWN_SMALL and os.path.getsize(p) <= MIN_SIZE:
-                fails.append('content: %s too small (%d bytes <= %d)'
-                             % (rel, os.path.getsize(p), MIN_SIZE))
-            if ext == '.pdf' and os.path.isfile(p):
-                fails.extend(check_pdf_truncation(p, rel))
+        p = os.path.join(ROOT, d, stem + '.md')
+        rel = os.path.join(d, stem + '.md')
+        if not os.path.isfile(p):
+            fails.append('content: missing %s' % rel)
+        elif rel not in KNOWN_SMALL and os.path.getsize(p) <= MIN_SIZE:
+            fails.append('content: %s too small (%d bytes <= %d)'
+                         % (rel, os.path.getsize(p), MIN_SIZE))
     return fails
 
 
@@ -138,11 +113,11 @@ def check_csv():
         if r[9] not in ('OK', 'MISSING_BILL'):
             fails.append('csv: row %s status %r not in {OK, MISSING_BILL}' % (r[0], r[9]))
         by_number[r[0]] = r
-    # zip_file consistency: every non-empty zip_file must exist at repo root
-    for num, r in sorted(by_number.items()):
-        z = r[8]
-        if z and not os.path.isfile(os.path.join(ROOT, z)):
-            fails.append('csv: zip_file %r (row %s) not found at repo root' % (z, num))
+    # zip_file is a HISTORICAL reference since 2026-08-07: the bundle zips were
+    # removed from the working tree and are preserved in the git tag trees
+    # STABLE_AMENDMENT_01..106 and in history — so no on-disk existence check is
+    # performed for them; the column is kept for provenance and restore docs.
+    # All other CSV checks below remain fully enforced.
     # manifest fields: every data row needs a title, key changes, and a valid
     # YYYY-MM-DD assent date (manifest completed 2026-08-07; guards regressions)
     for num, r in sorted(by_number.items()):
@@ -209,32 +184,16 @@ def check_docs():
     return fails
 
 
-ZIP_97_106_MEMBERS = 78   # 39 content dirs x (txt+pdf)
-ZIP_97_106_PART9B = 'PART_9_B/PART9B.txt'  # Part IXB inserted by the 97th Amendment
-
-
 def check_zips():
+    """Bundle zips were removed from the working tree 2026-08-07 (markdown-first
+    repo). They are preserved in the git tag trees STABLE_AMENDMENT_01..106
+    (each tag tree still contains its bundle zip) and in history; this check
+    guards the invariant that none are re-added to the tree."""
     fails = []
-    zips = sorted(glob.glob(os.path.join(ROOT, 'AMENDMENT_*.zip')))
-    for z in zips:
-        name = os.path.basename(z)
-        try:
-            with zipfile.ZipFile(z) as zf:
-                bad = zf.testzip()
-                if bad is not None:
-                    fails.append('zips: %s corrupt member %s' % (name, bad))
-                names = zf.namelist()
-                if ZIP_PREAMBLE_MEMBER not in names:
-                    fails.append('zips: %s has no %s member' % (name, ZIP_PREAMBLE_MEMBER))
-                m = re.match(r'AMENDMENT_(\d+)', name)
-                if m and 97 <= int(m.group(1)) <= 106:
-                    if len(names) != ZIP_97_106_MEMBERS:
-                        fails.append('zips: %s has %d members (want %d, 97-106 convention)'
-                                     % (name, len(names), ZIP_97_106_MEMBERS))
-                    if ZIP_97_106_PART9B not in names:
-                        fails.append('zips: %s missing %s' % (name, ZIP_97_106_PART9B))
-        except (zipfile.BadZipFile, OSError) as e:
-            fails.append('zips: %s unreadable: %s' % (name, e))
+    for z in sorted(glob.glob(os.path.join(ROOT, 'AMENDMENT_*.zip'))):
+        fails.append('zips: %s must not exist in the working tree (removed '
+                     '2026-08-07; preserved in git tags/history)'
+                     % os.path.basename(z))
     return fails
 
 
@@ -244,10 +203,10 @@ def main():
     rows = load_csv() if not csv_fails else []
     by_number = {r[0]: r for r in rows[1:]} if rows else {}
     groups = [
-        ('a. content dirs (39 x md+pdf >100B)', check_content()),
+        ('a. content dirs (39 x md >100B; content PDFs removed 2026-08-07)', check_content()),
         ('b. AMENDMENTS/ acts+bills (106 acts, bills per CSV)', check_amendments(by_number)),
-        ('c. bundle zips (all testzip + PREAMBLE; 97-106: 78 members + PART_9_B)', check_zips()),
-        ('d. docs/amendments.csv (parse + filesystem consistency)', csv_fails),
+        ('c. bundle zips (none in working tree; preserved in git tags/history)', check_zips()),
+        ('d. docs/amendments.csv (parse + manifest; zip_file historical)', csv_fails),
         ('e. docs/ deliverables (amendments.csv, amendments-table.md, AMENDMENTS.md, INVENTORY.md, bill_gaps.md, bundle_reconstruction_97_106.md)', check_docs()),
     ]
     all_fail = []

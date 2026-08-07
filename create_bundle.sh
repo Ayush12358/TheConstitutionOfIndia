@@ -1,3 +1,5 @@
+# LEGACY (2026-08-07): bundles removed from the working tree; this script recreates
+# them if needed (zips are preserved in git tags/history).
 #The way to run this is by passing two arguments: The first one being the amendment number and the second one is date in ddmmyyyy format.
 #This bundles up all the files from PART1 to PART22 and the PREAMBLE.
 #So, essentially, this is like a RELEASE.

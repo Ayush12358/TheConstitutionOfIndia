@@ -338,3 +338,25 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
 
 2026-08-07 (final polish): docs/amendments-table.md has clickable relative links (214, all verified); link-integrity check added to verify_repo.py check e; generator committed as gen_amendments_table.py.
 
+## 10. 2026-08-07 binary cleanup
+
+- **Deleted (this commit)**: the 108 bundle zips at repo root (`AMENDMENT_01_18061951.zip` …
+  `AMENDMENT_106_28092023.zip`, incl. `AMENDMENT_ORIGINAL_26011950.zip` and
+  `AMENDMENT_88ACTUAL_11022003_but_enforced_15012004.zip`) and the 39 content PDFs
+  (`PREAMBLE/Preamble.pdf`, `PART_*/PART*.pdf` incl. `PART_*_A/`, `SCHEDULE_*/SCHEDULE*.pdf`)
+  — ≈80 MB removed.
+- **Why**: markdown-first repo; every Part/Schedule/Preamble is fully covered by the checked-in
+  `.md` text, and the content PDFs were generated artifacts.
+- **Kept**: everything in `AMENDMENTS/` — 118 PDFs (106 acts + 12 bills), the bills-and-acts
+  deliverable — plus all `.md` files, docs, scripts, and the CI workflow.
+- **Restore paths**: the bundle zips are preserved in the git tag trees
+  `STABLE_AMENDMENT_01..106` (each tag tree still contains its bundle zip;
+  `STABLE_AMENDMENT_88_ACTUAL` and `STABLE_ORIGINAL_VERSION` hold the 88ACTUAL and ORIGINAL
+  bundles) and in history — e.g. `git checkout STABLE_AMENDMENT_106 -- AMENDMENT_106_28092023.zip`.
+  The content PDFs are re-extractable from the official 2024 pocket edition.
+- **verify_repo.py changes**: check (c) is now the no-zips-in-working-tree invariant; check (d)
+  treats `zip_file` as a historical reference (no on-disk requirement; all other CSV checks kept);
+  check (a) requires only the `.md` content files (PDF `%PDF`/`%%EOF` guard dropped). All 5 checks
+  still run; `docs/amendments-table.md` renders `zip_file` as plain text (generator updated,
+  `gen_amendments_table.py`).
+
