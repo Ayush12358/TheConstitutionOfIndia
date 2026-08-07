@@ -142,15 +142,15 @@ Python-2-only and its source site is gone.
 
 ## 5. Amendment manifest — 97..106, nothing beyond
 
-**`docs/amendments.csv`** (header `number,title,assent_date,key_changes,bill_url,act_url,zip_file`)
-contains rows **1..106**. Rows 1–96 carry only `number` + `zip_file` (backfill target for other
-workers; zip filenames taken verbatim from the repo listing). Rows 97–106 are fully populated.
+**`docs/amendments.csv`** (merged manifest; header `number,title,assent_date,key_changes,bill_file,act_file,bill_url,act_url,zip_file,status`)
+contains rows **1..106**, all populated since 2026-08-07 (rows 1–96 backfilled from the
+Wikipedia list cross-checked with the act PDFs; rows 97–106 carry titles, dates, key changes, bill/act files+URLs and their bundle names — §8/§9).
 
 **Nothing beyond the 106th amendment has been enacted as of 2026-08-07.** Cross-check (4 sources):
 1. **Wikipedia** — "List of amendments of the Constitution of India": *"As of March 2026, there have been 106 amendments"*.
 2. **Official** — Lok Sabha Unstarred Question No. 988, answered **24 July 2026**
    (sansad.in PDF) lists the last 12 years' 8 enacted amendments: 99, 100, 101, 102, 103, 104, 105, 106.
-3. **PRS India** — billtrack shows only *pending* bills beyond 106 (129th Bill 2024 ONOE, 130th Bill 2025, 131st Bill 2026); no enacted Act ≥ 107.
+3. **PRS India** — billtrack shows only bills beyond 106 that were never enacted (129th Bill 2024 ONOE, 130th Bill 2025, 131st Bill 2026 — negatived in Lok Sabha on 17 Apr 2026); no enacted Act ≥ 107.
 4. **Testbook / anantamias (Apr 2026)** — "No 107th Amendment has been enacted. The latest is the 106th."
 
 Bill numbers ≠ amendment numbers: 111th Bill 2009 → **97th** Act; 119th Bill 2013 → 100th;
@@ -171,12 +171,12 @@ Key data (full details in the CSV):
 | 103 | EWS 10% | 2019-01-12 | Arts 15(6), 16(6); upheld 2022 (3:2) |
 | 104 | SC/ST extension | 2020-01-21 | Art 334 → 80 years (25 Jan 2030); Anglo-Indian seats ended |
 | 105 | OBC state lists | 2021-08-19 | Arts 342A, 338B(9), 366(26C) |
-| 106 | Women's reservation | 2023-09-28 | Arts 330A, 332A, 334A; Art 239AA; not yet in force (awaits notified date/delimitation) |
+| 106 | Women's reservation | 2023-09-28 | Arts 330A, 332A, 334A; Art 239AA; in force 16-04-2026 (S.O. 1922(E)); reserved seats await delimitation |
 
 ## 6. Gaps & notes
 
-- **Repo has no bundles for amendments 97+** — the newest zip is `AMENDMENT_96_23092011.zip`;
-  CSV `zip_file` is empty for 97–106.
+- **Bundles for amendments 97+ added 2026-08-07** (see §9): `AMENDMENT_97_12012012.zip` …
+  `AMENDMENT_106_28092023.zip` — 108 zips total; CSV `zip_file` populated for every row (1–106).
 - **98th bill URL**: no PRS billtrack page exists (both `the-constitution-98th-amendment-bill-2012`
   and `the-constitution-97th-amendment-bill-2011` return HTTP 404) → `MISSING` in CSV; the bill
   is documented as "The Constitution (98th Amendment) Bill, 2012" (introduced in Rajya Sabha).
@@ -190,13 +190,13 @@ Key data (full details in the CSV):
   18/19/20 Aug 2021 → CSV uses 2021-08-19.
 - **104th title**: officially "The Constitution (One Hundred and Fourth Amendment) Act, **2019**"
   (assented 21 Jan 2020, in force 25 Jan 2020).
-- **106th status**: assent 28 Sep 2023; substantive provisions commence on a Central Government
-  notification (linked to delimitation after census) — **not in force as of 2026-08-07**.
-- **Tag gaps**: no `STABLE_AMENDMENT` tags for 02–06, 54–57, 62, 65, 97–99.
-- **Working tree**: incomplete as a constitution bundle (missing Part IVA/IXA/XIVA + Schedules
-  9–12 at HEAD); master is experimental per README. `.DS_Store` tracked.
-- Rows 1–96 of the CSV: title/assent_date/key_changes/URLs intentionally blank for backfilling
-  by other workers.
+- **106th status**: assent 28 Sep 2023; brought into force **16-04-2026** by notification
+  **S.O. 1922(E)** under s.1(2) (updated 2026-08-07); the reserved seats themselves still await
+  delimitation after the next census.
+- **Tag gaps resolved 2026-08-07** (see §8–9): 02–06, 54–57, 62, 65 restored; 97–106 added — 109 tags total.
+- **Working tree (regenerated 2026-08-07, §8–9)**: complete post-106th state — all 39 content
+  dirs as `.md`+`.pdf`; master sanitized; `.DS_Store` removed.
+- CSV fully populated 2026-08-07: rows 1–96 backfilled (titles, assent dates, key changes, bill/act files + URLs, status MISSING_BILL where no pre-1997 bill survives); rows 97–106 bundle names linked.
 
 ## 7. Sources consulted
 
