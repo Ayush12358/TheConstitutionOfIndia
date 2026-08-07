@@ -76,6 +76,16 @@ once and does everything client-side (reading pane, search, amendments links), s
 with zero API calls on any static host — e.g. Vercel with `website/vercel.json`
 (`outputDirectory: dist`).
 
+## Deploy
+
+**Dashboard:** vercel.com → Import repo → Root Directory: `website`, Framework Preset: Bun
+(or leave auto), Build Command: `bun install && bun run build`, Output Directory: `dist`.
+
+**Automated (optional):** `.github/workflows/deploy.yml` builds and runs
+`vercel deploy --prebuilt --prod` on every push to `master`. It only runs once the
+`VERCEL_TOKEN`, `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` secrets are set — until then the
+job is skipped, not failed.
+
 ## Run
 
 ```bash
