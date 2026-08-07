@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Moon, Sun } from "lucide-react";
 import { marked } from "marked";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -107,7 +108,16 @@ export function App() {
 
   // Amendments detail (git/text views) + date browser state.
   const [detail, setDetail] = useState<Amendment | null>(null);
-  const [detailView, setDetailView] = useState<"text" | "git">("text");
+  const [detailView, setDetailView] = useState<"text" | "git">("git");
+
+  // Dark mode: mirrors the `dark` class on <html>. The inline head script sets
+  // the class before first paint; this picks it up and the effect below keeps
+  // class + localStorage in sync with the header toggle.
+  const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", dark);
+    localStorage.setItem("theme", dark ? "dark" : "light");
+  }, [dark]);
   const [history, setHistory] = useState<HistoryIndex | null>(null);
   const [dateA, setDateA] = useState(today());
   const [dateB, setDateB] = useState("");
@@ -289,11 +299,11 @@ export function App() {
       const lines = (bText ?? "").split("\n");
       return (
         <div className="rounded border text-xs">
-          <div className="border-b bg-muted px-2 py-1 font-mono font-medium">{title} <span className="text-green-700">(+{lines.length})</span></div>
+          <div className="border-b bg-muted px-2 py-1 font-mono font-medium">{title} <span className="text-green-700 dark:text-green-400">(+{lines.length})</span></div>
           <pre className="max-h-80 overflow-y-auto p-2">
             {lines.map((l, i) => (
-              <div key={i} className="bg-green-50 px-1">
-                <span className="text-green-700 select-none">+ </span>{l || " "}
+              <div key={i} className="bg-green-50 dark:bg-green-950/50 px-1">
+                <span className="text-green-700 dark:text-green-400 select-none">+ </span>{l || " "}
               </div>
             ))}
           </pre>
@@ -304,11 +314,11 @@ export function App() {
       const lines = aText.split("\n");
       return (
         <div className="rounded border text-xs">
-          <div className="border-b bg-muted px-2 py-1 font-mono font-medium">{title} <span className="text-red-700">(−{lines.length})</span></div>
+          <div className="border-b bg-muted px-2 py-1 font-mono font-medium">{title} <span className="text-red-700 dark:text-red-400">(−{lines.length})</span></div>
           <pre className="max-h-80 overflow-y-auto p-2">
             {lines.map((l, i) => (
-              <div key={i} className="bg-red-50 px-1">
-                <span className="text-red-700 select-none">- </span>{l || " "}
+              <div key={i} className="bg-red-50 dark:bg-red-950/50 px-1">
+                <span className="text-red-700 dark:text-red-400 select-none">- </span>{l || " "}
               </div>
             ))}
           </pre>
@@ -325,8 +335,8 @@ export function App() {
       <div className="rounded border text-xs">
         <div className="border-b bg-muted px-2 py-1 font-mono font-medium">
           {title}{" "}
-          <span className="text-green-700">+{stats.add}</span>{" "}
-          <span className="text-red-700">−{stats.del}</span>
+          <span className="text-green-700 dark:text-green-400">+{stats.add}</span>{" "}
+          <span className="text-red-700 dark:text-red-400">−{stats.del}</span>
         </div>
         <div className="max-h-[60vh] overflow-y-auto p-2 font-mono">
           {hunks.map((h, hi) => (
@@ -337,14 +347,14 @@ export function App() {
                 </div>
               ))}
               {h.del.map((l, i) => (
-                <div key={`d${i}`} className="bg-red-50 px-1">
-                  <span className="text-red-700 select-none">- </span>
+                <div key={`d${i}`} className="bg-red-50 dark:bg-red-950/50 px-1">
+                  <span className="text-red-700 dark:text-red-400 select-none">- </span>
                   <Highlighted side="del" line={l.text} pair={h.add[i]?.text ?? ""} />
                 </div>
               ))}
               {h.add.map((l, i) => (
-                <div key={`a${i}`} className="bg-green-50 px-1">
-                  <span className="text-green-700 select-none">+ </span>
+                <div key={`a${i}`} className="bg-green-50 dark:bg-green-950/50 px-1">
+                  <span className="text-green-700 dark:text-green-400 select-none">+ </span>
                   <Highlighted side="add" line={l.text} pair={h.del[i]?.text ?? ""} />
                 </div>
               ))}
@@ -359,7 +369,7 @@ export function App() {
     const { pre, post } = edgeChars(line, pair);
     const mid = line.length - pre - post;
     if (mid <= 0) return <>{line || " "}</>;
-    const cls = side === "del" ? "bg-red-200" : "bg-green-200";
+    const cls = side === "del" ? "bg-red-200 dark:bg-red-900/60" : "bg-green-200 dark:bg-green-900/60";
     return (
       <>
         {line.slice(0, pre)}
@@ -705,24 +715,35 @@ export function App() {
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6 p-6">
-      <header>
-        <h1 className="text-3xl font-bold">The Constitution of India</h1>
-        <p className="text-muted-foreground text-sm">
-          As amended up to the 106th Amendment (in force 16-04-2026)
-        </p>
-        <nav className="mt-3 flex gap-2">
-          {(
-            [
-              ["constitution", "Constitution"],
-              ["amendments", "Bills & Amendments"],
-              ["dates", "By Date"],
-            ] as const
-          ).map(([id, label]) => (
-            <Button key={id} variant={tab === id ? "default" : "outline"} size="sm" onClick={() => setTab(id)}>
-              {label}
-            </Button>
-          ))}
-        </nav>
+      <header className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">The Constitution of India</h1>
+          <p className="text-muted-foreground text-sm">
+            As amended up to the 106th Amendment (in force 16-04-2026)
+          </p>
+          <nav className="mt-3 flex gap-2">
+            {(
+              [
+                ["constitution", "Constitution"],
+                ["amendments", "Bills & Amendments"],
+                ["dates", "By Date"],
+              ] as const
+            ).map(([id, label]) => (
+              <Button key={id} variant={tab === id ? "default" : "outline"} size="sm" onClick={() => setTab(id)}>
+                {label}
+              </Button>
+            ))}
+          </nav>
+        </div>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => setDark(!dark)}
+          aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+          className="shrink-0"
+        >
+          {dark ? <Moon /> : <Sun />}
+        </Button>
       </header>
 
       {error && <p className="text-destructive text-sm">{error}</p>}
@@ -844,7 +865,7 @@ export function App() {
                       key={a.number}
                       className="flex items-start justify-between gap-2 border-b py-2 text-sm last:border-b-0"
                     >
-                      <button className="min-w-0 text-left" onClick={() => { setDetail(a); setDetailView("text"); }}>
+                      <button className="min-w-0 text-left" onClick={() => setDetail(a)}>
                         <span className="text-muted-foreground font-mono text-xs">{a.number}</span>
                         <span className="block font-medium leading-snug hover:underline">{a.title}</span>
                         {a.key_changes && (
