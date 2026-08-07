@@ -42,7 +42,7 @@ describe("parseCSV", () => {
   test("real docs/amendments.csv parses to exactly 106 data rows", async () => {
     // Mirrors loadAmendments: drop '#' comments and the "number,..." header.
     const text = await Bun.file("../docs/amendments.csv").text();
-    const rows = parseCSV(text).filter(r => r.length > 0 && !r[0].startsWith("#"));
+    const rows = parseCSV(text).filter(r => r.length > 0 && !(r[0] ?? "").startsWith("#"));
     const data = rows[0]?.[0] === "number" ? rows.slice(1) : rows;
     expect(data).toHaveLength(106);
   });
@@ -66,6 +66,8 @@ describe("buildPayload", () => {
     const payload = buildPayload(
       { preamble: "# PREAMBLE\nWE, THE PEOPLE…", part3: "# PART III FUNDAMENTAL RIGHTS\n## 12. Definition.—" },
       amendments,
+      { "01": "THE CONSTITUTION (FIRST AMENDMENT) ACT, 1951" },
+      {},
       "2026-08-07T00:00:00.000Z",
     );
     expect(payload.generated).toBe("2026-08-07T00:00:00.000Z");
@@ -76,14 +78,17 @@ describe("buildPayload", () => {
     expect(payload.index.find(i => i.key === "schedule12")?.title).toBe("schedule12");
     // contents mirrors the markdowns map passed in; index is the full CONTENT_MAP.
     expect(Object.keys(payload.contents)).toEqual(["preamble", "part3"]);
+    // act/bill texts pass through verbatim.
+    expect(payload.act_texts).toEqual({ "01": "THE CONSTITUTION (FIRST AMENDMENT) ACT, 1951" });
+    expect(payload.bill_texts).toEqual({});
   });
 
   test("preamble + amendments pass through verbatim (act_url/bill_url kept as-is)", () => {
-    const payload = buildPayload({ preamble: "# PREAMBLE\nX" }, amendments, "2026-08-07T00:00:00.000Z");
+    const payload = buildPayload({ preamble: "# PREAMBLE\nX" }, amendments, {}, {}, "2026-08-07T00:00:00.000Z");
     expect(payload.preamble).toEqual({ key: "preamble", title: "PREAMBLE", markdown: "# PREAMBLE\nX" });
     expect(payload.amendments).toEqual(amendments);
-    expect(payload.amendments[0].act_url).toBe("https://example.com/act.pdf");
-    expect(payload.amendments[0].bill_url).toBe("MISSING");
+    expect(payload.amendments[0]!.act_url).toBe("https://example.com/act.pdf");
+    expect(payload.amendments[0]!.bill_url).toBe("MISSING");
   });
 
   test("parseAmendments maps CSV columns to the payload shape", () => {

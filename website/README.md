@@ -1,18 +1,31 @@
 # website — Constitution of India site
 
-A minimal single-page site for the [Constitution of India](https://github.com/Ayush12358/TheConstitutionOfIndia):
-the **Preamble**, an index of all **26 Parts** (including 4A, 9A, 9B, 14A) and **12 Schedules**,
-an **Amendments** list (all 106 amendment acts, with bills where available), and a reading pane
-with slugified article anchors on every heading for deep links
-(e.g. `#12-definition` for Article 12 in Part III). Content comes from the repo's own markdown —
-`../PREAMBLE`, `../PART_*/`, `../SCHEDULE_*/` — so the site stays in sync with the source files.
+A single-page site for the [Constitution of India](https://github.com/Ayush12358/TheConstitutionOfIndia)
+with three views:
 
-The site is **fully static-capable**: `bun run build` embeds every content file plus the
-amendments manifest into `dist/content.json`, and the app loads that one payload — no API
-calls at runtime. `dist/` deploys as-is to any static host, including Vercel
-(`website/vercel.json` → `outputDirectory: dist`). The Bun server and its `/api/*` routes
-remain for local development (`bun dev` / `bun start`) and serve the identical payload at
-`GET /content.json`.
+- **Constitution** — the Preamble, an index of all **26 Parts** (including 4A, 9A, 9B, 14A) and
+  **12 Schedules**, a reading pane with slugified article anchors on every heading for deep links
+  (e.g. `#12-definition` for Article 12 in Part III), and full-text search over everything.
+- **Bills & Amendments** — all **106 amendment acts** (and the 12 surviving bills) in two views:
+  a **Text** view (the act/bill's plain text — extracted from the PDFs; the 7 scan-only acts
+  were sourced from Indian Kanoon) and a **Git diff** view (what the amendment changed in the
+  Constitution text, rendered as a unified diff with per-line highlighting, straight from the
+  repo's own historical states). PDFs are served at stable `/amendments/AMENDMENT_NN_ACT.pdf`
+  URLs.
+- **By Date** — enter a date and read the Constitution as it stood then: the date resolves to
+  the latest amendment assented on or before it, and the 107 historical states (1950 original +
+  after each amendment) come from the git tags. Each Part/Schedule lists the amendments that
+  changed it (click one to jump to its git view), and a second date enables a **compare** mode
+  that diffs the two states file by file.
+
+Content comes from the repo's own files — `../PREAMBLE`, `../PART_*/`, `../SCHEDULE_*/`,
+`../AMENDMENTS/*.txt`, `../docs/amendments.csv` — so the site stays in sync with the source.
+
+The site is **fully static-capable**: `bun run build` embeds every content file, the amendments
+manifest and all act/bill texts into `dist/content.json`, copies the historical states into
+`dist/history/`, and copies the amendment PDFs into `dist/amendments/` — the app then makes zero
+API calls. `dist/` deploys as-is to any static host, including Vercel
+(`website/vercel.json` → `outputDirectory: dist`).
 
 ## Static payload
 
@@ -26,10 +39,34 @@ object with everything the app needs:
 - `amendments` — `[{ number, title, assent_date, key_changes, status, has_bill, act_url, bill_url }, …]`
   for all 106 amendments in CSV order; `act_url`/`bill_url` are the manifest's external links
   verbatim (the literal `MISSING` when absent — the app hides the button then).
+- `act_texts` / `bill_texts` — `{ "01": "…", … }` plain text of every act and surviving bill,
+  keyed by manifest number. Empty/missing = scan-only PDF, no text.
 
 Built by `buildPayload()` in `src/lib/content.ts` from `CONTENT_MAP` + the parsed manifest;
 `build.ts` and the server's `/content.json` route call the same builder, so the two payloads
 are identical by construction (only `generated` differs).
+
+## Historical states (By Date / git views)
+
+`scripts/generate-history.ts` rebuilds `data/history/*.json` from the repo's git tags (run it
+when new amendment tags appear; the output is committed):
+
+- `data/history/index.json` — the 107 states (number, assent date, amendment title), per-file
+  version boundaries, and which amendments changed which files.
+- `data/history/<key>.json` — `[{ from, text }]` per content key: the deduped versions of that
+  Part/Schedule/Preamble across states (state 0 = original 1950 text, state N = after the Nth
+  amendment).
+
+Sources per state: states 1–96 come from the author's 2015 tag trees
+(`STABLE_AMENDMENT_NN`), states 97–106 and the original from the bundle zips inside
+`STABLE_AMENDMENT_106` (the 97+ tag trees share one text; the zips carry the per-amendment
+states). Every file is normalized (paragraph rewrap) so era-vs-era line wrapping does not
+pollute diffs. Known archive gaps: the author's bundles recorded **no file change for the 88th
+Amendment** (and a few later-era states carry forward text) — the git view says so explicitly
+instead of pretending.
+
+The Bun server serves the same files at `/history/index.json` and `/history/<key>.json`
+(whitelisted keys only); the static build copies them into `dist/history/`.
 
 ## Content API (Bun server only — local dev)
 
@@ -49,13 +86,14 @@ are identical by construction (only `generated` differs).
   number (`01`…`96`, `097`…`106`); `key_changes` is returned in full. The manifest
   (`../docs/amendments.csv`) is parsed once (RFC4180: quoted fields, `""` escapes, `#` comments)
   and cached in memory; `has_bill` is `false` when the row's status is `MISSING_BILL`.
-  (The static payload's `amendments` additionally carry `act_url`/`bill_url`; see above.)
-- `GET /api/file/:kind/:n` → the amendment PDF for `kind` = `act` | `bill` and `n` = 1…106.
-  Filenames follow `AMENDMENT_NN_<KIND>.pdf` (2-digit zero-padded for `n` ≤ 96) and
-  `AMENDMENT_0NN_<KIND>.pdf` (3-digit for `n` > 96), resolved inside `../AMENDMENTS/` with a
-  repo-root containment check. `404` for an invalid kind, an out-of-range or non-integer `n`,
-  a bill whose CSV row is `MISSING_BILL`, or a file that doesn't exist on disk. Responses are
-  `Content-Type: application/pdf`.
+- `GET /api/file/:kind/:n` → the amendment PDF for `kind` = `act` | `bill` and `n` = 1…106,
+  resolved inside `../AMENDMENTS/` with a repo-root containment check; `404` for anything
+  invalid or missing. (The app itself links to the stable `/amendments/<file>` URLs so the
+  same links work on static hosts.)
+- `GET /amendments/<file>` → one amendment PDF by exact filename (`AMENDMENT_NN_ACT.pdf`,
+  canonical padded names only). Dev server reads `../AMENDMENTS/`; the static build copies
+  the PDFs into `dist/amendments/`.
+- `GET /history/index.json`, `GET /history/<key>.json` → the date-browser states (see above).
 
 **Security model:** keys are looked up in a hard-coded whitelist (`key` → repo-relative path)
 and are never derived from the request path; the resolved path is additionally checked to stay
@@ -66,25 +104,20 @@ in memory afterwards (the cache is shared by `/api/content`, `/api/index`, and `
 ## Build
 
 ```bash
-bun run build    # -> dist/ (static HTML/JS/CSS + content.json; gitignored)
+bun run build    # -> dist/ (HTML/JS/CSS + content.json + history/ + amendments/)
 ```
 
-`build.ts` bundles the app, then embeds all 39 markdown files and the amendments manifest
-into `dist/content.json` (written after the bundle step, since the build starts by wiping
-`dist/`). The result is a **self-contained static site**: the app fetches `/content.json`
-once and does everything client-side (reading pane, search, amendments links), so it works
-with zero API calls on any static host — e.g. Vercel with `website/vercel.json`
-(`outputDirectory: dist`).
+`build.ts` bundles the app, then embeds all 39 markdown files, the amendments manifest and all
+act/bill texts into `dist/content.json`, copies `data/history/` into `dist/history/` and the
+118 amendment PDFs into `dist/amendments/` (written after the bundle step, since the build
+starts by wiping `dist/`). The result is a **self-contained static site**: the app fetches
+`/content.json` once and does everything client-side, so it works with zero API calls on any
+static host — e.g. Vercel with `website/vercel.json` (`outputDirectory: dist`).
 
 ## Deploy
 
 **Dashboard:** vercel.com → Import repo → Root Directory: `website`, Framework Preset: Bun
 (or leave auto), Build Command: `bun install && bun run build`, Output Directory: `dist`.
-
-**Automated (optional):** `.github/workflows/deploy.yml` builds and runs
-`vercel deploy --prebuilt --prod` on every push to `master`. It only runs once the
-`VERCEL_TOKEN`, `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` secrets are set — until then the
-job is skipped, not failed.
 
 ## Run
 
@@ -94,32 +127,33 @@ bun dev          # development, hot reload -> http://localhost:3000
 bun start        # production mode server
 ```
 
-The Bun server serves the SPA plus `/api/*` (content, search, amendments, PDF files) and
-`/content.json` — use it when you want the API routes or live repo files.
+The Bun server serves the SPA plus `/api/*` (content, search, amendments, PDF files),
+`/content.json` and `/history/*` — use it when you want the API routes or live repo files.
 
-## CI
+## Tests & checks
 
-`.github/workflows/verify.yml` job `website-build` runs on every push/PR:
-`bun install --frozen-lockfile` + `bun run build`, then a check that `dist/content.json` was
-produced, then `bun test` (unit tests for the pure content helpers in `src/lib/content.ts` —
-the RFC4180 CSV parser, the `AMENDMENT_NN_<KIND>.pdf` filename derivation, the static-payload
-builder, and a check that the real manifest parses to 106 rows), then a smoke test that starts
-the server and checks `GET /api/content/preamble` returns the Preamble text,
-`GET /api/search?q=secular` returns a result (plus `GET /` → 200).
+```bash
+bun test         # unit tests: CSV parser, PDF naming, payload builder, diff lib
+bunx tsc --noEmit  # type-check
+```
 
 ## Layout
 
 ```
-src/index.ts              Bun server: content API + /content.json + SPA serving
-src/App.tsx               UI: preamble, grouped Parts/Schedules index, reading pane, client-side search
+src/index.ts              Bun server: content API + /content.json + /history + SPA serving
+src/App.tsx               UI: three tabs — Constitution (search/preamble/index), Bills &
+                          Amendments (text + git diff views), By Date (state browser + compare)
 src/frontend.tsx          React entry (loaded by index.html)
 src/index.html            page shell
 src/index.css             styles (imports styles/globals.css)
-src/components/ui/        shadcn components (button, card, select, …)
+src/components/ui/        shadcn components (button, card, input, …)
 src/lib/content.ts      pure helpers: CONTENT_MAP (39 keys), RFC4180 CSV parser,
-                         parseAmendments, titleOf, buildPayload (static payload builder)
-src/lib/utils.ts        cn() helper
-build.ts                  static build script (bun-plugin-tailwind) + dist/content.json
+                         parseAmendments, amendmentPdfName/amendmentTextName, buildPayload
+src/lib/diff.ts           line-diff (LCS) + hunks + diff-highlight edge detection
+src/lib/utils.ts          cn() helper
+scripts/generate-history.ts  rebuilds data/history/*.json from the git tags (committed output)
+data/history/             generated historical states (index.json + one file per key)
+build.ts                  static build script (bun-plugin-tailwind) + content.json + assets
 components.json           shadcn config
 ```
 

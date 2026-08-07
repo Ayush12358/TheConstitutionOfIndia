@@ -1,0 +1,177 @@
+THE CONSTITUTION (ONE HUNDRED AND THIRD AMENDMENT) ACT, 2019
+
+Skip to main content
+
+Indian Kanoon - Search engine for Indian Law
+
+Search
+
+Search Indian laws and judgments
+
+Main Navigation
+
+Free features
+
+Premium
+
+Premium features
+
+Prism AI IKademy Pricing
+
+Login
+
+Mobile Navigation
+
+Free features
+
+Premium Premium features
+
+Prism AI IKademy Pricing
+
+Login
+
+Legal Document View
+
+Tools for analyzing structure and cite text of judgments
+
+:root { --navy-deep: #0a1628; --navy-mid: #122a4a; --gold-bright: #f4a261; --gold-rich: #e76f51;
+--gold-dark: #c45a3d; --white: #ffffff; --white-dim: rgba(255, 255, 255, 0.65); --glass-bg:
+rgba(255, 255, 255, 0.04); --glass-border: rgba(255, 255, 255, 0.08); --shadow-gold: rgba(244, 162,
+97, 0.3); --gold-glow: rgba(244, 162, 97, 0.35); --font-primary: 'Outfit', sans-serif;
+--gradient-gold: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold-rich) 100%); }
+
+.premium-banner { display: block; position: relative; max-width: 850px; margin: 0 auto;
+border-radius: 16px; overflow: hidden; animation: bannerFadeIn 0.6s ease-out; }
+
+@keyframes bannerFadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1;
+transform: translateY(0); } }
+
+.premium-banner__bg { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 50% at
+50% 0%, rgba(244, 162, 97, 0.12) 0%, transparent 60%), linear-gradient(180deg, var(--navy-deep) 0%,
+var(--navy-mid) 100%); }
+
+.premium-banner__content { position: relative; text-align: center; padding: 10px 20px 12px; }
+
+.premium-banner__badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px;
+background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px;
+font-family: var(--font-primary); font-size: 8px; font-weight: 600; letter-spacing: 0.8px;
+text-transform: uppercase; color: var(--gold-bright); margin-bottom: 8px; backdrop-filter:
+blur(8px); }
+
+.premium-banner__badge-dot { width: 5px; height: 5px; background: var(--gold-bright); border-radius:
+50%; animation: dotPulse 2s ease-in-out infinite; }
+
+@keyframes dotPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.premium-banner__headline { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight:
+600; line-height: 1.15; color: var(--white); margin-bottom: 6px; letter-spacing: -0.01em; }
+
+.premium-banner__prism { background: var(--gradient-gold); -webkit-background-clip: text;
+-webkit-text-fill-color: transparent; background-clip: text; }
+
+.premium-banner__ai-tag { display: inline-flex; align-items: center; margin-left: 6px; padding: 3px
+8px; background: var(--gradient-gold); border-radius: 5px; font-family: var(--font-primary);
+font-size: 10px; font-weight: 700; letter-spacing: 0.8px; color: var(--navy-deep); vertical-align:
+middle; box-shadow: 0 2px 8px var(--shadow-gold); }
+
+.premium-banner__byline { font-family: var(--font-primary); line-height: 1.4; font-size: 12px;
+color: var(--white-dim); margin-bottom: 10px; max-width: 600px; margin-left: auto; margin-right:
+auto; }
+
+.premium-banner__byline strong { color: var(--white); font-weight: 500; }
+
+.premium-banner__features { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px;
+margin-bottom: 0; }
+
+.premium-banner__feature { padding: 3px 8px; background: var(--glass-bg); border: 1px solid
+var(--glass-border); border-radius: 100px; font-family: var(--font-primary); font-size: 11px;
+font-weight: 500; color: white; transition: all 0.25s ease; }
+
+.premium-banner__feature:hover { border-color: var(--gold-glow); color: var(--white); background:
+rgba(244, 162, 97, 0.08); }
+
+.premium-banner__cta-wrapper { display: flex; justify-content: flex-end; margin-top: 10px; }
+
+.premium-banner__cta { display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px;
+background: var(--gradient-gold); border-radius: 8px; font-family: var(--font-primary); font-size:
+11px; font-weight: 700; letter-spacing: 0.3px; color: var(--navy-deep); transition: all 0.3s ease;
+box-shadow: 0 3px 16px var(--shadow-gold); cursor: pointer; }
+
+.premium-banner__cta:hover { transform: translateY(-2px); box-shadow: 0 6px 24px var(--shadow-gold);
+background: linear-gradient(135deg, var(--gold-rich) 0%, var(--gold-dark) 100%); }
+
+.premium-banner__cta-arrow { width: 16px; height: 16px; transition: transform 0.3s ease; }
+
+.premium-banner__cta:hover .premium-banner__cta-arrow { transform: translateX(3px); }
+
+@media (max-width: 768px) { .premium-banner { margin: 16px; border-radius: 14px; }
+
+.premium-banner__content { padding: 12px 16px; }
+
+.premium-banner__headline { font-size: 24px; }
+
+.premium-banner__byline { font-size: 12px; }
+
+.premium-banner__features { gap: 3px; }
+
+.premium-banner__feature { font-size: 9px; padding: 3px 7px; }
+
+.premium-banner__cta { width: 100%; padding: 10px 20px; font-size: 13px; }
+
+.premium-banner__cta-wrapper { margin-top: 10px; width: 100%; } }
+
+@media (max-width: 480px) { .premium-banner__headline { font-size: 18px; }
+
+.premium-banner__feature { font-size: 9px; padding: 3px 6px; } }
+
+Unlock Advanced Research with PRISMAI
+
+Integrated with over 4 crore judgments and laws — designed for legal practitioners, researchers,
+students and institutions
+
+- Know your Kanoon - Doc Gen Hub - Counter Argument - Case Predict AI - Talk with IK Doc - ...
+
+Upgrade to Premium
+
+Document Options
+
+Get in PDF
+
+Print it!
+
+[Cites 0, Cited by 35]
+
+Constitution and Amendments THE CONSTITUTION (ONE HUNDRED AND THIRD AMENDMENT) ACT, 2019
+
+India
+
+THE CONSTITUTION (ONE HUNDRED AND THIRD AMENDMENT) ACT, 2019
+
+Act 103 of 2019
+
+Published in Gazette of India on 12 January 2019
+
+Commenced on 12 January 2019
+
+An Act further to amend the Constitution of India.BE it enacted by Parliament in the Sixty-ninth
+Year of the Republic of India as follows:—1. Short title and commencement. (1)This Act may be called
+the Constitution (One Hundred and Third Amendment) Act, 2019.(2)It shall come into force on such
+date as the Central Government may, by notification in the Official Gazette, appoint.2. Amendment of
+article 15. In article 15 of the Constitution, after clause (5), the following clause shall be
+inserted, namely:—(6)Nothing in this article or sub-clause (g) of clause (1) of article 19 or clause
+(2) of article 29 shall prevent the State from making,—(a)any special provision for the advancement
+of any economically weaker sections of citizens other than the classes mentioned in clauses (4) and
+(5); and(b)any special provision for the advancement of any economically weaker sections of citizens
+other than the classes mentioned in clauses (4) and (5) in so far as such special provisions relate
+to their admission to educational institutions including private educational institutions, whether
+aided or unaided by theState, other than the minority educational institutions referred to in clause
+(1) of article 30, which in the case of reservation would be in addition to the existing
+reservations and subject to a maximum of ten per cent. of the total seats in each
+category.Explanation.—For the purposes of this article and article 16, "economically weaker
+sections" shall be such as may be notified by the State from time to time on the basis of family
+income and other indicators of economic disadvantage.’.3. Amendment of article 16. In article 16 of
+the Constitution, after clause (5), the following clause shall be inserted, namely:—(6)Nothing in
+this article shall prevent the State from making any provision for the reservation of appointments
+or posts in favour of any economically weaker sections of citizens other than the classes mentioned
+in clause (4), in addition to the existing reservation and subject to a maximum of ten per cent. of
+the posts in each category.".

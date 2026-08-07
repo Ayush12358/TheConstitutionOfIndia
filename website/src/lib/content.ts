@@ -105,16 +105,19 @@ export type Amendment = {
 // bill_url,act_url,zip_file,status. Comment/header filtering happens in the
 // callers (loadAmendments in src/index.ts, build.ts) before this mapping.
 export function parseAmendments(rows: string[][]): Amendment[] {
-  return rows.map(r => ({
-    number: r[0],
-    title: r[1],
-    assent_date: r[2],
-    key_changes: r[3],
-    status: r[9],
-    has_bill: r[9] !== "MISSING_BILL",
-    act_url: r[7],
-    bill_url: r[6],
-  }));
+  return rows.map(r => {
+    const [number = "", title = "", assent_date = "", key_changes = "", , , bill_url = "", act_url = "", , status = ""] = r;
+    return {
+      number,
+      title,
+      assent_date,
+      key_changes,
+      status,
+      has_bill: status !== "MISSING_BILL",
+      act_url,
+      bill_url,
+    };
+  });
 }
 
 // The static payload: build.ts writes it to dist/content.json at build time
@@ -127,11 +130,17 @@ export type ContentPayload = {
   index: { key: string; title: string }[];
   contents: Record<string, string>;
   amendments: Amendment[];
+  // Plain text of every act (and surviving bill), keyed by manifest number
+  // ("01"…"106"). Empty string = no text available (scan-only PDF).
+  act_texts: Record<string, string>;
+  bill_texts: Record<string, string>;
 };
 
 export function buildPayload(
   markdowns: Record<string, string>,
   amendments: Amendment[],
+  actTexts: Record<string, string>,
+  billTexts: Record<string, string>,
   generated?: string,
 ): ContentPayload {
   const index = Object.keys(CONTENT_MAP).map(key => ({
@@ -148,6 +157,8 @@ export function buildPayload(
     index,
     contents: markdowns,
     amendments,
+    act_texts: actTexts,
+    bill_texts: billTexts,
   };
 }
 
@@ -159,4 +170,11 @@ export function buildPayload(
 export function amendmentPdfName(kind: "act" | "bill", n: number): string {
   const padded = n <= 96 ? String(n).padStart(2, "0") : String(n).padStart(3, "0");
   return `AMENDMENT_${padded}_${kind.toUpperCase()}.pdf`;
+}
+
+// Plain-text twin of the PDF: AMENDMENT_NN_ACT.txt / AMENDMENT_NN_BILL.txt in
+// ../AMENDMENTS (extracted from the PDFs; scanned originals were sourced from
+// Indian Kanoon). Same padding rule as the PDF name.
+export function amendmentTextName(kind: "act" | "bill", n: number): string {
+  return amendmentPdfName(kind, n).replace(/\.pdf$/, ".txt");
 }

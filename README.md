@@ -1,10 +1,9 @@
 # The Constitution of India
 
-![verify](https://github.com/Ayush12358/TheConstitutionOfIndia/actions/workflows/verify.yml/badge.svg)
-
 Git archive of the Constitution of India: every Part (Articles), Schedule and the Preamble in
-`.md`, plus the full text of every Amendment Act (and the surviving Bills) in `AMENDMENTS/`
-through the **106th Amendment (2023)** — the latest enacted as of **2026-08-07**.
+`.md`, plus the full text (PDF **and** plain text) of every Amendment Act and the surviving
+Bills in `AMENDMENTS/` through the **106th Amendment (2023)** — the latest enacted as of
+**2026-08-07**.
 
 ## Current state (2026-08-07)
 
@@ -16,9 +15,13 @@ through the **106th Amendment (2023)** — the latest enacted as of **2026-08-07
 - **Content tree regenerated 2026-08-07** from the official consolidated text (Legislative
   Department pocket editions through the 105th) with the 106th Amendment applied from the Gazette —
   i.e. the post-106th state; extraction defects found in audit were fixed against the printed pages
-  (see `docs/INVENTORY.md`, `verify_repo.py`).
+  (see `docs/INVENTORY.md`).
 - **All 39 content files are Markdown** (converted 2026-08-07); the bundle zips (removed
   from the working tree) keep their .txt members in the tag trees.
+- **Every act and surviving bill now has plain text** (`AMENDMENT_NN_ACT.txt` /
+  `AMENDMENT_NN_BILL.txt`, added 2026-08-07): 99 acts + 10 bills extracted from the PDFs, the
+  7 scanned acts (94, 96, 97–98, 102, 103, 105) sourced from Indian Kanoon, and the 2
+  scan-only bills (98, 106) left without text.
 - Amendment **105's** assent date is recorded as **2021-08-19** (Gazette extraordinary date); some
   secondary sources say 18 Aug 2021.
 
@@ -35,6 +38,8 @@ AMENDMENTS/
       097–106 three-digit) — 106/106 acts
     → Bill PDFs for 12 of 106 (03, 16, 097–106) — pre-1997 bills are largely lost from the open
       web; the 94 gaps are documented with full provenance in docs/bill_gaps.md (never fabricated)
+    → Plain text of every act (AMENDMENT_NN_ACT.txt) and of 10 of the 12 bills
+      (AMENDMENT_NN_BILL.txt); the 2 scan-only bills (98, 106) have no text
       — note PART_9_B (Co-operative Societies) was inserted by the 97th Amendment, so post-97
       bundles contain 39 content dirs vs 38 for 1..96
 Bundle zips removed 2026-08-07 (markdown-first): the 108 per-amendment bundles
@@ -45,13 +50,13 @@ Bundle zips removed 2026-08-07 (markdown-first): the 108 per-amendment bundles
 docs/
     → INVENTORY.md (authoritative audit), amendments.csv (machine source, 106 rows),
       amendments-table.md (manifest, human-readable view), AMENDMENTS.md (human-readable amendment
-      index), amendments_new.md / amendments_new_report.md / backfill_report.md (worker sources,
-      converted from CSV), bill_gaps.md (bill provenance), bundle_reconstruction_97_106.md
-      (97–106 bundle lineage + reconstruction audit log)
+      index), bill_gaps.md (bill provenance)
 website/
-    → minimal Constitution site: Preamble + parts/schedules index served from the repo
-      markdown via `/api/content/:key`; run: `cd website && bun dev` (or `bun start`);
-      build: `bun run build` → `website/dist/` (see website/README.md)
+    → Constitution site (Bun/React): Preamble + parts/schedules index with full-text search,
+      every bill/act in two views (plain text + git-style diff of what it changed), and a
+      by-date browser over all 107 historical states with a compare mode. Run:
+      `cd website && bun dev` (or `bun start`); build: `bun run build` → `website/dist/`
+      (see website/README.md)
 ```
 
 **Tags**: every bundle release is annotated-tagged `STABLE_AMENDMENT_NN` (files as they stood
@@ -59,32 +64,20 @@ between the NNth and (NN+1)th Amendments). Tags now cover **01..106** (gaps 02�
 restored and 97–106 added on 2026-08-07). Plus `STABLE_AMENDMENT_88_ACTUAL`,
 `STABLE_ORIGINAL_VERSION`, `SPECIAL_FORWARD_COMMIT` — **109 tags total**. Since the 2026-08-07
 binary cleanup, **each tag tree still contains its bundle zip** — that is the restore path.
+The zip inside `STABLE_AMENDMENT_106` holds every bundle (01–106 + original), which is what
+`website/scripts/generate-history.ts` uses to rebuild the site's historical states.
 
 ## Tooling
 
 | Tool | Runs on | Purpose |
 |---|---|---|
-| `verify_repo.py` | Python 3, any OS (stdlib) | Completeness check: 39 content dirs (.md), 106 acts + bills, no bundle zips in working tree (removed 2026-08-07; preserved in git tags/history), CSV consistency; exit 0 = complete |
-| `download_amendments.py` | Python 3, any OS (stdlib urllib) | Download a bill/act PDF into `AMENDMENTS/` (`--auto N` lists expected filenames; `--force` to overwrite; %PDF + size verified) |
-| `create_directories.sh` | bash (Git Bash/WSL) | Create PART_1..22 / SCHEDULE_1..12 dirs |
-| `create_extension_directories.sh` | bash | Create PART_<n>_A dirs |
-| `create_bundle.sh` | bash + `zip` | LEGACY (2026-08-07): bundles removed from the working tree; recreates them if needed (zips preserved in git tags/history) |
-| `convert_modified_txt_to_pdf.sh` | bash + `enscript` + `ps2pdf` | Convert a txt edit to PDF (legacy: operates on .txt; content is now .md) |
-| `convert_all_pdfs_to_texts.sh` | bash + `pdftotext` (poppler) | Re-extract all PDFs to txt (legacy: operates on .txt; content is now .md) |
-| `website/` | Bun (any OS) | Minimal Constitution site (Preamble + parts/schedules index served from the repo markdown via `/api/content/:key`); run: `cd website && bun dev` (or `bun start`); build: `bun run build` (see website/README.md); Vercel-ready (static dist/); optional Vercel deploy workflow |
+| `website/scripts/generate-history.ts` | Bun (in `website/`) | Rebuild `website/data/history/*.json` — the 107 historical constitution states (original + after each amendment) extracted from the git tags, normalized and deduped. Run: `cd website && bun run scripts/generate-history.ts`; output is committed |
+| `website/` | Bun (any OS) | Constitution site: search, bills/acts text + git views, by-date browser with compare; run: `cd website && bun dev` (or `bun start`); build: `bun run build` (see website/README.md); Vercel-ready (static dist/) |
 
-CI: `.github/workflows/verify.yml` runs `verify_repo.py` on every push/PR (GitHub Actions).
-
-`download_pdfs.py` was **removed** (2026-08-07): it was Python 2 only and its source
-(`lawmin.nic.in`) no longer hosts the files — superseded by `download_amendments.py`.
-
-## Quick start
-
-```
-python verify_repo.py                # completeness report; exit 0 = repo complete
-python download_amendments.py --help # download tool usage
-python download_amendments.py --auto 106   # expected filenames for amendment 106
-```
+The legacy maintenance scripts (`verify_repo.py`, `download_amendments.py`, the `*.sh` bundle
+helpers, the worker-source docs and the GitHub Actions workflows) were **removed 2026-08-07**:
+the site build + tests are the new verification path, and the tag trees hold everything the
+scripts used to regenerate.
 
 ## History
 
