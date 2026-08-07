@@ -208,12 +208,13 @@ export function App() {
   // --- Date browser helpers ---
 
   // Latest state whose amendment date is <= the given date (state 0 = original).
+  // Assent dates are NOT monotonic in amendment number (e.g. the 25th was
+  // assented after the 26th), so this is a max scan, not a first-break.
   const stateForDate = (date: string): number => {
     if (!history) return 0;
     let n = 0;
     for (const s of history.states) {
       if (s.date <= date) n = s.n;
-      else break;
     }
     return n;
   };
