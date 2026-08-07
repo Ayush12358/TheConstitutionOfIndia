@@ -36,11 +36,14 @@ function slugify(text: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-// Post-pass over marked's HTML: give every <h2>/<h3> a slugified id for deep links.
+// Post-pass over marked's HTML: give every <h2>/<h3> a slugified id and wrap the
+// text in a same-page anchor so clicking a heading sets the URL hash (deep links).
 function withHeadingAnchors(html: string): string {
   return html.replace(/<h([23])>([^<]*)<\/h\1>/g, (_, level, text) => {
     const id = slugify(text);
-    return id ? `<h${level} id="${id}">${text}</h${level}>` : `<h${level}>${text}</h${level}>`;
+    return id
+      ? `<h${level} id="${id}"><a href="#${id}" class="heading-link">${text}</a></h${level}>`
+      : `<h${level}>${text}</h${level}>`;
   });
 }
 
@@ -227,6 +230,11 @@ export function App() {
                   <div className="min-w-0">
                     <span className="text-muted-foreground font-mono text-xs">{a.number}</span>
                     <span className="block font-medium leading-snug">{a.title}</span>
+                    {a.key_changes && (
+                      <span className="text-muted-foreground line-clamp-2 block text-xs">
+                        {a.key_changes}
+                      </span>
+                    )}
                     <span className="text-muted-foreground text-xs">
                       {a.assent_date}
                       {a.status === "MISSING_BILL" && (
