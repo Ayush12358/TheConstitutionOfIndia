@@ -46,7 +46,7 @@ AMENDMENT_NN_<date>.zip   (108 at repo root)
       AMENDMENT_ORIGINAL_26011950.zip is the 1950 original
 docs/
     → INVENTORY.md (authoritative audit), amendments.csv (machine source, 106 rows),
-      amendments.md (manifest, human-readable view), AMENDMENTS.md (human-readable amendment
+      amendments-table.md (manifest, human-readable view), AMENDMENTS.md (human-readable amendment
       index), amendments_new.md / backfill_report.md (worker sources, converted from CSV),
       bill_gaps.md (bill provenance)
 ```

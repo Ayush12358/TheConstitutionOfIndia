@@ -1,4 +1,4 @@
-<!-- Generated 2026-08-07 from docs/amendments.csv (machine source of truth for verify_repo.py and download_amendments.py; this table is the human-readable view). -->
+<!-- Generated 2026-08-07 from docs/amendments.csv (machine source of truth for verify_repo.py and download_amendments.py; docs/amendments-table.md is the human-readable view). -->
 
 | number | title | assent_date | key_changes | bill_file | act_file | bill_url | act_url | zip_file | status |
 |---|---|---|---|---|---|---|---|---|---|

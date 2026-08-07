@@ -11,5 +11,5 @@ was located (03, 16, 097–106).
   their provenance in `../docs/bill_gaps.md`; each row's `status = MISSING_BILL` in
   `../docs/amendments.csv`.
 - **Sources**: per-file download URLs and names live in `../docs/amendments.csv` (machine
-  source) and `../docs/amendments.md` (human-readable view); fetch new files with
+  source) and `../docs/amendments-table.md` (human-readable view); fetch new files with
   `python ../download_amendments.py`.
