@@ -238,7 +238,7 @@ Provided that at the end of ten years from the commencement of this Constitution
 
 (6) The President shall cause all such reports to be laid before each House of Parliament along with a memorandum explaining the action taken or proposed to be taken on the recommendations relating to the Union and the reasons for the non-acceptance, if any, of any such recommendations.
 
-(7) Where any such report, or any part thereof, relates to any matter with which any State Government is concerned, a copy of such report shall be forwarded to the State Government which shall cause it to be laid before the Legislature of the State along with a memorandum explaining the action taken or proposed to be taken on the recommendations relating to the State and the reasons for the non-acceptance, it any, of any of such recommendations.
+(7) Where any such report, or any part thereof, relates to any matter with which any State Government is concerned, a copy of such report shall be forwarded to the State Government which shall cause it to be laid before the Legislature of the State along with a memorandum explaining the action taken or proposed to be taken on the recommendations relating to the State and the reasons for the non-acceptance, if any, of any of such recommendations.
 
 (8) The Commission shall, while investigating any matter referred to in sub-clause (a) or inquiring into any complaint referred to in sub-clause (b) of clause (5), have all the powers of a civil court trying a suit and in particular in respect of the following matters, namely :—
 

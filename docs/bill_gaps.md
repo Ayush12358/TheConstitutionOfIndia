@@ -59,3 +59,31 @@ These are the same files now on disk as `AMENDMENTS/AMENDMENT_01_ACT.pdf` … `A
   `amendments_new.md`.
 - **105th assent date**: `docs/amendments.csv` row 105 uses **2021-08-19** (Gazette extraordinary
   date, authoritative) — the source CSV said 2021-08-18.
+
+## Fresh web probe — 8-bill sample (2026-08-07)
+
+Follow-up worker research (2026-08-07), sample: amendments 01, 02, 04, 07, 10, 17, 24, 40.
+Goal: test whether any of the 94 `MISSING_BILL` rows is recoverable from the open web.
+
+- **(a) Amendment 01 recovered (as a committee report, not a bill PDF).** The only sample item
+  recoverable is the *Report of the Joint Committee on the Constitution (First Amendment) Bill,
+  1951*, from the eparlib jcb (Joint Committee on Bills) collection, via the Wayback Machine
+  2024-06-18 capture of
+  `https://eparlib.nic.in/bitstream/123456789/58338/1/jcb_1951_constitution_1st_amendment_bill.pdf`
+  (26 pages, OCR text layer; reproduces the bill text, including the Ninth Schedule). Caveat: the
+  2022-08-13 capture of the same bitstream is corrupt — use the 2024-06-18 one.
+- **(b) eparlib jcb collection holds >= 4 amendment-bill items.** Identified so far: 1st = 58338,
+  3rd = 58262, 16th = 58623, 81st = 757609. These are joint-committee reports that reproduce bill
+  texts; a Wayback CDX sweep of eparlib `bitstream/123456789/*` is the most promising full-sweep
+  path for the remaining gaps.
+- **(c) Parliament Digital Library (eparlib.sansad.in) holds debate records, not bills.** Lok Sabha
+  debate records titled "Constitution (Nth Amendment) Bill" exist for many amendments (handles:
+  02 = 896504, 07 = 895365, 24 = 858238 / 853319 / 852188, 11th = 903479, 14th = 874018,
+  22nd = 870920, 42nd = 855625, 44th = 836904, 45th = 839925, 48th = 833581). These are DEBATE
+  records (leave-to-introduce motion and speeches), NOT bill text — must not be labeled as bills.
+  The site is currently down (preservation risk; contents may not be re-probeable).
+- **(d) Verdict.** Standalone pre-1997 bill PDFs remain unrecoverable from the open web: the
+  Gazette of India Extraordinary for the 1950s–70s is not digitised, and
+  PRS / indiankanoon / legislative.gov.in hold acts only. No new `bill_url` values added to
+  `docs/amendments.csv` as a result of this probe; amendment 01 stays `MISSING_BILL` as a *bill*
+  (the recovered committee report is not the bill proper — flagging here for future triage).
