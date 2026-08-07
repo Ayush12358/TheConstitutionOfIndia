@@ -9,7 +9,7 @@ was located (03, 16, 097–106). Every act and surviving bill also has a plain-t
 - **Coverage**: 106/106 Acts present; every act is %PDF-verified (>10 KB) and content-checked.
 - **Plain text**: 99 acts + 10 bills extracted from the PDFs; the 7 scan-only acts (94, 96,
   097, 098, 102, 103, 105) were transcribed from Indian Kanoon; the 2 scan-only bills (098,
-  106) have no text file — the site shows "scan-only PDF" for them.
+  106) were transcribed page-by-page with a vision model.
 - **Missing bills**: the 94 bills not yet located (01–96 except 03 and 16) are tracked with
   their provenance in `../docs/bill_gaps.md`; each row's `status = MISSING_BILL` in
   `../docs/amendments.csv`.

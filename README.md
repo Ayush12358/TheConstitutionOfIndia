@@ -21,7 +21,7 @@ Bills in `AMENDMENTS/` through the **106th Amendment (2023)** — the latest ena
 - **Every act and surviving bill now has plain text** (`AMENDMENT_NN_ACT.txt` /
   `AMENDMENT_NN_BILL.txt`, added 2026-08-07): 99 acts + 10 bills extracted from the PDFs, the
   7 scanned acts (94, 96, 97–98, 102, 103, 105) sourced from Indian Kanoon, and the 2
-  scan-only bills (98, 106) left without text.
+  scan-only bills (98, 106) transcribed page-by-page with a vision model.
 - Amendment **105's** assent date is recorded as **2021-08-19** (Gazette extraordinary date); some
   secondary sources say 18 Aug 2021.
 
