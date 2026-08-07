@@ -315,7 +315,9 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
   ("Constitution (One Hundred and Eleventh Amendment) Act, 2009" — the 111th Amendment does not
   exist; the gazette says Ninety-seventh Amendment Act, 2011), and stale First/Fourth Schedules
   (pre-Telangana, no UT entries 6–7 Puducherry/Chandigarh). Our reconstruction is
-  act-gazette-verified (closed-loop diff against the post-96 bundle).
+  act-gazette-verified (closed-loop diff against the post-96 bundle); the per-edit
+  audit log of the reconstruction (92 reverse-chain edits, each cited to its act
+  section) is preserved in `docs/bundle_reconstruction_97_106.md`.
 - **Spelling note**: the official Gazette of India Extraordinary (13-01-2012) prints
   **"conterminous"** in 243ZJ(2) — our bundles and the live txt match the gazette; Wikisource's
   2020 consolidation prints "coterminous", diverging from the gazette (the author's bundles
