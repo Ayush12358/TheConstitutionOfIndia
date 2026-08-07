@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { marked } from "marked";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -82,6 +82,10 @@ function render(markdown: string): string {
 function padNumber(n: number): string {
   return n <= 96 ? String(n).padStart(2, "0") : String(n).padStart(3, "0");
 }
+
+// In-flight history-file fetches, shared across renders (module scope so a
+// re-render can't lose track and re-fetch). See versionFile below.
+const historyRequests = new Map<string, Promise<HistoryFile | null>>();
 
 function today(): string {
   return new Date().toISOString().slice(0, 10);
@@ -225,17 +229,27 @@ export function App() {
           .map(([key]) => key)
       : [];
 
-  const versionFile = async (key: string): Promise<HistoryFile | null> => {
-    if (historyCache[key]) return historyCache[key];
-    try {
-      const res = await fetch(`/history/${key}.json`);
-      if (!res.ok) return null;
-      const data = (await res.json()) as HistoryFile;
-      setHistoryCache(prev => ({ ...prev, [key]: data }));
-      return data;
-    } catch {
-      return null;
-    }
+  // One fetch per key, ever, per session: successful entries stay in the map
+  // (not just while in flight) so a render that commits between a fetch's
+  // resolution and its state update can never start a second request. Only
+  // failures are dropped, allowing a later retry.
+  const versionFile = (key: string): Promise<HistoryFile | null> => {
+    const cached = historyCache[key];
+    if (cached) return Promise.resolve(cached);
+    const inFlight = historyRequests.get(key);
+    if (inFlight) return inFlight;
+    const request = fetch(`/history/${key}.json`)
+      .then(res => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
+      .then((data: HistoryFile) => {
+        setHistoryCache(prev => ({ ...prev, [key]: data }));
+        return data;
+      })
+      .catch(() => {
+        historyRequests.delete(key);
+        return null;
+      });
+    historyRequests.set(key, request);
+    return request;
   };
 
   const textAtState = async (key: string, n: number): Promise<string | null> => {
@@ -462,11 +476,17 @@ export function App() {
 
   function AsyncDiff({ title, keyName, a, b }: { title: string; keyName: string; a: number; b: number }) {
     const [state, setState] = useState<{ a: string | null; b: string | null } | null>(null);
+    const resolved = useRef<string | null>(null);
     useEffect(() => {
+      const pair = `${a}:${b}`;
+      if (resolved.current === pair) return; // already rendered for this state pair
       let alive = true;
       (async () => {
         const [ta, tb] = await Promise.all([textAtState(keyName, a), textAtState(keyName, b)]);
-        if (alive) setState({ a: ta, b: tb });
+        if (alive) {
+          setState({ a: ta, b: tb });
+          resolved.current = pair;
+        }
       })();
       return () => {
         alive = false;
@@ -600,10 +620,15 @@ export function App() {
 
   function HistoryReader({ keyName, n }: { keyName: string; n: number }) {
     const [text, setText] = useState<string | null>(null);
+    const resolved = useRef<number | null>(null);
     useEffect(() => {
+      if (resolved.current === n) return; // already rendered for this state
       let alive = true;
       textAtState(keyName, n).then(t => {
-        if (alive) setText(t);
+        if (alive) {
+          setText(t);
+          resolved.current = n;
+        }
       });
       return () => {
         alive = false;
@@ -616,7 +641,10 @@ export function App() {
 
   function ComparePanel({ nA, nB }: { nA: number; nB: number }) {
     const [files, setFiles] = useState<Record<string, { a: string | null; b: string | null }> | null>(null);
+    const resolved = useRef<string | null>(null);
     useEffect(() => {
+      const pair = `${nA}:${nB}`;
+      if (resolved.current === pair) return; // already computed for this date pair
       let alive = true;
       (async () => {
         // A file's text differs between the two states iff a version boundary
@@ -633,7 +661,10 @@ export function App() {
         for (const [key, ta, tb] of results) {
           if (alive && ta !== tb) entries[key] = { a: ta, b: tb };
         }
-        if (alive) setFiles(entries);
+        if (alive) {
+          setFiles(entries);
+          resolved.current = pair;
+        }
       })();
       return () => {
         alive = false;
