@@ -48,6 +48,8 @@ docs/
       index), amendments_new.md / amendments_new_report.md / backfill_report.md (worker sources,
       converted from CSV), bill_gaps.md (bill provenance), bundle_reconstruction_97_106.md
       (97–106 bundle lineage + reconstruction audit log)
+website/
+    → Bun/React/Tailwind app; `bun run build` → `website/dist/`; dev via `bun dev`
 ```
 
 **Tags**: every bundle release is annotated-tagged `STABLE_AMENDMENT_NN` (files as they stood
@@ -67,6 +69,7 @@ binary cleanup, **each tag tree still contains its bundle zip** — that is the 
 | `create_bundle.sh` | bash + `zip` | LEGACY (2026-08-07): bundles removed from the working tree; recreates them if needed (zips preserved in git tags/history) |
 | `convert_modified_txt_to_pdf.sh` | bash + `enscript` + `ps2pdf` | Convert a txt edit to PDF (legacy: operates on .txt; content is now .md) |
 | `convert_all_pdfs_to_texts.sh` | bash + `pdftotext` (poppler) | Re-extract all PDFs to txt (legacy: operates on .txt; content is now .md) |
+| `website/` | Bun (any OS) | React/Tailwind site; build: `cd website && bun run build` |
 
 CI: `.github/workflows/verify.yml` runs `verify_repo.py` on every push/PR (GitHub Actions).
 
