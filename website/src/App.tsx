@@ -2,10 +2,16 @@ import { useEffect, useState } from "react";
 import { marked } from "marked";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import "./index.css";
 
 type IndexItem = { key: string; title: string };
 type Content = { key: string; title: string; markdown: string };
+type SearchResult = {
+  key: string;
+  title: string;
+  matches: { line: string; snippet: string }[];
+};
 
 // Part keys in display order: part1..part22, then the lettered parts.
 const PART_KEYS = [
@@ -39,6 +45,22 @@ export function App() {
   const [items, setItems] = useState<IndexItem[]>([]);
   const [selected, setSelected] = useState<Content | null>(null);
   const [error, setError] = useState("");
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<SearchResult[] | null>(null);
+
+  const runSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!query.trim()) {
+      setResults(null); // query cleared → drop stale results
+      return;
+    }
+    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+    if (!res.ok) {
+      setResults([]);
+      return;
+    }
+    setResults(await res.json());
+  };
 
   useEffect(() => {
     fetch("/api/content/preamble")
@@ -90,6 +112,45 @@ export function App() {
       </header>
 
       {error && <p className="text-destructive text-sm">{error}</p>}
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Search</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="flex gap-2" onSubmit={runSearch}>
+            <Input
+              placeholder="Search the Constitution… e.g. secular, 330A, habeas corpus"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+            />
+            <Button type="submit">Search</Button>
+          </form>
+          {results && (
+            results.length === 0 ? (
+              <p className="text-muted-foreground mt-4 text-sm">No matches</p>
+            ) : (
+              <div className="mt-2 grid grid-cols-1 gap-2 md:grid-cols-2">
+                {results.map(r => (
+                  <Button
+                    key={r.key}
+                    variant="outline"
+                    className="h-auto justify-start py-2 text-left text-xs leading-snug"
+                    onClick={() => open(r)}
+                  >
+                    <span className="min-w-0">
+                      <span className="block truncate font-medium">{r.title}</span>
+                      {r.matches[0] && (
+                        <span className="text-muted-foreground block truncate">{r.matches[0].snippet}</span>
+                      )}
+                    </span>
+                  </Button>
+                ))}
+              </div>
+            )
+          )}
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

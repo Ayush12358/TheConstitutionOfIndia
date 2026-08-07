@@ -13,11 +13,18 @@ and a reading pane with slugified article anchors on every heading for deep link
   Unknown keys → `404 { error }`.
 - `GET /api/index` → `[{ key, title }, …]` for all 39 keys (loads every file; used to build
   the grouped Parts/Schedules index).
+- `GET /api/search?q=<query>` → full-text search. Case-insensitive substring scan of all
+  39 content files; returns `[{ key, title, matches: [{ line, snippet }] }]` with up to
+  5 matches per file (`snippet` is the matched line trimmed to ~140 chars) and at most
+  20 files, sorted by match count (descending). `q` must be at least 2 characters, else
+  `400 { error: "query too short" }`. Search is plain substring matching (no regex), so
+  there's no injection risk, and it never reads outside the whitelisted files.
 
 **Security model:** keys are looked up in a hard-coded whitelist (`key` → repo-relative path)
 and are never derived from the request path; the resolved path is additionally checked to stay
 inside the repo root (containment check), and a `/api/*` catch-all returns 404 instead of
-falling through to the SPA. Content files are read from disk on each request.
+falling through to the SPA. Content files are read from disk on the first request and cached
+in memory afterwards (the cache is shared by `/api/content`, `/api/index`, and `/api/search`).
 
 ## Run
 
@@ -40,7 +47,8 @@ The static build has **no API server** — it can't fetch content — so serve t
 
 `.github/workflows/verify.yml` job `website-build` runs on every push/PR:
 `bun install --frozen-lockfile` + `bun run build`, then a smoke test that starts the server
-and checks `GET /api/content/preamble` returns the Preamble text (plus `GET /` → 200).
+and checks `GET /api/content/preamble` returns the Preamble text, `GET /api/search?q=secular`
+returns a result (plus `GET /` → 200).
 
 ## Layout
 

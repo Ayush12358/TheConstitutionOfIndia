@@ -49,6 +49,10 @@ const contentMap: Record<string, string> = {
 // Server runs with cwd = website/, so the repo root is one level up.
 const repoRoot = path.resolve(process.cwd(), "..");
 
+// All 39 content files, loaded lazily once (first /api/search request) and
+// reused by /api/content and /api/index afterwards.
+const contentCache = new Map<string, { title: string; markdown: string }>();
+
 function contentPath(key: string): string | null {
   const rel = contentMap[key];
   if (!rel) return null;
@@ -64,11 +68,15 @@ function titleOf(markdown: string, fallback: string): string {
 }
 
 async function loadContent(key: string) {
+  const cached = contentCache.get(key);
+  if (cached) return { key, ...cached };
   const full = contentPath(key);
   if (!full) return null;
   try {
     const markdown = await Bun.file(full).text();
-    return { key, title: titleOf(markdown, key), markdown };
+    const content = { key, title: titleOf(markdown, key), markdown };
+    contentCache.set(key, { title: content.title, markdown });
+    return content;
   } catch {
     return null;
   }
@@ -90,6 +98,28 @@ const server = serve({
         }),
       );
       return Response.json(items);
+    },
+
+    "/api/search": async req => {
+      const q = (new URL(req.url).searchParams.get("q") ?? "").trim();
+      if (q.length < 2) return Response.json({ error: "query too short" }, { status: 400 });
+
+      // Plain case-insensitive substring scan over the cached whitelisted files —
+      // no regex, so user input can't inject patterns. Warm the cache once.
+      const needle = q.toLowerCase();
+      await Promise.all(Object.keys(contentMap).map(loadContent));
+      const results: { key: string; title: string; matches: { line: string; snippet: string }[] }[] = [];
+      for (const [key, content] of contentCache) {
+        const matches: { line: string; snippet: string }[] = [];
+        for (const line of content.markdown.split("\n")) {
+          if (!line.toLowerCase().includes(needle)) continue;
+          matches.push({ line, snippet: line.length > 140 ? `${line.slice(0, 140)}…` : line });
+          if (matches.length === 5) break;
+        }
+        if (matches.length > 0) results.push({ key, title: content.title, matches });
+      }
+      results.sort((a, b) => b.matches.length - a.matches.length);
+      return Response.json(results.slice(0, 20));
     },
 
     // Any other /api/* path is a 404, never the SPA fallback.
