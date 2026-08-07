@@ -1,0 +1,19 @@
+# macOS cruft
+.DS_Store
+
+# content regeneration workspace (owned by the content worker)
+_work/
+
+# scratch artifacts from the amendment-research workers
+probe_*
+*_results.json
+*_urls.json
+bill_ids.json
+amend_map.json
+amend_index.json
+prs_cands.json
+act_textcheck.json
+_leg_*.html
+_leg_*.json
+_wiki_raw.txt
+amend_acts_page.html
