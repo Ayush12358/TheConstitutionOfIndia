@@ -110,6 +110,12 @@ README-described branch set survives here. Note the two 97–99 lineages: the au
 bundles (on `forward_amendments` and the upstream `STABLE_AMENDMENT_97..99` tags) vs this repo's
 act-gazette-verified reconstruction on `master` — see `docs/INVENTORY.md` §9 (Lineage comparison).
 
+## License
+
+No license file is present in this repository — inherited from upstream, which also has none
+([anoopdixith/TheConstitutionOfIndia](https://github.com/anoopdixith/TheConstitutionOfIndia)).
+The Constitution of India text is a work of the Government of India.
+
 ## References
 
 - `docs/INVENTORY.md` — authoritative audit: git archaeology, zip contents, amendment manifest, tag gaps
