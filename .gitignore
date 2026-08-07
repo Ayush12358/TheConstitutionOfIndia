@@ -4,6 +4,9 @@
 # content regeneration workspace (owned by the content worker)
 _work/
 
+# bundle worker scratch (reverse-chain stages live here, never in the tree)
+_bundle_work/
+
 # scratch artifacts from the amendment-research workers
 probe_*
 *_results.json
