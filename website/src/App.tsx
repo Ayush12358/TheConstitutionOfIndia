@@ -19,6 +19,18 @@ type Amendment = {
   key_changes: string;
   status: string;
   has_bill: boolean;
+  act_url: string;
+  bill_url: string;
+};
+
+// The static payload from /content.json (dist/content.json on static hosts):
+// all content embedded at build time, so the site needs no API server.
+type ContentPayload = {
+  generated: string;
+  preamble: { key: string; title: string; markdown: string };
+  index: IndexItem[];
+  contents: Record<string, string>;
+  amendments: Amendment[];
 };
 
 // Part keys in display order: part1..part22, then the lettered parts.
@@ -60,40 +72,60 @@ export function App() {
   const [results, setResults] = useState<SearchResult[] | null>(null);
   const [amendments, setAmendments] = useState<Amendment[]>([]);
   const [amendmentQuery, setAmendmentQuery] = useState("");
+  const [contents, setContents] = useState<Record<string, string>>({});
 
-  const runSearch = async (e: React.FormEvent) => {
+  // Client-side twin of the server's /api/search: case-insensitive substring,
+  // up to 5 matches per file, 20-file cap, sorted by match count. Runs over
+  // the embedded contents map, so it works on static hosting with no API.
+  const runSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!query.trim()) {
+    const q = query.trim();
+    if (!q) {
       setResults(null); // query cleared → drop stale results
       return;
     }
-    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-    if (!res.ok) {
-      setResults([]);
+    if (q.length < 2) {
+      setResults([]); // mirrors the server's "query too short" → no matches
       return;
     }
-    setResults(await res.json());
+    const needle = q.toLowerCase();
+    const found: SearchResult[] = [];
+    for (const [key, markdown] of Object.entries(contents)) {
+      const matches: { line: string; snippet: string }[] = [];
+      for (const line of markdown.split("\n")) {
+        if (!line.toLowerCase().includes(needle)) continue;
+        matches.push({ line, snippet: line.length > 140 ? `${line.slice(0, 140)}…` : line });
+        if (matches.length === 5) break;
+      }
+      if (matches.length > 0) {
+        found.push({ key, title: items.find(i => i.key === key)?.title ?? key, matches });
+      }
+    }
+    found.sort((a, b) => b.matches.length - a.matches.length);
+    setResults(found.slice(0, 20));
   };
 
   useEffect(() => {
-    fetch("/api/content/preamble")
-      .then(res => res.json())
-      .then((data: Content) => setPreamble(data.markdown))
-      .catch(() => setError("Failed to load the Preamble."));
-    fetch("/api/index")
-      .then(res => res.json())
-      .then(setItems)
-      .catch(() => setError("Failed to load the parts and schedules index."));
-    fetch("/api/amendments")
-      .then(res => res.json())
-      .then(setAmendments)
-      .catch(() => setError("Failed to load the amendments list."));
+    // One payload holds everything: preamble, index, full contents (reading
+    // pane + search), amendments. On static hosts this is dist/content.json.
+    fetch("/content.json")
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then((data: ContentPayload) => {
+        setPreamble(data.preamble.markdown);
+        setItems(data.index);
+        setContents(data.contents);
+        setAmendments(data.amendments);
+      })
+      .catch(() => setError("Failed to load content.json — run the Bun server or rebuild"));
   }, []);
 
-  const open = async (item: IndexItem) => {
-    const res = await fetch(`/api/content/${item.key}`);
-    const data: Content = await res.json();
-    setSelected(data);
+  const open = (item: IndexItem) => {
+    const markdown = contents[item.key];
+    if (markdown === undefined) return;
+    setSelected({ key: item.key, title: item.title, markdown });
   };
 
   // Group the index into Parts (explicit display order) and Schedules (numeric).
@@ -175,7 +207,7 @@ export function App() {
         </CardHeader>
         <CardContent>
           {preamble ? (
-            // Trusted content: markdown is served from this repo's own files via /api/content/:key.
+            // Trusted content: markdown is embedded from this repo's own files into /content.json.
             <div
               className="markdown max-w-prose"
               dangerouslySetInnerHTML={{ __html: render(preamble) }}
@@ -243,14 +275,16 @@ export function App() {
                     </span>
                   </div>
                   <div className="flex shrink-0 gap-1">
-                    <Button asChild variant="outline" size="sm">
-                      <a href={`/api/file/act/${a.number}`} target="_blank" rel="noopener">
-                        Act
-                      </a>
-                    </Button>
-                    {a.has_bill && (
+                    {a.act_url !== "MISSING" && (
                       <Button asChild variant="outline" size="sm">
-                        <a href={`/api/file/bill/${a.number}`} target="_blank" rel="noopener">
+                        <a href={a.act_url} target="_blank" rel="noopener">
+                          Act
+                        </a>
+                      </Button>
+                    )}
+                    {a.has_bill && a.bill_url !== "MISSING" && (
+                      <Button asChild variant="outline" size="sm">
+                        <a href={a.bill_url} target="_blank" rel="noopener">
                           Bill
                         </a>
                       </Button>

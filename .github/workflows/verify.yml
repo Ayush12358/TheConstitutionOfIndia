@@ -24,6 +24,8 @@ jobs:
           bun-version: latest
       - name: Install deps and build website
         run: cd website && bun install --frozen-lockfile && bun run build
+      - name: Check static payload exists
+        run: cd website && test -f dist/content.json
       - name: Run unit tests
         run: cd website && bun test
       - name: Smoke test content API
