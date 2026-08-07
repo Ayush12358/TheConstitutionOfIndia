@@ -12,9 +12,10 @@ Act (and the surviving Bills) through the **106th Amendment (2023)** — the lat
   16-04-2026** by notification S.O. 1922(E) under s.1(2); the reserved seats themselves still
   await delimitation after the next census. Amendments 107+ exist only as pending bills (e.g. the
   ONOE bills); none has been enacted.
-- **Content tree is the post-96th-Amendment (2011) Constitution, currently being regenerated**
-  amendment-by-amendment toward the post-106th state; see `docs/INVENTORY.md` for the audit and
-  `verify_repo.py` for live completeness status.
+- **Content tree regenerated 2026-08-07** from the official consolidated text (Legislative
+  Department pocket editions through the 105th) with the 106th Amendment applied from the Gazette —
+  i.e. the post-106th state; extraction defects found in audit were fixed against the printed pages
+  (see `docs/INVENTORY.md`, `verify_repo.py`).
 - Amendment **105's** assent date is recorded as **2021-08-19** (Gazette extraordinary date); some
   secondary sources say 18 Aug 2021.
 
@@ -56,7 +57,7 @@ restored and 97–106 added on 2026-08-07). Plus `STABLE_AMENDMENT_88_ACTUAL`,
 
 | Tool | Runs on | Purpose |
 |---|---|---|
-| `verify_repo.py` | Python 3, any OS (stdlib) | Completeness check: 39 content dirs, 106 acts + bills, 98 zips, CSV consistency; exit 0 = complete |
+| `verify_repo.py` | Python 3, any OS (stdlib) | Completeness check: 39 content dirs, 106 acts + bills, 108 bundle zips (all testzip + PREAMBLE member; 97–106 must have 78 members incl. PART_9_B), CSV consistency; exit 0 = complete |
 | `download_amendments.py` | Python 3, any OS (stdlib urllib) | Download a bill/act PDF into `AMENDMENTS/` (`--auto N` lists expected filenames; `--force` to overwrite; %PDF + size verified) |
 | `create_directories.sh` | bash (Git Bash/WSL) | Create PART_1..22 / SCHEDULE_1..12 dirs |
 | `create_extension_directories.sh` | bash | Create PART_<n>_A dirs |
@@ -94,9 +95,9 @@ Advani, Arun Jaitley, …).
 Two experimental branches (`forward_amendments` for 96→99, `dates` for the reverse chain) were
 described in the original README; **master** was used for experiments and has been rebased — only
 `master` survives in this clone, and it is not a single clean history. The author's own notes:
-*"Not sure if it's completely usable. I plan to sanitize it."* — that sanitization is the ongoing
-2026-08-07 regeneration effort (working tree content is being rebuilt from the bundle zips toward
-the post-106th state).
+*"Not sure if it's completely usable. I plan to sanitize it."* — that sanitization was carried out
+on 2026-08-07: the working tree was regenerated from the official consolidated text to the
+post-106th state (see `docs/INVENTORY.md` §8–9).
 
 ## References
 
