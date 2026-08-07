@@ -263,3 +263,29 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
   `docs/backfill_report.csv` (eparlib found only 03 and 16; legislative.gov.in/PRS/indiacode have
   no pre-1997 bills), plus the 88/88ACTUAL canonical note.
 - **No commit made** — the lead runs final verification and commits after the content worker lands.
+
+---
+
+## 9. 2026-08-07 final updates (post-commit follow-ups)
+
+- **Content fix pass (18 files)**: the content worker corrected live extraction defects in 18
+  txt files — Art 240(1) omission notes, Sixth Schedule paragraph numbering, First Schedule
+  footnote leaks, Schedule 4 table, space-semicolons, and `'N[` leaks — each verified against the
+  printed pages. Committed together with this appendix.
+- **Bundles 97–106 added**: 10 new zips `AMENDMENT_97_12012012.zip` … `AMENDMENT_106_28092023.zip`
+  (98 → 108 total) plus tags `STABLE_AMENDMENT_97` … `STABLE_AMENDMENT_106` (99 → 109 tags total),
+  committed by the bundle worker in release commits `99a81d5..285d2d8` and reviewed with no changes.
+  Their PDFs are **typeset from the txt** (not official scans, unlike the 1–96 bundles); the 99th
+  bundle reflects NJAC **as enacted** (struck down 16 Oct 2015). Lineage: anchored on the official
+  post-96 bundle text + the act texts. New-convention zips carry 78 members (39 content dirs,
+  incl. `PART_9_B` added by the 97th) vs 76 for 1–96 (38 dirs, no Part IXB).
+- **106th Amendment in force**: brought into force **16-04-2026** by notification **S.O. 1922(E)**
+  under s.1(2) of the 106th Amendment Act; the reserved seats themselves still await delimitation
+  after the next census.
+- **`verify_repo.py` zip check made dynamic**: no hardcoded zip count; enumerates all
+  `AMENDMENT_*.zip` (testzip + PREAMBLE member for every one) and additionally requires the 97–106
+  bundles to have 78 members including `PART_9_B/PART9B.txt`. Full PASS at 108 zips.
+- **`docs/AMENDMENTS.md` added**: human-readable index of amendments 1–106 generated from
+  `docs/amendments.csv` (97–106 fully populated; 1–96 show bundle-zip dates with names/key changes
+  pending backfill, never fabricated).
+

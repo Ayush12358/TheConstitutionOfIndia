@@ -8,7 +8,7 @@ Provided that the conduct of the President may be brought under review by any co
 
 (3) No process for the arrest or imprisonment of the President, or the Governor of a State, shall issue from any court during his term of office.
 
-(4) No civil proceedings in which relief is claimed against the President, or the Governor of a State, shall be instituted during his term of office in any court in respect of any act done or purporting to be done by him in his personal capacity, whether before or after he entered upon his office as President, or as Governor of such State, until the expiration of two months next after notice in writing has been delivered to the President or the Governor , as the case may be, or left at his office stating the nature of the proceedings, the cause of action therefor, the name, description and place of residence of the party by whom such proceedings are to be instituted and the relief which he claims.
+(4) No civil proceedings in which relief is claimed against the President, or the Governor of a State, shall be instituted during his term of office in any court in respect of any act done or purporting to be done by him in his personal capacity, whether before or after he entered upon his office as President, or as Governor of such State, until the expiration of two months next after notice in writing has been delivered to the President or the Governor, as the case may be, or left at his office stating the nature of the proceedings, the cause of action therefor, the name, description and place of residence of the party by whom such proceedings are to be instituted and the relief which he claims.
 
 361A. Protection of publication of proceedings of Parliament and State Legislatures.—(1) No person shall be liable to any proceedings, civil or criminal, in any court in respect of the publication in a newspaper of a substantially true report of any proceedings of either House of Parliament or the Legislative Assembly, or, as the case may be, either House of the Legislature, of a State, unless the publication is proved to have been made with malice:
 
@@ -88,7 +88,7 @@ Explanation. — For the purposes of this article,—
 
 (11) “Federal Court” means the Federal Court constituted under the Government of India Act, 1935;
 
-(12) “goods” includes all materials, commodities, and articles; (12A) “goods and services tax” means any tax on supply of goods, or services or both except taxes on the supply of the alcoholic liquor for human consumption ;
+(12) “goods” includes all materials, commodities, and articles; (12A) “goods and services tax” means any tax on supply of goods, or services or both except taxes on the supply of the alcoholic liquor for human consumption;
 
 (13) “guarantee” includes any obligation undertaken before the commencement of this Constitution to make payments in the event of the profits of an undertaking falling short of a specified amount;
 
@@ -122,7 +122,7 @@ Explanation. — For the purposes of this article,—
 
 (25) “Scheduled Tribes” means such tribes or tribal communities or parts of or groups within such tribes or tribal communities as are deemed under article 342 to be Scheduled Tribes for the purposes of this Constitution;
 
-(26) “securities” includes stock; (26A) “Services” means anything other than goods; (26B) “State” with reference to articles 246A, 268, 269, 269A and article 279A includes a Union territory with Legislature ; (26C) "socially and educationally backward classes" means such backward classes as are so deemed under article 342A for the purposes of the Central Government or the State or Union territory, as the case may be ;
+(26) “securities” includes stock; (26A) “Services” means anything other than goods; (26B) “State” with reference to articles 246A, 268, 269, 269A and article 279A includes a Union territory with Legislature; (26C) "socially and educationally backward classes" means such backward classes as are so deemed under article 342A for the purposes of the Central Government or the State or Union territory, as the case may be.
 
 (27) “sub-clause” means a sub-clause of the clause in which the expression occurs;
 
@@ -146,7 +146,7 @@ Explanation. — For the purposes of this article,—
 
 367. Interpretation.—(1) Unless the context otherwise requires, the General Clauses Act, 1897, shall, subject to any adaptations and modifications that may be made therein under article 372, apply for the interpretation of this Constitution as it applies for the interpretation of an Act of the Legislature of the Dominion of India.
 
-(2) Any reference in this Constitution to Acts or laws of, or made by, Parliament, or to Acts or laws of, or made by, the Legislature of a State , shall be construed as including a reference to an Ordinance made by the President or, to an Ordinance made by a Governor , as the case may be.
+(2) Any reference in this Constitution to Acts or laws of, or made by, Parliament, or to Acts or laws of, or made by, the Legislature of a State, shall be construed as including a reference to an Ordinance made by the President or, to an Ordinance made by a Governor, as the case may be.
 
 (3) For the purposes of this Constitution “foreign State” means any State other than India:
 

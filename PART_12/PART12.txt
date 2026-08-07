@@ -124,7 +124,7 @@ Provided that after a Finance Commission has been constituted no order shall be 
 
 (d) the threshold limit of turnover below which goods and services may be exempted from goods and services tax;
 
-(e) the rates including floor rates with bands of goods and services tax ;
+(e) the rates including floor rates with bands of goods and services tax;
 
 (f) any special rate or rates for a specified period, to raise additional resources during any natural calamity or disaster;
 
@@ -202,7 +202,7 @@ Provided that after a Finance Commission has been constituted no order shall be 
 
 (a) outside the State; or
 
-(b) in the course of the import of the goods or services or both into, or export of the goods or services or both out of, the territory of India. 4[(2) Parliament may by law formulate principles for determining when a supply of goods or of services or both in any of the ways mentioned in clause (1).
+(b) in the course of the import of the goods or services or both into, or export of the goods or services or both out of, the territory of India. (2) Parliament may by law formulate principles for determining when a supply of goods or of services or both in any of the ways mentioned in clause (1).
 
 287. Exemption from taxes on electricity.—Save in so far as Parliament may by law otherwise provide, no law of a State shall impose, or authorise the imposition of, a tax on the consumption or sale of electricity (whether produced by a Government or other persons) which is—
 

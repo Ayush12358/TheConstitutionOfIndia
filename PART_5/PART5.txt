@@ -224,7 +224,7 @@ CHAPTER II.—PARLIAMENT General
 
 (4) The representatives of each State in the Council of States shall be elected by the elected members of the Legislative Assembly of the State in accordance with the system of proportional representation by means of the single transferable vote.
 
-(5) The representatives of the Union territories in the Council of States shall be chosen in such manner as Parliament may by law prescribe. 3[81. Composition of the House of the People.—(1) Subject to the provisions of article 331 , the House of the People shall consist of—
+(5) The representatives of the Union territories in the Council of States shall be chosen in such manner as Parliament may by law prescribe. 81. Composition of the House of the People.—(1) Subject to the provisions of article 331, the House of the People shall consist of—
 
 (a) not more than five hundred and thirty members chosen by direct election from territorial constituencies in the States, and
 
@@ -350,7 +350,7 @@ Provided that nothing in this clause shall be construed as preventing the creati
 
 101. Vacation of seats.— (1) No person shall be a member of both Houses of Parliament and provision shall be made by Parliament by law for the vacation by a person who is chosen a member of both Houses of his seat in one House or the other.
 
-(2) No person shall be a member both of Parliament and of a House of the Legislature of a State , and if a person is chosen a member both of Parliament and of a House of the Legislature of a State, then, at the expiration of such period as may be specified in rules made by the President, that person’s seat in Parliament shall become vacant, unless he has previously resigned his seat in the Legislature of the State.
+(2) No person shall be a member both of Parliament and of a House of the Legislature of a State, and if a person is chosen a member both of Parliament and of a House of the Legislature of a State, then, at the expiration of such period as may be specified in rules made by the President, that person’s seat in Parliament shall become vacant, unless he has previously resigned his seat in the Legislature of the State.
 
 (3) If a member of either House of Parliament—
 
@@ -676,7 +676,7 @@ Provided that the Supreme Court may after determining the said questions of law 
 
 (2) The President may, notwithstanding anything in the proviso to article 131, refer a dispute of the kind mentioned in the said proviso to the Supreme Court for opinion and the Supreme Court shall, after such hearing as it thinks fit, report to the President its opinion thereon.
 
-144. Civil and judicial authorities to act in aid of the Supreme Court.—All authorities, civil and judicial, in the territory of India shall act in aid of the Supreme Court. 4[144A. [Special provisions as to disposal of questions relating to constitutional validity of laws.].—Omitted by the Constitution (Forty-third Amendment) Act, 1977, s. 5.]
+144. Civil and judicial authorities to act in aid of the Supreme Court.—All authorities, civil and judicial, in the territory of India shall act in aid of the Supreme Court. 144A. [Special provisions as to disposal of questions relating to constitutional validity of laws.].—Omitted by the Constitution (Forty-third Amendment) Act, 1977, s. 5.]
 
 145. Rules of Court, etc.—(1) Subject to the provisions of any law made by Parliament, the Supreme Court may from time to time, with the approval of the President, make rules for regulating generally the practice and procedure of the Court including—
 

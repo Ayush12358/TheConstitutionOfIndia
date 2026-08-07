@@ -8,10 +8,10 @@ Act (and the surviving Bills) through the **106th Amendment (2023)** — the lat
 ## Current state (2026-08-07)
 
 - **106 amendments enacted; nothing beyond.** The 106th Amendment (Nari Shakti Vandan Adhiniyam,
-  women's reservation, assent 28 Sep 2023) is the newest Act. Its substantive provisions — reserved
-  seats for women in Lok Sabha, State Assemblies and the Delhi Assembly — are **not yet in force**:
-  they commence on a date notified by the Central Government, linked to delimitation after the next
-  census. Amendments 107+ exist only as pending bills (e.g. the ONOE bills); none has been enacted.
+  women's reservation, assent 28 Sep 2023) is the newest Act. It was **brought into force on
+  16-04-2026** by notification S.O. 1922(E) under s.1(2); the reserved seats themselves still
+  await delimitation after the next census. Amendments 107+ exist only as pending bills (e.g. the
+  ONOE bills); none has been enacted.
 - **Content tree is the post-96th-Amendment (2011) Constitution, currently being regenerated**
   amendment-by-amendment toward the post-106th state; see `docs/INVENTORY.md` for the audit and
   `verify_repo.py` for live completeness status.
@@ -30,20 +30,27 @@ AMENDMENTS/
       097–106 three-digit) — 106/106 acts
     → Bill PDFs for 12 of 106 (03, 16, 097–106) — pre-1997 bills are largely lost from the open
       web; the 94 gaps are documented with full provenance in docs/bill_gaps.md (never fabricated)
-AMENDMENT_NN_<date>.zip   (98 at repo root)
-    → per-amendment "bundle": the whole Constitution (all 38 content dirs of that era, txt+pdf)
+      — note PART_9_B (Co-operative Societies) was inserted by the 97th Amendment, so post-97
+      bundles contain 39 content dirs vs 38 for 1..96
+AMENDMENT_NN_<date>.zip   (108 at repo root)
+    → per-amendment "bundle": the whole Constitution (all 39 content dirs of that era, txt+pdf)
       as of after Amendment NN — i.e. a full post-N snapshot, not a single bill/act PDF.
+      Bundles now cover ALL amendments 1..106: AMENDMENT_01_18061951.zip … AMENDMENT_106_28092023.zip.
+      The 97..106 bundle PDFs are typeset from the txt (not official scans, unlike 1..96); the 99th
+      bundle reflects NJAC as enacted (struck down 16-10-2015); the 97..106 lineage is anchored on
+      the official post-96 bundle text + the act texts (see docs/INVENTORY.md §appendix).
       AMENDMENT_88ACTUAL_…zip is the canonical post-88 bundle (the plain 88 zip is erroneous);
       AMENDMENT_ORIGINAL_26011950.zip is the 1950 original
 docs/
     → INVENTORY.md (authoritative audit), amendments.csv (manifest, 106 rows),
-      amendments_new.csv / backfill_report.csv (worker sources), bill_gaps.md (bill provenance)
+      AMENDMENTS.md (human-readable amendment index), amendments_new.csv / backfill_report.csv
+      (worker sources), bill_gaps.md (bill provenance)
 ```
 
 **Tags**: every bundle release is annotated-tagged `STABLE_AMENDMENT_NN` (files as they stood
-between the NNth and (NN+1)th Amendments). Tags 01–96 are complete (gaps 02–06, 54–57, 62, 65
-restored 2026-08-07); 97–99 remain pending. Plus `STABLE_AMENDMENT_88_ACTUAL`,
-`STABLE_ORIGINAL_VERSION`, `SPECIAL_FORWARD_COMMIT` — 99 tags total.
+between the NNth and (NN+1)th Amendments). Tags now cover **01..106** (gaps 02–06, 54–57, 62, 65
+restored and 97–106 added on 2026-08-07). Plus `STABLE_AMENDMENT_88_ACTUAL`,
+`STABLE_ORIGINAL_VERSION`, `SPECIAL_FORWARD_COMMIT` — **109 tags total**.
 
 ## Tooling
 
@@ -95,4 +102,5 @@ the post-106th state).
 
 - `docs/INVENTORY.md` — authoritative audit: git archaeology, zip contents, amendment manifest, tag gaps
 - `docs/amendments.csv` — merged manifest: number, title, assent date, key changes, bill/act files + URLs, zip, status
+- `docs/AMENDMENTS.md` — human-readable index of all 106 amendments
 - `docs/bill_gaps.md` — why 94 bills are missing, with the exact sources tried

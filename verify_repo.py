@@ -12,14 +12,16 @@ Checks:
   b. AMENDMENTS/: for every amendment 1..106 an ACT pdf exists (%PDF magic,
      >10KB) and a BILL pdf exists OR docs/amendments.csv marks that number
      MISSING_BILL (CSV is the source of truth for filenames + status)
-  c. all 98 AMENDMENT_*.zip files at repo root pass zipfile.testzip() and
-     contain a PREAMBLE member (bundle sanity)
+  c. every AMENDMENT_*.zip at repo root passes zipfile.testzip() and contains
+     a PREAMBLE member; the 97-106 bundles (new convention) must additionally
+     have 78 members including PART_9_B/PART9B.txt
   d. docs/amendments.csv parses and is consistent with the filesystem
      (zip_file matches an actual file for 1..96)
 """
 import csv
 import glob
 import os
+import re
 import sys
 import zipfile
 
@@ -132,22 +134,32 @@ def check_amendments(by_number):
     return fails
 
 
+ZIP_97_106_MEMBERS = 78   # 39 content dirs x (txt+pdf)
+ZIP_97_106_PART9B = 'PART_9_B/PART9B.txt'  # Part IXB inserted by the 97th Amendment
+
+
 def check_zips():
     fails = []
     zips = sorted(glob.glob(os.path.join(ROOT, 'AMENDMENT_*.zip')))
-    if len(zips) != 98:
-        fails.append('zips: found %d AMENDMENT_*.zip files (want 98)' % len(zips))
     for z in zips:
+        name = os.path.basename(z)
         try:
             with zipfile.ZipFile(z) as zf:
                 bad = zf.testzip()
                 if bad is not None:
-                    fails.append('zips: %s corrupt member %s' % (os.path.basename(z), bad))
+                    fails.append('zips: %s corrupt member %s' % (name, bad))
                 names = zf.namelist()
                 if ZIP_PREAMBLE_MEMBER not in names:
-                    fails.append('zips: %s has no %s member' % (os.path.basename(z), ZIP_PREAMBLE_MEMBER))
+                    fails.append('zips: %s has no %s member' % (name, ZIP_PREAMBLE_MEMBER))
+                m = re.match(r'AMENDMENT_(\d+)', name)
+                if m and 97 <= int(m.group(1)) <= 106:
+                    if len(names) != ZIP_97_106_MEMBERS:
+                        fails.append('zips: %s has %d members (want %d, 97-106 convention)'
+                                     % (name, len(names), ZIP_97_106_MEMBERS))
+                    if ZIP_97_106_PART9B not in names:
+                        fails.append('zips: %s missing %s' % (name, ZIP_97_106_PART9B))
         except (zipfile.BadZipFile, OSError) as e:
-            fails.append('zips: %s unreadable: %s' % (os.path.basename(z), e))
+            fails.append('zips: %s unreadable: %s' % (name, e))
     return fails
 
 
@@ -159,7 +171,7 @@ def main():
     groups = [
         ('a. content dirs (39 x txt+pdf >100B)', check_content()),
         ('b. AMENDMENTS/ acts+bills (106 acts, bills per CSV)', check_amendments(by_number)),
-        ('c. bundle zips (98 x testzip + PREAMBLE member)', check_zips()),
+        ('c. bundle zips (all testzip + PREAMBLE; 97-106: 78 members + PART_9_B)', check_zips()),
         ('d. docs/amendments.csv (parse + filesystem consistency)', csv_fails),
     ]
     all_fail = []
