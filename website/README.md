@@ -3,7 +3,7 @@
 A minimal single-page site for the [Constitution of India](https://github.com/Ayush12358/TheConstitutionOfIndia):
 the **Preamble**, an index of all **26 Parts** (including 4A, 9A, 9B, 14A) and **12 Schedules**,
 and a reading pane with slugified article anchors on every heading for deep links
-(e.g. `/#part3` or `#article-12`). Content is served from the repo's own markdown —
+(e.g. `#12-definition` for Article 12 in Part III). Content is served from the repo's own markdown —
 `../PREAMBLE`, `../PART_*/`, `../SCHEDULE_*/` — so the site stays in sync with the source files.
 
 ## Content API
