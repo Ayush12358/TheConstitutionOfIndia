@@ -293,3 +293,34 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
   PDFs in AMENDMENTS/ — printed assent lines; zip-filename dates overridden where they
   record bill/enforcement dates). docs/AMENDMENTS.md regenerated from the completed manifest.
 
+### Lineage comparison (2026-08-07)
+
+- **Upstream mirrored**: the fork now carries the upstream branches `forward_amendments`
+  (7888d9e4), `dates` (cac24958) and `corrections_local` (4c9be12f), fetched from
+  anoopdixith/TheConstitutionOfIndia and pushed to origin — the README-described branch set is
+  no longer missing from the clone. Upstream has no branches or tags we lack; the only tag
+  divergence is local-only `STABLE_AMENDMENT_100..106` (our forward reconstruction).
+- **Author's 97/98/99 bundles vs ours**: the zips inside the upstream
+  `STABLE_AMENDMENT_97/98/99` tags are the same blobs as on `forward_amendments`
+  (f31a68a1 / c9b3b494 / 152780fc). Per-amendment word-level comparison against our bundles
+  shows **substantively identical content** — every Part IXB article, 371J, and the full NJAC
+  package (124A–124C, 127, 128, 217, 222, 224, 224A, 231) is present in both — but the author's
+  copies carry their known manual-mistake patterns: all 13 Part IXB marginal headings dropped
+  (plus the 43B heading), typos (`soceity`, `aon`, `the the`, `HyderabadKarnataka`,
+  `assumes`, `in case—`, `a stalemate`, `the proviso` for `first proviso`, `following,` for
+  `following matters,`, `hand over` for `handover`), a wrong act reference in 243ZT
+  ("Constitution (One Hundred and Eleventh Amendment) Act, 2009" — the 111th Amendment does not
+  exist; the gazette says Ninety-seventh Amendment Act, 2011), and stale First/Fourth Schedules
+  (pre-Telangana, no UT entries 6–7 Puducherry/Chandigarh). Our reconstruction is
+  act-gazette-verified (closed-loop diff against the post-96 bundle).
+- **Spelling note**: the official Gazette of India Extraordinary (13-01-2012) prints
+  **"conterminous"** in 243ZJ(2) — our bundles and the live txt match the gazette; Wikisource's
+  2020 consolidation prints "coterminous", diverging from the gazette (the author's bundles
+  follow the wikisource spelling).
+- **Corrective commit (this one)**: a line-wrap defect split the article number in Part IXB —
+  "24 3ZI" (live txt, space form) / "24\r\n3ZI" (all 10 bundle zips 97–106, CRLF form) instead
+  of "243ZI". Found in every bundle and the live txt; fixed in this commit. Bundle zips at HEAD
+  are the corrected canonical snapshots while the release tags keep the originals — the same
+  88 vs 88ACTUAL precedent (corrected snapshot at HEAD, historical artifacts preserved under
+  tags/branches).
+

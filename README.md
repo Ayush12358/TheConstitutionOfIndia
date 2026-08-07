@@ -93,11 +93,17 @@ and authored commits under the minister who piloted the bill (Nehru, Shastri, In
 Advani, Arun Jaitley, …).
 
 Two experimental branches (`forward_amendments` for 96→99, `dates` for the reverse chain) were
-described in the original README; **master** was used for experiments and has been rebased — only
-`master` survives in this clone, and it is not a single clean history. The author's own notes:
+described in the original README; **master** was used for experiments and has been rebased — it is
+not a single clean history. The author's own notes:
 *"Not sure if it's completely usable. I plan to sanitize it."* — that sanitization was carried out
 on 2026-08-07: the working tree was regenerated from the official consolidated text to the
 post-106th state (see `docs/INVENTORY.md` §8–9).
+
+Since 2026-08-07 this fork also carries the upstream branches `forward_amendments`, `dates` and
+`corrections_local`, mirrored from the upstream repo (anoopdixith/TheConstitutionOfIndia) so the
+README-described branch set survives here. Note the two 97–99 lineages: the author's original
+bundles (on `forward_amendments` and the upstream `STABLE_AMENDMENT_97..99` tags) vs this repo's
+act-gazette-verified reconstruction on `master` — see `docs/INVENTORY.md` §9 (Lineage comparison).
 
 ## References
 
