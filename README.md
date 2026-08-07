@@ -68,6 +68,8 @@ restored and 97–106 added on 2026-08-07). Plus `STABLE_AMENDMENT_88_ACTUAL`,
 | `convert_modified_txt_to_pdf.sh` | bash + `enscript` + `ps2pdf` | Convert a txt edit to PDF (legacy: operates on .txt; content is now .md) |
 | `convert_all_pdfs_to_texts.sh` | bash + `pdftotext` (poppler) | Re-extract all PDFs to txt (legacy: operates on .txt; content is now .md) |
 
+CI: `.github/workflows/verify.yml` runs `verify_repo.py` on every push/PR (GitHub Actions).
+
 `download_pdfs.py` was **removed** (2026-08-07): it was Python 2 only and its source
 (`lawmin.nic.in`) no longer hosts the files — superseded by `download_amendments.py`.
 

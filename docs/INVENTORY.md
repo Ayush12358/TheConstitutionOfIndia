@@ -297,6 +297,7 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
 - **Markdown conversion (2026-08-07)**: all 39 content files converted txt→md (fidelity-gated:
   markup-stripped md == original txt, whitespace-normalized); .txt removed from the working tree
   (still inside the bundle zips); verify_repo.py + create_bundle.sh updated.
+- 2026-08-07: added GitHub Actions verification workflow + .editorconfig.
 
 ### Lineage comparison (2026-08-07)
 
