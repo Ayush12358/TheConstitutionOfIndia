@@ -501,3 +501,119 @@ bills for 62 (RS Sixty-second Bill 1989, No. XXVI) and 49 (Fifty-first Bill 1984
 Bill coverage: 30/106 → **64/106**. Remaining missing (42 rows): 21, 24–26, 28–39, 46, 48–51, 56–59,
 62, 64, 70, 78–80, 84, 89 — every one either absent from the sansad DB or PDF-less; identities for
 most are recorded above and in the era-C section.
+
+## 33-row recovery sweep — getFile brute force + API re-enumeration (2026-08-08, worker missing33)
+
+Timeboxed hunt for the 33 still-missing rows (21, 24–26, 28–39, 46, 48–51, 56–59, 62, 64, 70,
+78–80, 84, 89). Checkpoints: `probe_ik3/` (gitignored) — `sansad_enum_ls.json` / `sansad_enum_rs.json`
+(full LS 819 + RS 628 constitution-bill API dumps), `getfile_probe_results*.json`, `getfile/dl*/`
+(downloaded candidates), `render/` (page-1 renders), `cdx_sansad_pdf.json` / `cdx_sansad_rs.json`
+(Wayback CDX dumps), `49_1990_ls_eng.pdf`.
+
+### Found (1/33): amendment 64 — CORRECTS a previous worker's mis-rejection
+
+**64th act ← Constitution (Sixty-fifth Amendment) Bill, 1990 (LS Bill No. 49 of 1990)**, art 356:
+"Provided also that in the case of the Proclamation issued under clause (1) on the 11th day of May,
+1987 with respect to the State of Punjab, the reference in the first proviso to this clause to 'three
+years' shall be construed as a reference to 'three years and six months'". ACT 64's SOR names the bill
+verbatim ("appended to the Constitution (Sixty-fifth Amendment) Bill, 1990 which was enacted as THE
+CONSTITUTION (Sixty-fourth Amendment) Act, 1990"); sansad API confirms bill No. 49/1990 passed both
+houses and was assented 16-04-1990 (= CSV assent date). The earlier worker's "Rejected: 1990 65th
+No. 49 (Art 356 'Provided also' — lapsed)" was **wrong** — the bill is the 64th act's bill, not a
+lapsed decoy. File: `https://sansad.in/getFile/BillsTexts/LSBillTexts/Asintroduced/49_1990_ls_eng.pdf`
+(scan-only, no text layer → no `.txt`, matching the AMENDMENT_95 precedent). Integrated as
+`AMENDMENTS/AMENDMENT_64_BILL.pdf`; CSV row 64 → `status=OK`.
+
+### 1971–75 API enumeration findings (rows 24–26, 28–39)
+
+Re-enumerated the full sansad LS/RS bills API (`https://sansad.in/api_rs/legislation/getBills`,
+params `billName=Constitution&house=…&page&size`; 819 LS + 628 RS records; all have "Constitution" in
+the title). **The LS DB has NO constitution bills for 1972–1975 at all** (LS 1971 has only the
+Twenty-seventh Bill No. 173, already integrated as row 27; LS 1972–75: zero records). The RS DB has
+~45 constitution-amendment bills for 1971–75 (e.g. RS I/1971 "to amend article 368", RS IV/1971
+"article 368 - to make provision for amending", RS XVII/1973 "to amend article 80", RS XXXI/1974
+"amendment of article 352 & omission of articles 356…") — **every one with `billIntroducedFile =
+null`**; all 426 roman-numeral getFile variants probed → 1 hit only, a non-constitution decoy
+(RS `X.pdf` = Contempt of Courts (Amendment) Bill 2003). Conclusion: the 1971–75 era bills (24th–26th,
+28th–39th acts) are **absent from the sansad DB entirely** (LS) or **PDF-less** (RS); ACT SORs name
+bills (e.g. 28th ← 31st Bill 1972 No. 55, 31st ← 31st Bill 1973 No. 31, 33rd ← 35th Bill 1974, 36th ←
+38th Bill 1975) that no longer have server files under any tested naming.
+
+### Identified-but-404 bills — getFile naming-variant brute force (task 1)
+
+For every bill identified in the API/DB with a missing/404 file, probed the getFile URL space:
+`LSBillTexts/Asintroduced/<no>_<year>_LS_Eng.pdf` (+ case variants, `_eng`, `.PDF`, `Eng_LS`,
+`LS_E`, `LS_En`, `LS-ENG`, `<no>_<year>.pdf`, `<no>LS.pdf`, `<no>_LS.pdf`, `Bill_No_<no>_of_<year>`,
+`<no>_of_<year>`, `of<year>`, leading zeros, year-folder `<year>/<no>_<year>.pdf`, root-level
+`LSBillTexts/<f>`), RS equivalents (`RSBillTexts/Asintroduced/<roman>_<year>.pdf` + variants), and
+the API's own `f`/`billIntroducedFile` values. ~1,500 unique URLs probed (10–12 concurrent, 7–10 s
+timeout, `?source=legislation` param required — without it the server 500s even known-good URLs).
+
+Outcome per identified bill (all `404 page not found` unless noted):
+
+| Row | Bill (identified) | Result |
+|-----|-------------------|--------|
+| 21 | 22nd Bill 1966 (RS No. XXIV) | in RS DB (`1966 \| XXIV \| Twenty-second Amendment Bill 1966`), file null; all variants 404 |
+| 24–26, 28–39 | 1971–75 bills (LS) | absent from LS DB; RS entries file-less (see above) |
+| 46 | 46th Bill 1981 (No. 52) | in LS DB (`1981 \| 52 \| 46th Amendment Bill 1981`), file null; 404s |
+| 49 | 51st Bill 1984 (No. 79) | in LS DB, file null; 404s |
+| 50 | 52nd Bill 1984 (No. 80) | **not in DB** (LS 1984 has only Nos. 79, 77); 404s |
+| 51 | 53rd Bill 1984 (No. 81) | **not in DB**; 404s |
+| 56 | 57th Bill 1987 (No. 54) | in LS DB, file null; 404s |
+| 57 | 58th Bill 1987 (No. 93) | in LS DB, file null; 404s |
+| 58 | 56th Bill 1987 (No. 80) | in LS DB, file null; 404s |
+| 59 | 59th Bill 1988 (RS No. XIV) | in RS DB, file null; 404s |
+| 62 | 62nd Bill 1989 (RS No. XXVI) | in RS DB, file null; 404s |
+| 70 | 76th Bill 1992 (RS No. XXX) | **not in RS DB** (RS 1992 has no XXX); 404s |
+| 78 | 78th Bill 1995 (RS No. XIV) | in RS DB (`1994 \| XIV \| Seventy-Eighth Amendment Bill, 1995`), file null; 404s |
+| 79 | 84th bill 1999 | not in DB (LS 1999 has no 84; 85th bill 1999 No. 99's file `99_1999.pdf` 404s) |
+| 80 | 89th Bill 2000 (No. 41) | in LS DB, file `41_2000.pdf` **404s on server**; all variants 404 |
+| 84 | 91st Bill 2000 (No. 172) | in LS DB, file `172_2000.pdf` **404s**; all variants 404 |
+| 89 | 94th Bill 2002 (No. 94) | in LS DB, file null; 404s |
+
+Also probed and rejected as decoys (all genuine PDFs, wrong content): every `<n>LS.pdf` hit — the
+bare-number LS space holds **modern private-member bills with unrelated content** (e.g. `22LS.pdf` =
+National Commission for Farmers' Income Bill 2015, `24LS.pdf` = Bhagwan Buddha Homoeopathy 2015,
+`78LS.pdf` = Constitution (Amendment) Bill 2000 inserting Art 16A women's reservation — the known
+lapsed decoy subject, `79LS.pdf` = Declaration of Assets 1998, `80LS.pdf` = NCT Delhi Development
+2000, `84LS.pdf` = art 174 bill 1998, `85LS.pdf` = IPC 1998, `41LS.pdf` = Bose Regiment 2015,
+`59LS.pdf` = IPC amendment 2005, `76LS.pdf` = Provision of Employment 1998, `81LS.pdf` = EWC
+Corporation 2012, `172LS.pdf` = Rajasthan HC Karauli 2016, `21LS.pdf`/`25LS.pdf`/`26LS.pdf`/
+`29LS.pdf`/`30LS.pdf`/`31LS.pdf`/`32LS.pdf`/`34LS.pdf`/`35LS.pdf`/`37LS.pdf`/`38LS.pdf`/`39LS.pdf`/
+`65LS.pdf` = assorted 2015–16 private-member bills, `X.pdf` = Contempt of Courts 2003). The
+year-qualified `<no>_<year>_LS_Eng.pdf` files that DO exist for target years are non-constitution
+bills sharing the LS bill-number space (e.g. `22_1966_LS_Eng.pdf` = Appropriation (Vote on Account)
+Bill 1966, `26_1971_LS_E.pdf` = Appropriation (Railways) 1971, `47_1982_LS_E.pdf` = Industrial
+Disputes (Amendment) 1982, `62_1989_LS_Eng.pdf` = SC/ST (Prevention of Atrocities) Bill 1988,
+`21_1967_LS_eng.pdf` = Appropriation (Railways) 1967).
+
+### Wayback retries (task 3)
+
+- Exact getFile URLs (41_2000, 172_2000, 90_2000, 99_1999, 94_2002, 79_1984, 80_1984, 81_1984,
+  54_1987, 93_1987, 55_1972, RS XIV_1988, XXVI_1989, XIV_1995): **zero captures** (CDX exact match).
+- `sansad.in/getFile/BillsTexts/LSBillTexts/Asintroduced/*` CDX dump: 869 PDF captures, **none** of
+  the target files. `RSBillTexts/…/*`: 569 captures, none. (sansad.in getFile space is mostly
+  2020s-era uploads with timestamp names.)
+- Old hosts: `164.100.47.5/bills-ls-rs/*` (2008 capture = dead index page, only an AR405 executable
+  link), `164.100.47.132/bills*`, `loksabha.nic.in/bills*`, `164.100.24.219/*`,
+  `parliamentofindia.nic.in/ls/bills*` — all CDX-empty for PDFs (consistent with the era-C sweep's
+  "199 captured PDFs, zero constitution bills" on 164.100.24.219).
+
+### egazette re-check for rows 78, 79, 80, 84 (task 4)
+
+Re-verified against the sweep's negative evidence (`probe_ik3/search_log.json` + `probe_ik3/dl/`
+artifacts): the 1991–2000 (447 gazettes, 28 Constitution subjects), 2001–2002 (82, 4) and 2003–2006
+(215, 27) sweeps covered every constitution-subject bill gazette in the DB; OCR'd artifacts re-scanned
+for the specific identities — **no Seventy-Eighth-bill-1995 (78th act), no art-334 50→60-years bill
+(79th act), no Eighty-Ninth-bill-2000 (80th act), no Ninety-First-bill-2000 (84th act)**. The only
+Eighty-Fourth hit is a post-enactment SOR reference in a 2003 gazette (Delimitation Act context), not
+a bill. 1994–2000 downloaded gazettes re-identified: all are the documented decoys (Bill 20/1994
+art 371, Bill 88/1994 arts 82/170 census — lapsed predecessor, RS LXX/1994, Bill 52/1995 water, Bill
+27/1997, Bill 35/1998 art 311, RS IV/1999, Bill 99/1999 = 85th bill). Rows 78/79/80/84 remain
+egazette-negative.
+
+### Net effect
+
+Bill coverage: 64/106 → **65/106** (01, 03, 16, 64, 65–69, 71–77, 81–83, 85–96, 97–106). Remaining
+missing (32 rows): 21, 24–26, 28–39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89 — all confirmed
+absent/PDF-less from sansad (LS+RS API re-enumerated), Wayback, and egazette.
