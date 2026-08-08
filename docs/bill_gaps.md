@@ -242,3 +242,106 @@ Earlier note ("coverage unverifiable → not searched") is **superseded**. Probi
   Extraordinary Part II Section 2 issue IDs can be enumerated (e.g. via the egazette search
   session UI driven headlessly, or by scraping the yearly ID ranges once a seed ID per year is
   known). Evidence: `probe_ik2/egazette_probe2.json`, `/tmp/ega_cdx.txt` (2000-row CDX dump).
+
+## egazette.gov.in headless hunt — 12 bill gazettes recovered (2026-08-08)
+
+The egazette "coverage unverifiable / not searched" note and the era-C "not found" verdicts for
+amendment bills 77–94 (except 89) are **superseded**. The ASP.NET search UI was driven end-to-end
+in a headless browser (see "How the search UI works" below); 12 Gazette of India EXTRAORDINARY
+Part II Section 2 (bills introduced in Parliament) issues were downloaded, OCR-verified against
+the act texts, and integrated. Bill coverage is now **27/106** (01, 03, 16, 077, 081, 083, 085–094,
+095–106). Remaining missing: 02, 04–15, 17–76, 78–80, 82, 84, 89 (80 rows).
+
+### How the search UI works (reproducible)
+
+1. `https://egazette.gov.in` → ASP.NET sessionized `(S(<sid>))/default.aspx`.
+2. Footer link "Search Gazette" → `SearchMenu.aspx` (must be clicked, not GET-navigated).
+3. Menu button `btnBill` ("Search by Bill / Assent / Act") → `SearchBill.aspx?id=<n>`.
+4. Form fields: `ddlreftype` (9 = Bill), `txtRefNo`, `txtKeyword` (textarea; **special
+   characters rejected** — no parens/hyphens), `txtDateFrom`/`txtDateTo` (`dd-MMM-yyyy`,
+   e.g. `01-Jan-2003`), submit = image button `ImgSubmitDetails` (`<name>.x/.y` postback).
+5. Results grid `gvGazetteList` (10/page, `__doPostBack('gvGazetteList','Page$N')` paging):
+   columns Ministry/Department/Office/**Subject**/Category/Part & Section/Issue Date/Publish
+   Date/Gazette ID + PDF icon button `gvGazetteList$ctlNN$imgbtndownload`.
+6. **Download mechanism**: the PDF icon postbacks `window.open('ViewPDF.aspx')`; the session
+   then serves `ViewPDF.aspx` containing `<iframe src="../WriteReadData/<year>/<file>.pdf">`.
+   The iframe URL is the stable public PDF link. **Gotcha**: the click is only honoured when the
+   server-side grid is on the row's own page — collect the button name and click *immediately*
+   on the page where the row was found (clicking after paging resolves the wrong row).
+7. Keyword search is weak for pre-2012 rows (`Constitution` + 2003–2006 dates → 0 hits) — the
+   reliable path is **date-window sweep, no keyword** (e.g. Bill type, 01-Jan-2003..31-Dec-2006
+   → 215 rows; 1991–2000 → 447 rows), then filter subjects for `Constitution`.
+
+All PDFs are **scans (no text layer)**; identification was done with RapidOCR on rendered pages
+(operative clauses cross-checked against `AMENDMENTS/AMENDMENT_NN_ACT.txt`). Probe artifacts in
+`probe_ik3/` (gitignored): `search_log.json`-style sweep outputs inline below, PDFs in
+`probe_ik3/dl/`, OCR text in `probe_ik3/dl/ocr/`.
+
+### Confirmed bill gazettes (12) — integrated
+
+Bill number in title ≠ amendment number for most rows (bills were renumbered at passage):
+
+| # | Bill (as printed in the gazette) | Issue date | egazette URL | Pages used |
+|---|----------------------------------|-----------|--------------|-----------|
+| 77 | The Constitution (Eighty-sixth Amendment) Bill, 1995 (Bill No. 43 of 1995, LS; art 16(4A) promotion reservation; SOR cites Indra Sawhney) | 31-May-1995 | https://egazette.gov.in/WriteReadData/1995/E-0343-1995-0025-12862.pdf | 1–2 (whole) |
+| 81 | The Constitution (Ninetieth Amendment) Bill, 2000 (Bill No. 90 of 2000, LS; art 16(4B) backlog vacancies; SOR cites Indra Sawhney 50% ceiling) | 08-May-2000 | https://egazette.gov.in/WriteReadData/2000/E_25_2013_192.pdf | 1–2 (whole) |
+| 83 | Constitution Amendment Bill 1999 (RS Bill No. XLVI of 1999; art 243M(3A) Arunachal Pradesh exemption from 243D) | 17-Dec-1999 | https://egazette.gov.in/WriteReadData/1999/E_32_2013_174.pdf | 1–2 of 4 (bill + SOR; p3–4 = separate 87th-bill-1999) |
+| 85 | The Constitution (Ninety-second Amendment) Bill, 2001 (Bill No. 105 of 2001, LS; art 16(4A) "with consequential seniority", deemed 17-Jun-1995; SOR cites Virpal Singh/Ajit Singh) | 26-Nov-2001 | https://egazette.gov.in/WriteReadData/2001/E-2503-2001-0043-113490.pdf | 1–2 of 8 |
+| 86 | The Constitution (Ninety-third Amendment) Bill, 2001 (Bill No. 106 of 2001, LS; new art 21A free & compulsory education 6–14; SOR cites art 45) | 26-Nov-2001 | https://egazette.gov.in/WriteReadData/2001/E-2503-2001-0043-113490.pdf | 5–7 of 8 (p3–4 = Essential Services repeal bill) |
+| 87 | The Constitution (Ninety-sixth Amendment) Bill, 2003 (Bill No. 31 of 2003, LS; arts 81/170/330 "1991"→"2001") | 02-May-2003 | https://egazette.gov.in/WriteReadData/2003/E_18_2011_142.pdf | 1–3 (whole) |
+| 88 | The Constitution (Ninety-fifth Amendment) Bill, 2003 (Bill No. 14 of 2003, LS; art 270(1) + Seventh Sched. List I entry 92C "Taxes on services") | 07-Mar-2003 | https://egazette.gov.in/WriteReadData/2003/E_4_2011_152.pdf | 1–3 of 6 (p4–6 = National Honour bill) |
+| 90 | The Constitution (Ninety-ninth Amendment) Bill, 2003 (Bill No. 38 of 2003, LS; art 332(6) proviso, Bodo areas of Assam; SOR cites BLT Memorandum of Settlement) | 09-May-2003 | https://egazette.gov.in/WriteReadData/2003/E_27_2011_129.pdf | 1–2 of 15 |
+| 91 | The Constitution (Ninety-seventh Amendment) Bill, 2003 (Bill No. 32 of 2003, LS; arts 75/164 + new 361B + Tenth Schedule; SOR = anti-defection; introduced bill has 10%/7-min, act later raised to 15%/12) | 05-May-2003 | https://egazette.gov.in/WriteReadData/2003/E_20_2011_140.pdf | 1–3 (whole) |
+| 92 | The Constitution (One-Hundredth Amendment) Bill, 2003 (Bill No. 63 of 2003, LS, L.K. Advani; Eighth Sched. entry 3 "Bodo" as introduced; Dogri/Maithili/Santali added in passage, retitled 92nd) | 18-Aug-2003 | https://egazette.gov.in/WriteReadData/2003/E_39_2011_107.pdf | 1–2 of 45 |
+| 93 | The Constitution (One Hundred and Fourth Amendment) Bill, 2005 (Bill No. 160 of 2005, LS; new art 15(5) — private unaided institutions) | 20-Dec-2005 | https://egazette.gov.in/WriteReadData/2005/E_72_2012_040.pdf | 1–2 (whole) |
+| 94 | The Constitution (One Hundred and Fifth Amendment) Bill, 2006 (Bill No. 15 of 2006, LS; art 164(1) proviso — tribal welfare Minister for Chhattisgarh/Jharkhand + MP/Odisha) | 01-Mar-2006 | https://egazette.gov.in/WriteReadData/2006/E_6_2011_083.pdf | 1–2 (whole) |
+
+First 120 chars of each bill (OCR-cleaned from the scan, title pages):
+- 77: "The following Bill was introduced in the Lok Sabha on 31st May, 1995: BILL No. 43 of 1995 — A Bill further to amend the Constitution of India. Be it enacted by Parliament in the Forty-sixth Year of the Republic of India as follows: 1. This Act may be called the Constitution (Eighty-sixth Amendment) Act, 1995."
+- 81: "A Bill further to amend the Constitution of India. Be it enacted by Parliament in the Fifty-first Year of the Republic of India as follows: 1. This Act may be called the Constitution (Ninetieth Amendment) Act, 2000."
+- 83: "A Bill further to amend the Constitution of India. Be it enacted by Parliament in the Fiftieth Year of the Republic of India as follows: 1. This Act may be called the Constitution (Amendment) Act, 1999."
+- 85: "A Bill further to amend the Constitution of India. Be it enacted by Parliament in the Fifty-second Year of the Republic of India as follows: 1. (1) This Act may be called the Constitution (Ninety-second Amendment) Act, 2001. (2) It shall be deemed to have come into force on the 17th day of June, 1995. 2. In article 16..."
+- 86: "A Bill further to amend the Constitution of India. Be it enacted by Parliament in the Fifty-second Year of the Republic of India as follows: 1. (1) This Act may be called the Constitution (Ninety-third Amendment) Act, 2001. (2) It shall come into force on such date as the Central Government may, by notification..."
+- 87: "A Bill further to amend the Constitution of India. Be it enacted by Parliament in the Fifty-fourth Year of the Republic of India as follows: 1. This Act may be called the Constitution (Ninety-sixth Amendment) Act, 2003. 2. In article 81 of the Constitution, in clause (3)..." (art 81 OCR shows "8 l")
+- 88: "A Bill further to amend the Constitution of India. Be it enacted by Parliament in the Fifty-fourth Year of the Republic of India as follows: 1. (1) This Act may be called the Constitution (Ninety-fifth Amendment) Act, 2003."
+- 90: "A Bill further to amend the Constitution of India. Be it enacted by Parliament in the Fifty-fourth Year of the Republic of India as follows: 1. This Act may be called the Constitution (Ninety-ninth Amendment) Act, 2003. 2. In article 332 of the Constitution..."
+- 91: "A Bill further to amend the Constitution of India. Be it enacted by Parliament in the Fifty-fourth Year of the Republic of India as follows: 1. This Act may be called the Constitution (Ninety-seventh Amendment) Act, 2003. 2. In article 75 of the Constitution..."
+- 92: "A Bill further to amend the Constitution of India. Be it enacted by Parliament in the Fifty-fourth Year of the Republic of India as follows: 1. This Act may be called the Constitution (One-Hundredth Amendment) Act, 2003. 2. In the Eighth Schedule to the Constitution, (a) existing entry 3 shall be re-numbered..."
+- 93: "A Bill further to amend the Constitution of India. Be it enacted by Parliament in the Fifty-sixth Year of the Republic of India as follows: 1. (1) This Act may be called the Constitution (One Hundred and Fourth Amendment) Act, 2005. 2. In article 15 of the Constitution, after clause (4), the following clause shall be inserted, namely: (5) Nothing in this article..."
+- 94: "A Bill further to amend the Constitution of India. Be it enacted by Parliament in the Fifty-seventh Year of the Republic of India as follows: 1. This Act may be called the Constitution (One Hundred and Fifth Amendment) Act, 2006. 2. In article 164 of the Constitution, in clause (1), in the proviso..."
+
+Integration notes: gazettes with several bills had the target bill's pages extracted (pypdf) —
+see "Pages used". All are scan-only; no `.txt` files produced (precedent: `AMENDMENT_95_BILL`).
+`docs/amendments.csv` rows 77, 81, 83, 85, 86, 87, 88, 90, 91, 92, 93, 94 → `status=OK`,
+`bill_file=AMENDMENT_NN_BILL.pdf`, `bill_url` = the egazette URL above.
+
+### Lapsed / non-amendment bills examined and rejected (ledger only)
+
+Genuine Part II Sec 2 constitution bills in the egazette DB that map to **no** act 01–106:
+2003: 95th-bill issue p4–6 (National Honour), Bill 21/2003 (art 356), Bill 70/2003 (IIT Kerala) +
+Bill 73/2003 (arts 103/192 + Tenth Sched), 98th bill 2003 (National Judicial Commission —
+Chapter IVA, arts 124/217/222/231), 101st bill 2003 (Ninth Sched. entry 285 Essential
+Commodities), 103rd bill 2004 (National Minorities Commission), Bill 74/2004 (MP recall),
+Bill 8/2004 (art 21A-after + omission of art 41), Bill 60/2005 (SC/ST seniority, Bimlesh
+Tanwar), Bill 56/2005 (art 124(8) post-retirement offices), Bill 135/2005 (inter-State river
+linking), RS XIX/2005 (art 276 professional tax cap), RS LXXX/2005 (Seventh Sched. sports
+entry), RS XXVII/2006 (art 51A cleanliness duties), Bill 59/2006 (Kerala professional colleges),
+Bill 83/2006 (art 85 minimum sittings), RS LIV/2000 (Tulu 8th Sched.), Bill 192/2000
+(art 177 Advocate-General), Bill 88/1994 (arts 82/170 census readjustment), Bill 20/1994
+(art 371 Maharashtra boards), RS LXX/1994 (contempt disqualification), Bill 52/1995 (water
+conservation), Bill 27/1997 + Bill 74/2000 + RS XIV/2000 + RS XXXI/1999 (teachers' constituency
+variants), Bill 35/1998 (art 311), Bill 78/1998 (consignment tax), Bill 71/1998 + Bill 99/1999
+(women's reservation 330A/332A — the known lapsed decoys), Bill 99/1998 (Planning Commission
+151A/151B), RS IV/1999 (Seventh Sched. List I), RS XXXX/1999 (State Legislature sessions),
+Bill 6/2000 (Bhojpuri), Bill 60/2000 (Kurmali), RS XXXIV/2000 (RS open ballot), RS XLII/1995-ish
+Sixth Schedule (North Cachar/Karbi Anglong — ordinary law, not art 368), SC/ST Order bills
+(statutory orders, not amendments). CVC bills (1998/1999) and ULC repeal (1998) are
+constitutional-status bills, not amendments 01–106. All kept in `probe_ik3/dl/` for future triage.
+
+### Still missing (this hunt)
+
+- **89th act's bill** (art 338 National Commission for SCs, act 28-Sep-2003): no matching bill
+  gazette in the egazette DB (2003 sweep: 27 constitution rows, none amends art 338).
+- 74–76, 78–80, 82, 84: DB coverage starts at 1994; 1994–2001 sweeps produced no bill matching
+  these acts (82nd act 2000's bill not in DB; 84th act 2001 delimitation bill not in DB).
+- Pre-1994 bills (02, 04–15, 17–74): egazette search DB has no bill gazettes before 1994.
