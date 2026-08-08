@@ -41,4 +41,23 @@ describe("amendmentTimeline", () => {
     // Single-entry file: nothing to diff against.
     expect(amendmentTimeline([{ from: 0, text: "12. Definition.—original" }])).toEqual({});
   });
+
+  test("body edits attribute to the heading of their paragraph", () => {
+    // Amendment 1 rewrites article 19's clause (2) — the changed lines are
+    // body lines, not the heading line itself, yet belong to article 19.
+    const file = [
+      { from: 0, text: "19. Protection of certain rights.—(1) All citizens shall have the right to free speech. (2) Old restrictions." },
+      { from: 1, text: "19. Protection of certain rights.—(1) All citizens shall have the right to free speech. (2) New restrictions." },
+    ];
+    expect(amendmentTimeline(file)).toEqual({ "19": [1] });
+  });
+
+  test("page-number lines are never attributed", () => {
+    // The "1" and "591." lines are archive page numbers, not article edits.
+    const file = [
+      { from: 0, text: "21. Protection of life.—No person shall be deprived of life.\n\n1\n\n22. Protection against arrest.—(1) No person shall be detained." },
+      { from: 1, text: "21. Protection of life.—No person shall be deprived of life.\n\n21A. Right to education.—The State shall provide free education.\n\n22. Protection against arrest.—(1) No person shall be detained." },
+    ];
+    expect(amendmentTimeline(file)).toEqual({ "21A": [1] });
+  });
 });

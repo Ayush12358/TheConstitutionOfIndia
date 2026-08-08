@@ -75,11 +75,39 @@ for (const [key, rel] of Object.entries(CONTENT_MAP)) dirByKey[key] = rel.split(
 const keyByDir = Object.fromEntries(Object.entries(dirByKey).map(([k, d]) => [d, k]));
 
 // --- Normalize: strip spacing noise, rewrap paragraphs (kills era line-wrap churn) ---
+
+// Article-heading lines start their own paragraph so a heading always begins a
+// line after the rewrap — per-article amendment attribution (lib/timeline.ts)
+// matches article keys at line starts. The archives write headings several
+// ways: "19. Protection of certain rights…", "330A. Reservation…",
+// "31. (1) No person…", and a bare "31." on its own line — accept any
+// continuation after the number. Only line breaks move; the word sequence is
+// untouched.
+const ARTICLE_HEADING = /^\d+[A-Z]*\.(?:\s+|$)/;
+
+// Split one paragraph (a blank-line-delimited block) at article-heading lines:
+// the heading line and everything after it (until the next heading) become
+// their own paragraph.
+function splitAtArticleHeadings(para: string): string[] {
+  const segments: string[] = [];
+  let cur = "";
+  for (const line of para.split("\n")) {
+    if (ARTICLE_HEADING.test(line) && cur) {
+      segments.push(cur);
+      cur = "";
+    }
+    cur = (cur ? cur + " " : "") + line;
+  }
+  if (cur) segments.push(cur);
+  return segments;
+}
+
 function normalize(raw: string): string {
   const fixed = raw.replace(/[ \t]+/g, " ").replace(/ *\r?\n */g, "\n").replace(/\n{3,}/g, "\n\n").trim();
   const width = 100;
   return fixed
     .split(/\n\s*\n/)
+    .flatMap(splitAtArticleHeadings)
     .map(para => {
       const words = para.split(/\s+/);
       const lines: string[] = [];
