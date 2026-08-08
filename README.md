@@ -75,7 +75,7 @@ The zip inside `STABLE_AMENDMENT_106` holds every bundle (01–106 + original), 
 | Tool | Runs on | Purpose |
 |---|---|---|
 | `website/scripts/generate-history.ts` | Bun (in `website/`) | Rebuild `website/data/history/*.json` — the 107 historical constitution states (original + after each amendment) extracted from the git tags, normalized and deduped. Run: `cd website && bun run scripts/generate-history.ts`; output is committed |
-| `website/` | Bun (any OS) | Constitution site: search, bills/acts text + git views, by-date browser with compare; run: `cd website && bun dev` (or `bun start`); build: `bun run build` (see website/README.md); Vercel-ready (static dist/) |
+| `website/` | Bun (any OS) | Constitution site: search, bills/acts text + git views, by-date browser with compare; run: `cd website && bun dev` (or `bun start`); build: `bun run build` (see website/README.md); Vercel-ready (static dist/); Test suite: `cd website && bun test` (54 tests: libs + server routes), `bunx tsc --noEmit`, `bun run build` |
 
 The legacy maintenance scripts (`verify_repo.py`, `download_amendments.py`, the `*.sh` bundle
 helpers, the worker-source docs and the GitHub Actions workflows) were **removed 2026-08-07**:
