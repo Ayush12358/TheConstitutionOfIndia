@@ -1,4 +1,4 @@
-# Bill gaps — amendments 01–96 (as of 2026-08-07)
+# Bill gaps — amendments 01–96 (as of 2026-08-08)
 
 Provenance ledger for the `status = MISSING_BILL` rows in `docs/amendments.csv`, so the hunt is not
 repeated. Source: `docs/backfill_report.md` (worker report, 2026-08-07, converted from CSV) —
@@ -9,12 +9,12 @@ provenance verbatim.
 
 - **106 amendments total; act coverage 100%** — every amendment 01–106 has a downloaded Act PDF
   (`AMENDMENTS/AMENDMENT_NN_ACT.pdf`), verified `%PDF` + content.
-- **Bill coverage: 15/106** — amendments 01, 03, 16 (pre-1997 era), 095–096 (era-C sweep, see the
-  2026-08-08 section below) and 097–106 (downloaded by the 97–106 worker; see
-  `docs/amendments_new_report.md`).
-- **94 bills missing (01–96 except 03 and 16)**: `bill_file = MISSING`, `bill_url = MISSING` in
-  `docs/amendments.csv`. Pre-1997 Parliament bill PDFs are largely not on the open web; the sources
-  tried below returned no usable copy.
+- **Bill coverage: 74/106** — the 62 missing bills recovered on 2026-08-08 from sansad.in's
+  LS/RS bills API (1952–2026), egazette.gov.in, eparlib and PRS; 45 of the 74 bills have text
+  layers (→ `.txt`), the other 29 are scan-only PDFs. See the 2026-08-08 sweep sections below.
+- **32 bills missing (21, 24–26, 28–39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89)**:
+  `bill_file = MISSING`, `bill_url = MISSING` in `docs/amendments.csv`. The sources tried
+  below returned no usable copy.
 
 ## What was tried (per-row `bill_url` = MISSING)
 

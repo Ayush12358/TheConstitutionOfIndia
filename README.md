@@ -18,10 +18,10 @@ Bills in `AMENDMENTS/` through the **106th Amendment (2023)** — the latest ena
   (see `docs/INVENTORY.md`).
 - **All 39 content files are Markdown** (converted 2026-08-07); the bundle zips (removed
   from the working tree) keep their .txt members in the tag trees.
-- **Every act and surviving bill now has plain text** (`AMENDMENT_NN_ACT.txt` /
-  `AMENDMENT_NN_BILL.txt`, added 2026-08-07): 99 acts + 10 bills extracted from the PDFs, the
-  7 scanned acts (94, 96, 97–98, 102, 103, 105) sourced from Indian Kanoon, and the 2
-  scan-only bills (98, 106) transcribed page-by-page with a vision model.
+- **Every act and text-bearing bill has plain text** (`AMENDMENT_NN_ACT.txt` /
+  `AMENDMENT_NN_BILL.txt`): 106/106 acts have text — 99 extracted from the PDFs plus the 7
+  scanned acts (94, 96, 97–98, 102, 103, 105) sourced from Indian Kanoon. Of the 74 bills
+  recovered on 2026-08-08, 45 have text; the other 29 are scan-only PDFs (no `.txt`).
 - Amendment **105's** assent date is recorded as **2021-08-19** (Gazette extraordinary date); some
   secondary sources say 18 Aug 2021.
 
@@ -36,10 +36,12 @@ SCHEDULE_1/ … SCHEDULE_12/
 AMENDMENTS/
     → Act PDFs for ALL 106 amendments (AMENDMENT_NN_ACT.pdf, zero-padded: 01–96 two-digit,
       097–106 three-digit) — 106/106 acts
-    → Bill PDFs for 12 of 106 (03, 16, 097–106) — pre-1997 bills are largely lost from the open
-      web; the 94 gaps are documented with full provenance in docs/bill_gaps.md (never fabricated)
-    → Plain text of every act (AMENDMENT_NN_ACT.txt) and of 10 of the 12 bills
-      (AMENDMENT_NN_BILL.txt); the 2 scan-only bills (98, 106) have no text
+    → Bill PDFs for 74 of 106, recovered 2026-08-08 from sansad.in's LS/RS bills API
+      (1952–2026), egazette.gov.in, eparlib and PRS; the 32 gaps (21, 24–26, 28–39, 46, 48–51,
+      56–59, 62, 70, 78–80, 84, 89) are documented with full provenance in docs/bill_gaps.md
+      (never fabricated)
+    → Plain text of every act (AMENDMENT_NN_ACT.txt) and of 45 of the 74 bills
+      (AMENDMENT_NN_BILL.txt); the other 29 bills are scan-only PDFs with no text
       — note PART_9_B (Co-operative Societies) was inserted by the 97th Amendment, so post-97
       bundles contain 39 content dirs vs 38 for 1..96
 Bundle zips removed 2026-08-07 (markdown-first): the 108 per-amendment bundles
@@ -119,4 +121,4 @@ The Constitution of India text is a work of the Government of India.
 - `docs/INVENTORY.md` — authoritative audit: git archaeology, zip contents, amendment manifest, tag gaps
 - `docs/amendments.csv` — merged manifest: number, title, assent date, key changes, bill/act files + URLs, zip, status
 - `docs/AMENDMENTS.md` — human-readable index of all 106 amendments
-- `docs/bill_gaps.md` — why 94 bills are missing, with the exact sources tried
+- `docs/bill_gaps.md` — why 32 bills are missing, with the exact sources tried

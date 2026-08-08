@@ -6,7 +6,7 @@ with three views:
 - **Constitution** — the Preamble, an index of all **26 Parts** (including 4A, 9A, 9B, 14A) and
   **12 Schedules**, a reading pane with slugified article anchors on every heading for deep links
   (e.g. `#12-definition` for Article 12 in Part III), and full-text search over everything.
-- **Bills & Amendments** — all **106 amendment acts** (and the 12 surviving bills) in two views:
+- **Bills & Amendments** — all **106 amendment acts** (and the 74 recovered bills) in two views:
   a **Text** view (the act/bill's plain text — extracted from the PDFs; the 7 scan-only acts
   were sourced from Indian Kanoon) and a **Git diff** view (what the amendment changed in the
   Constitution text, rendered as a unified diff with per-line highlighting, straight from the
@@ -109,7 +109,8 @@ bun run build    # -> dist/ (HTML/JS/CSS + content.json + history/ + amendments/
 
 `build.ts` bundles the app, then embeds all 39 markdown files, the amendments manifest and all
 act/bill texts into `dist/content.json`, copies `data/history/` into `dist/history/` and the
-118 amendment PDFs into `dist/amendments/` (written after the bundle step, since the build
+180 amendment PDFs (106 acts + 74 bills) into `dist/amendments/` (written after the bundle
+step, since the build
 starts by wiping `dist/`). The result is a **self-contained static site**: the app fetches
 `/content.json` once and does everything client-side, so it works with zero API calls on any
 static host — e.g. Vercel with `website/vercel.json` (`outputDirectory: dist`).
