@@ -9,7 +9,7 @@ provenance verbatim.
 
 - **106 amendments total; act coverage 100%** — every amendment 01–106 has a downloaded Act PDF
   (`AMENDMENTS/AMENDMENT_NN_ACT.pdf`), verified `%PDF` + content.
-- **Bill coverage: 14/106** — amendments 03, 16 (pre-1997 era), 095–096 (era-C sweep, see the
+- **Bill coverage: 15/106** — amendments 01, 03, 16 (pre-1997 era), 095–096 (era-C sweep, see the
   2026-08-08 section below) and 097–106 (downloaded by the 97–106 worker; see
   `docs/amendments_new_report.md`).
 - **94 bills missing (01–96 except 03 and 16)**: `bill_file = MISSING`, `bill_url = MISSING` in
@@ -167,3 +167,78 @@ captures for all 23 ordinals ×3 years; live: 404), loksabha.nic.in / loksabhaph
 sansad.in / rajyasabha.nic.in / 164.100.24.219 / 164.100.47.132 / 164.100.47.5 /
 parliamentofindia.nic.in / legislative.gov.in CDX (no constitution-amendment-bill PDFs),
 egazette.gov.in (coverage unverifiable → not searched), eparlib jcb (only the 5 items above).
+
+## Full eparlib jcb sweep — all 45 bitstreams classified (2026-08-08)
+
+All 45 jcb URLs from `probe_ik2/host_cdx2.json` (44 unique bitstreams; `757594` appears twice, once
+with a corrupt `;2` suffix) were downloaded from their newest Wayback captures
+(`probe_ik2/jcb_dl/`, `probe_ik2/jcb_dl_manifest.json`) and classified by first-page pdftotext.
+Full table: `probe_ik2/jcb_classification.json` (44 rows: filename | category | subject |
+first-120 chars | wayback URL).
+
+- **Constitution-amendment items (3)**: 58338 (1st, **INTEGRATED below**), 58262 (3rd, already
+  integrated), 58623 (16th, already integrated).
+- **Lapsed-bill report (1)**: 757609 — Constitution (81st Amendment) Bill, 1996 (women's
+  reservation: new Arts 330A/332A) Joint Committee report with corrigenda. LAPSED bill, NOT the
+  81st Act (SC/ST backlog, 2000) — does not map to any CSV row. Verified: PRS hosts 3 copies
+  (`Constitution_(81st_Amendment)_Bill_1996.pdf`,
+  `Joint_Committee_on_Constitution_(81st_Amendment)_Bill_1996.pdf`,
+  `Joint_Committee_Report_Constitution_(81st_Amendment)_Bill_1996.pdf` under
+  prsindia.org/files/bills_acts/bills_parliament/1996/) — ledger only, NOT integrated.
+- **ST-order report (1)**: 757628 — Constitution (Scheduled Tribes) Order (Amendment) Bill, 1996,
+  Select Committee report; a statutory-order bill, NOT a constitutional amendment — ledger only.
+- **Other (39)**: non-constitution bills (estate duty, chit fund, Hindu marriage, CrPC, trade
+  merchandise, air force, trade unions, Aligarh Muslim, companies ×2, income-tax evidence,
+  food adulteration evidence, seeds, insurance, salary, patents evidence, mental-health evidence,
+  air-pollution evidence, life insurance ×2, railways ×3, marriage, IPC evidence, criminal law ×3,
+  dowry, prevention of disqualification, liability in tort, enforcement of security interest,
+  preventive detention, essential goods) + pre-independence non-bills (GOI Act 1919, Official
+  Secrets 1923, CrPC 1923). No further constitution-amendment bill text beyond the 3 above.
+
+### Amendment 01 bill recovered and integrated (2026-08-08)
+
+The 1st-amendment item (handle 58338, `jcb_1951_constitution_1st_amendment_bill.pdf`) is a Select
+Committee report that **annexes the full bill text as amended** — verified in the 2024-06-18
+Wayback capture: "A BILL to amend the Constitution of India. BE it enacted by Parliament as
+follows: 1. Short title… 2. Amendment of article 15… (4) Nothing in this article or in clause (2)
+of article 29 shall prevent the State from making any special provision…" plus the operative
+clauses (19(2), 31A, 31B, Ninth Schedule). This meets the repo's 03/16 precedent (committee
+report reproducing bill text = the bill), so the earlier "(a)/(d)" note's "stays MISSING_BILL"
+call is **superseded**. Integrated as `AMENDMENTS/AMENDMENT_01_BILL.pdf` (2.8 MB, text layer →
+`AMENDMENT_01_BILL.txt`), CSV row 01 → `status=OK`, bill_url =
+https://web.archive.org/web/20240618004242id_/https://eparlib.nic.in/bitstream/123456789/58338/1/jcb_1951_constitution_1st_amendment_bill.pdf .
+Caveat kept: the 2022-08-13 capture of the same bitstream is corrupt (empty text layer); the
+2024-06-18 capture (2.8 MB) and 2024-12-05 capture (Wayback-truncated at 1 MiB) exist — only the
+2024-06-18 one is usable and is the one pinned.
+
+**Bill coverage now 15/106** (01, 03, 16, 095–106). Remaining missing: 02, 04–15, 17–94 (92 rows).
+
+## egazette.gov.in year coverage — DETERMINED (2026-08-08)
+
+Earlier note ("coverage unverifiable → not searched") is **superseded**. Probing on 2026-08-08:
+
+- **Coverage extends back to at least 1947, definitively ≤2011.** Wayback CDX of
+  `egazette.gov.in/WriteReadData/*` (collapse=urlkey, 2000 URL keys) shows captures for every year
+  1937, 1947–2025 (e.g. 1950: 11, 1955: 8, 1960: 6, 1970: 3, 1980: 6, 1990: 5, 2000: 3, 2005: 13,
+  2010: 7, 2011: 7). Live fetches all return `200 application/pdf`:
+  - `WriteReadData/1951/O-2306-1951-0003-107771.pdf` → 637 KB, verified Gazette of India,
+    20 Jan 1951 (Part I Sec 4) via pdftotext.
+  - `WriteReadData/2011/E_21_2011_128.pdf` → 200 (39 KB); `WriteReadData/2005/E_248_2011_024.pdf`
+    → 200 (757 KB); `WriteReadData/2006/W_11_2011_096.pdf` → 200 (636 KB).
+  - Two filename schemes coexist: `YYYY/<NNNNNN>.pdf` (2013+; the 100th/101st/104th act URLs) and
+    `YYYY/E_<id>_<batchyear>_<n>.pdf` / `W_...` (older digitisation batches; E=Extraordinary,
+    W=Weekly).
+- **Site surface**: no robots.txt / sitemap.xml (both 404). Homepage is an ASP.NET sessionized
+  postback app (`/(S(<sid>))/default.aspx`); GazetteDirectory.aspx / SearchMenu.aspx /
+  RecentUploads.aspx render a static shell with no year index or search form without a JS
+  postback session — not curl-drivable in the probe.
+- **Sample bill-gazette hunt (91st/92nd/93rd/94th amendment bills, 2003–2006): NOT FOUND in
+  timebox.** Wayback CDX knows only 28 URLs total for 2003–2006 (2003: 2, 2004: 4, 2005: 13,
+  2006: 9); none is a bill gazette. The gazette-issue ID space per year is opaque and not
+  enumerable from the open web; the site search cannot be driven without a session. No bill
+  gazettes downloaded; nothing integrated from egazette this pass.
+- **Follow-up opportunity (flagged)**: since `WriteReadData/YYYY/` serves live for every year
+  1947+, era-C bills (2001–2011) and pre-1997 bills are in principle retrievable IF the per-year
+  Extraordinary Part II Section 2 issue IDs can be enumerated (e.g. via the egazette search
+  session UI driven headlessly, or by scraping the yearly ID ranges once a seed ID per year is
+  known). Evidence: `probe_ik2/egazette_probe2.json`, `/tmp/ega_cdx.txt` (2000-row CDX dump).
