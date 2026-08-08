@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { diffHunks, edgeChars, type Hunk } from "./lib/diff";
 import { amendmentPdfName } from "./lib/content";
 import { searchRecords, type SearchHit, type SearchRecord } from "./lib/search";
+import { amendmentTimeline, articleKey } from "./lib/timeline";
 import "./index.css";
 
 type IndexItem = { key: string; title: string };
@@ -75,6 +76,20 @@ function render(markdown: string): string {
   return withHeadingAnchors(marked.parse(markdown, { async: false }));
 }
 
+// Per-article amendment chips: after render(), drop an "Amended by" row under
+// every <h2>/<h3> whose leading article key has a timeline (data-derived from
+// the history diffs, see lib/timeline.ts — never parsed from prose).
+function withAmendedBy(html: string, timeline: Record<string, number[]> | null): string {
+  if (!timeline) return html;
+  return html.replace(/<h([23])[^>]*>([\s\S]*?)<\/h\1>/g, (heading, _level, inner) => {
+    const key = articleKey(inner.replace(/<[^>]*>/g, ""));
+    const froms = key ? timeline[key] : undefined;
+    if (!froms || froms.length === 0) return heading;
+    const chips = froms.map(n => `<button type="button" data-amend="${n}">${n}</button>`).join(", ");
+    return `${heading}<div class="amended-by" data-article="${key}">Amended by: ${chips}</div>`;
+  });
+}
+
 // Manifest numbers are zero-padded ("01"…"96", "097"…"106").
 function padNumber(n: number): string {
   return n <= 96 ? String(n).padStart(2, "0") : String(n).padStart(3, "0");
@@ -93,6 +108,8 @@ export function App() {
   const [preamble, setPreamble] = useState("");
   const [items, setItems] = useState<IndexItem[]>([]);
   const [selected, setSelected] = useState<Content | null>(null);
+  const [timeline, setTimeline] = useState<Record<string, number[]> | null>(null);
+  const timelineKey = useRef<string | null>(null); // open key at fetch time (stale guard)
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchHit[] | null>(null);
@@ -194,6 +211,13 @@ export function App() {
     const markdown = contents[item.key];
     if (markdown === undefined) return;
     setSelected({ key: item.key, title: item.title, markdown });
+    timelineKey.current = item.key;
+    setTimeline(null); // never show a previous part's chips while loading
+    if (item.key === "preamble") return; // no per-article history for the Preamble
+    versionFile(item.key).then(file => {
+      if (timelineKey.current !== item.key) return; // stale: a newer part was opened
+      setTimeline(file ? amendmentTimeline(file) : null);
+    });
   };
 
   // Search-hit routing: constitution hits open the reading pane; act/bill
@@ -301,6 +325,12 @@ export function App() {
       setDetailView("git");
       setTab("amendments");
     }
+  };
+
+  // One delegated handler for all "Amended by" chips in the reading pane.
+  const onReadingPaneClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const amend = (e.target as HTMLElement).dataset.amend;
+    if (amend) openAmendment(Number(amend));
   };
 
   const renderHistoryText = (text: string) => (
@@ -870,7 +900,8 @@ export function App() {
               <CardContent>
                 <div
                   className="markdown max-h-[70vh] max-w-prose overflow-y-auto pr-4"
-                  dangerouslySetInnerHTML={{ __html: render(selected.markdown) }}
+                  onClick={onReadingPaneClick}
+                  dangerouslySetInnerHTML={{ __html: withAmendedBy(render(selected.markdown), timeline) }}
                 />
               </CardContent>
             </Card>

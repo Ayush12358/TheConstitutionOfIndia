@@ -5,8 +5,10 @@ with three views:
 
 - **Constitution** — the Preamble, an index of all **26 Parts** (including 4A, 9A, 9B, 14A) and
   **12 Schedules**, a reading pane with slugified article anchors on every heading for deep links
-  (e.g. `#12-definition` for Article 12 in Part III), and full-text search over the Constitution,
-  all **106 act texts** and **74 bill texts** (scope selector: Constitution / Acts & Bills / All).
+  (e.g. `#12-definition` for Article 12 in Part III), per-article **"Amended by"** chips (which
+  amendments changed each article, derived from the history diffs), and full-text search over the
+  Constitution, all **106 act texts** and **74 bill texts** (scope selector: Constitution /
+  Acts & Bills / All).
 - **Bills & Amendments** — all **106 amendment acts** (and the 74 recovered bills) in two views:
   a **Text** view (the act/bill's plain text — extracted from the PDFs; the 7 scan-only acts
   were sourced from Indian Kanoon) and a **Git diff** view (what the amendment changed in the

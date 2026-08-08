@@ -78,6 +78,17 @@
   opacity: 0.7;
 }
 
+/* Per-article "Amended by" chips (timeline derived from history diffs) */
+.markdown .amended-by {
+  @apply inline-flex flex-wrap gap-x-1 text-[11px] text-muted-foreground;
+  margin: -0.5rem 0 0.75rem;
+}
+
+.markdown .amended-by button {
+  @apply underline hover:text-primary;
+  cursor: pointer;
+}
+
 @media (prefers-reduced-motion) {
   *,
   ::before,
