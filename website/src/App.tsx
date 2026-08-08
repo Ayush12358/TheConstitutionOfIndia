@@ -6,15 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { diffHunks, edgeChars, type Hunk } from "./lib/diff";
 import { amendmentPdfName } from "./lib/content";
+import { searchRecords, type SearchHit, type SearchRecord } from "./lib/search";
 import "./index.css";
 
 type IndexItem = { key: string; title: string };
 type Content = { key: string; title: string; markdown: string };
-type SearchResult = {
-  key: string;
-  title: string;
-  matches: { line: string; snippet: string }[];
-};
 type Amendment = {
   number: string;
   title: string;
@@ -99,7 +95,8 @@ export function App() {
   const [selected, setSelected] = useState<Content | null>(null);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchResult[] | null>(null);
+  const [results, setResults] = useState<SearchHit[] | null>(null);
+  const [scope, setScope] = useState<"constitution" | "acts" | "all">("constitution");
   const [amendments, setAmendments] = useState<Amendment[]>([]);
   const [amendmentQuery, setAmendmentQuery] = useState("");
   const [contents, setContents] = useState<Record<string, string>>({});
@@ -126,9 +123,34 @@ export function App() {
   const [compareOpen, setCompareOpen] = useState<string | null>(null);
   const [historyError, setHistoryError] = useState("");
 
-  // Client-side twin of the server's /api/search: case-insensitive substring,
-  // up to 5 matches per file, 20-file cap, sorted by match count. Runs over
-  // the embedded contents map, so it works on static hosting with no API.
+  // Search records for the chosen scope: the 39 content files (constitution,
+  // identical results to the old inline scan) plus act/bill texts ("acts" and
+  // "all" scopes), keyed by manifest number. Matching lives in src/lib/search.ts.
+  const recordsFor = (s: "constitution" | "acts" | "all"): SearchRecord[] => {
+    const titleOf = new Map(items.map(i => [i.key, i.title]));
+    const constitution: SearchRecord[] = Object.entries(contents).map(([key, text]) => ({
+      id: key,
+      title: titleOf.get(key) ?? key,
+      text,
+      kind: "constitution",
+    }));
+    if (s === "constitution") return constitution;
+    const amendmentTitle = new Map(amendments.map(a => [a.number, a.title]));
+    const acts: SearchRecord[] = Object.entries(actTexts).map(([num, text]) => ({
+      id: num,
+      title: `Act ${num}: ${amendmentTitle.get(num) ?? `Amendment ${num}`}`,
+      text,
+      kind: "act",
+    }));
+    const bills: SearchRecord[] = Object.entries(billTexts).map(([num, text]) => ({
+      id: num,
+      title: `Bill ${num}: ${amendmentTitle.get(num) ?? `Amendment ${num}`}`,
+      text,
+      kind: "bill",
+    }));
+    return s === "acts" ? [...acts, ...bills] : [...constitution, ...acts, ...bills];
+  };
+
   const runSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const q = query.trim();
@@ -136,25 +158,7 @@ export function App() {
       setResults(null); // query cleared → drop stale results
       return;
     }
-    if (q.length < 2) {
-      setResults([]); // mirrors the server's "query too short" → no matches
-      return;
-    }
-    const needle = q.toLowerCase();
-    const found: SearchResult[] = [];
-    for (const [key, markdown] of Object.entries(contents)) {
-      const matches: { line: string; snippet: string }[] = [];
-      for (const line of markdown.split("\n")) {
-        if (!line.toLowerCase().includes(needle)) continue;
-        matches.push({ line, snippet: line.length > 140 ? `${line.slice(0, 140)}…` : line });
-        if (matches.length === 5) break;
-      }
-      if (matches.length > 0) {
-        found.push({ key, title: items.find(i => i.key === key)?.title ?? key, matches });
-      }
-    }
-    found.sort((a, b) => b.matches.length - a.matches.length);
-    setResults(found.slice(0, 20));
+    setResults(searchRecords(recordsFor(scope), q)); // <2 chars → [] → "No matches"
   };
 
   useEffect(() => {
@@ -190,6 +194,21 @@ export function App() {
     const markdown = contents[item.key];
     if (markdown === undefined) return;
     setSelected({ key: item.key, title: item.title, markdown });
+  };
+
+  // Search-hit routing: constitution hits open the reading pane; act/bill
+  // hits open the amendment's Text view (amendments tab).
+  const openHit = (hit: SearchHit) => {
+    if (hit.kind === "constitution") {
+      open({ key: hit.id, title: hit.title });
+      return;
+    }
+    const a = amendments.find(x => x.number === hit.id);
+    if (a) {
+      setDetail(a);
+      setDetailView("text");
+      setTab("amendments");
+    }
   };
 
   // Group the index into Parts (explicit display order) and Schedules (numeric).
@@ -755,9 +774,27 @@ export function App() {
               <CardTitle>Search</CardTitle>
             </CardHeader>
             <CardContent>
+              <div className="mb-2 flex gap-1">
+                {(
+                  [
+                    ["constitution", "Constitution"],
+                    ["acts", "Acts & Bills"],
+                    ["all", "All"],
+                  ] as const
+                ).map(([id, label]) => (
+                  <Button
+                    key={id}
+                    size="sm"
+                    variant={scope === id ? "default" : "outline"}
+                    onClick={() => setScope(id)}
+                  >
+                    {label}
+                  </Button>
+                ))}
+              </div>
               <form className="flex gap-2" onSubmit={runSearch}>
                 <Input
-                  placeholder="Search the Constitution… e.g. secular, 330A, habeas corpus"
+                  placeholder="Search the Constitution, acts & bills… e.g. secular, service tax, Nari Shakti"
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                 />
@@ -770,16 +807,19 @@ export function App() {
                   <div className="mt-2 grid grid-cols-1 gap-2 md:grid-cols-2">
                     {results.map(r => (
                       <Button
-                        key={r.key}
+                        key={`${r.kind}-${r.id}`}
                         variant="outline"
                         className="h-auto justify-start py-2 text-left text-xs leading-snug"
-                        onClick={() => open(r)}
+                        onClick={() => openHit(r)}
                       >
                         <span className="min-w-0">
-                          <span className="block truncate font-medium">{r.title}</span>
-                          {r.matches[0] && (
-                            <span className="text-muted-foreground block truncate">{r.matches[0].snippet}</span>
-                          )}
+                          <span className="block truncate font-medium">
+                            <span className="text-muted-foreground mr-1 rounded bg-muted px-1 py-0.5 align-middle text-[10px] font-semibold tracking-wide uppercase">
+                              {r.kind === "constitution" ? "PART" : r.kind === "act" ? "ACT" : "BILL"}
+                            </span>
+                            {r.title}
+                          </span>
+                          <span className="text-muted-foreground block truncate">{r.snippet}</span>
                         </span>
                       </Button>
                     ))}
