@@ -1,4 +1,4 @@
-<!-- Generated 2026-08-08 from docs/amendments.csv (machine source of truth for verify_repo.py and download_amendments.py; docs/amendments-table.md is the human-readable view). -->
+<!-- Generated 2026-08-08 from docs/amendments.csv (machine source of truth; this file is the human-readable view). -->
 <!-- zip_file is plain text (no link): the bundle zips were removed from the working tree 2026-08-07 and are preserved in git tags/history. -->
 
 | number | title | assent_date | key_changes | bill_file | act_file | bill_url | act_url | zip_file | status |
