@@ -249,8 +249,10 @@ The egazette "coverage unverifiable / not searched" note and the era-C "not foun
 amendment bills 77–94 (except 89) are **superseded**. The ASP.NET search UI was driven end-to-end
 in a headless browser (see "How the search UI works" below); 12 Gazette of India EXTRAORDINARY
 Part II Section 2 (bills introduced in Parliament) issues were downloaded, OCR-verified against
-the act texts, and integrated. Bill coverage is now **27/106** (01, 03, 16, 077, 081, 083, 085–094,
-095–106). Remaining missing: 02, 04–15, 17–76, 78–80, 82, 84, 89 (80 rows).
+the act texts, and integrated. Bill coverage is now **39/106** (01, 03, 16, 065–069, 071–077,
+081, 083, 085–096, 097–106 — my 12 egazette rows: 077, 081, 083, 085–088, 090–094; the
+sansad worker's 12: 065–069, 071–076, 082). Remaining missing: 02, 04–15, 17–64, 70,
+78–80, 84, 89 (67 rows).
 
 ### How the search UI works (reproducible)
 
@@ -296,6 +298,10 @@ Bill number in title ≠ amendment number for most rows (bills were renumbered a
 | 93 | The Constitution (One Hundred and Fourth Amendment) Bill, 2005 (Bill No. 160 of 2005, LS; new art 15(5) — private unaided institutions) | 20-Dec-2005 | https://egazette.gov.in/WriteReadData/2005/E_72_2012_040.pdf | 1–2 (whole) |
 | 94 | The Constitution (One Hundred and Fifth Amendment) Bill, 2006 (Bill No. 15 of 2006, LS; art 164(1) proviso — tribal welfare Minister for Chhattisgarh/Jharkhand + MP/Odisha) | 01-Mar-2006 | https://egazette.gov.in/WriteReadData/2006/E_6_2011_083.pdf | 1–2 (whole) |
 
+Row 94 was later **superseded** by the sansad worker: `AMENDMENT_94_BILL.pdf` now is the
+text-layer sansad copy and `AMENDMENT_94_BILL.txt` exists; CSV row 94 `bill_url` points at
+sansad (commit f94ae8a). The egazette scan PDF remains retrievable from the URL above.
+
 First 120 chars of each bill (OCR-cleaned from the scan, title pages):
 - 77: "The following Bill was introduced in the Lok Sabha on 31st May, 1995: BILL No. 43 of 1995 — A Bill further to amend the Constitution of India. Be it enacted by Parliament in the Forty-sixth Year of the Republic of India as follows: 1. This Act may be called the Constitution (Eighty-sixth Amendment) Act, 1995."
 - 81: "A Bill further to amend the Constitution of India. Be it enacted by Parliament in the Fifty-first Year of the Republic of India as follows: 1. This Act may be called the Constitution (Ninetieth Amendment) Act, 2000."
@@ -340,8 +346,17 @@ constitutional-status bills, not amendments 01–106. All kept in `probe_ik3/dl/
 
 ### Still missing (this hunt)
 
-- **89th act's bill** (art 338 National Commission for SCs, act 28-Sep-2003): no matching bill
-  gazette in the egazette DB (2003 sweep: 27 constitution rows, none amends art 338).
+- **89th act's bill** (art 338 National Commission for SCs, act 28-Sep-2003): **definitive
+  negative after a second pass.** Probes on 2026-08-08: (i) egazette **Search by TEXT**
+  (`SearchText.aspx`, keyword + dates) returns only *current-year* gazettes — `National
+  Commission for Scheduled Castes` / `article 338` with 2003 dates -> "Text NOT found";
+  sanity keywords return 2025/2026 issues only; (ii) full 2003-window subject sweep
+  (Bill type, 57 rows) re-examined — all 27 constitution-subject rows plus every
+  non-constitution bill-introduction issue inspected; no bill amends art 338;
+  (iii) every multi-bill issue OCR-scanned (E_4, E_27, E_39, E_17, E_29, E_33, E_47,
+  E-2503-2001-0043) — E_33's three constitution bills (Bill 55/2005 water, Bill 86/2005
+  national service, Bill 85/2005, plus two more) are all lapsed 2005 bills. The 89th act's
+  bill is not in the egazette DB.
 - 74–76, 78–80, 82, 84: DB coverage starts at 1994; 1994–2001 sweeps produced no bill matching
   these acts (82nd act 2000's bill not in DB; 84th act 2001 delimitation bill not in DB).
 - Pre-1994 bills (02, 04–15, 17–74): egazette search DB has no bill gazettes before 1994.
