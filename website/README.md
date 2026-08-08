@@ -138,6 +138,8 @@ The Bun server serves the SPA plus `/api/*` (content, search, amendments, PDF fi
 
 ```bash
 bun test         # unit tests: CSV parser, PDF naming, payload builder, diff lib
+                 # + server route tests (test/server.test.ts spawns the real server: content.json,
+                 #   search, amendments, PDF/file routes, history, SPA fallback, 404s)
 bunx tsc --noEmit  # type-check
 ```
 
