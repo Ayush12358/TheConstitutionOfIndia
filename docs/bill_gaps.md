@@ -617,3 +617,79 @@ egazette-negative.
 Bill coverage: 64/106 → **65/106** (01, 03, 16, 64, 65–69, 71–77, 81–83, 85–96, 97–106). Remaining
 missing (32 rows): 21, 24–26, 28–39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89 — all confirmed
 absent/PDF-less from sansad (LS+RS API re-enumerated), Wayback, and egazette.
+
+## Final three leads — egazette pre-1994 / loksabhadocs / RS getFile (2026-08-08, worker finalhunt)
+
+Timeboxed sweep of the three remaining lead classes for the last 32 rows (21, 24–26, 28–39, 46,
+48–51, 56–59, 62, 70, 78–80, 84, 89). Checkpoints (gitignored): `probe_ik3/lead1/`
+(`ega_cdx_all.json` 2195 URLs, `pre94_captures.json` 216 pre-1994, `dl/` 59 Wayback PDFs,
+`classification.json`, `live_hits.json` 156 live URLs, `live_dl/` 156 PDFs,
+`live_classification.json`), `probe_ik3/lead2/` (CDX dumps: loksabhadocs 8076, 164.100.47.132
+10724, 164.100.24.219 4769, loksabha.nic.in 9158, sansad getFile/BillsTexts 1501),
+`probe_ik3/lead3_hits.json`.
+
+### Lead 1 — egazette WriteReadData pre-1994 files — NEGATIVE (no bill gazettes found)
+
+- **Wayback CDX** (`egazette.gov.in/WriteReadData/*`, collapse=urlkey, 2195 unique URLs): only 216
+  pre-1994 captures; target years hold 1–10 files each (1967: 6, 1971: 5, 1972: 7, 1973: 4, 1974: 4,
+  1975: 1, 1982: 3, 1984: 1, 1987: 7, 1988: 4, 1989: 8, 1992: 9). All 59 target-year PDFs
+  downloaded from newest `id_` captures and classified by first-page pdftotext: **no Extraordinary
+  Part II §2 gazette among them** — the only §2 issue is `E-0657-1988-0039` (12-Aug-1988) = Muslim
+  Women (Protection of Rights on Divorce) Amendment Bill, 1988 (non-constitution). The rest are
+  Part II §1 (Punjab Art 356 proclamations etc.) or ordinary.
+- **Live direct-URL construction** (files serve HTTP 200 outside Wayback): validated the
+  `E-<seq>-<year>-<issue>-<id>.pdf` scheme and `id = base + issue` on known pairs, then probed
+  issues 1–150 for the seqs observable from Wayback (1971=1384, 1987=710, 1988=656/657,
+  1989=615, 1992=495) → **156 further gazettes downloaded + classified**. Only two are Part II §2
+  (both 12-Aug-1988): issue 38 = Banking Companies (Taking Over of Management) Bill, RS XXIX/1988;
+  issue 39 = Muslim Women bill (above) — **neither a Constitution Amendment Bill**.
+- **Negative on the bill-introduction windows**: 1971 Jul–Aug (24th/25th/26th bills), 1987
+  Mar/Nov–Dec (56th/57th/58th bills), 1988 Feb (59th bill), 1989 (62nd bill), 1992 (70th bill)
+  fall in issue ranges whose `seq`+`id` bases are not observable (each year splits across multiple
+  seqs; the id-base is not a function of seq — adjacent-seq probes with base hedges: 1388 probes,
+  0 hits). Pre-1994 bill gazettes demonstrably exist on the server (1971 issues 84–86 constructed
+  from the id formula return 200) but the per-issue ids are opaque from the open web, so the
+  specific bill issues are not enumerable. Years with no captured E- file at all (1967, 1972–75,
+  1982, 1984) are unreachable by construction (seq + id both unknown). **Nothing integrated.**
+
+### Lead 2 — loksabhadocs.nic.in & sibling bill-text hosts — NEGATIVE
+
+- CDX sweeps (collapse=urlkey, all 200s): loksabhadocs.nic.in 8076, 164.100.47.132 10724,
+  164.100.24.219 4769 (full BillsTexts tree = 209 paths, all 2010+ era), loksabha.nic.in 9158,
+  sansad.in/getFile/BillsTexts/* 1501 (2020s-era timestamp-named files).
+- **No capture of any target file**: 41_2000, 172_2000, 90_2000, 94_2002, 99_1999 (the 80th ← 89th
+  bill 2000 LS 41; 84th ← 91st bill 2000 LS 172; 89th ← 94th bill 2002 LS 94 identities) — zero
+  hits on any host. The 164.100.24.219 BillsTexts tree holds only modern files (2011–2022: 109–152
+  of 2013/2021/2022, errata, passed copies) and RS romans XII_2004, XIV_2005, LXXXVI_2006,
+  XCI_2006, XXIV_2002 (= Slums & Jhuggi-Jhopri Bill — non-constitution, downloaded + verified),
+  plus `Cons (111amdt) 107 of 2009` (= 97th act's bill, already integrated). 164.100.47.132
+  `LssNew/ratification/` = the 110th bill 2009 women's-reservation decoy only; `LssNew/abstract/
+  constitution_amendment_bills.htm` is a procedural note, no bill links. `listbills.aspx?mpc=*`
+  member listing returns "No Bills Found". **Nothing integrated.**
+
+### Lead 3 — RS DB 1971–75 getFile brute force — NEGATIVE
+
+- RS API (`sansad.in/api_rs/legislation/getBills`, dump `probe_ik3/sansad_enum_rs.json`, 628
+  records) holds **43 constitution bills for 1971–75, every `billIntroducedFile` = null** — all
+  are *private-member* constitutional amendment bills (titles like "to amend article 368"), none
+  is the government bill behind acts 24–39 (SOR-verified identities: 24th ← 24th Bill 1971,
+  28th ← 31st Bill 1972 No. 55, 31st ← 31st Bill 1973 No. 31, 33rd ← 35th Bill 1974, 36th ← 38th
+  Bill 1975, etc. — all LS-introduced; the LS DB has **zero** constitution bills for 1972–75).
+- Brute force against `https://sansad.in/getFile/BillsTexts/RSBillTexts/{Asintroduced,asintroduced}/
+  <Roman>_<year>[_{Eng,eng}][.PDF].pdf?source=legislation` (490 URL variants covering the 43
+  era romans + the act-bill targets XIV_1988, XXVI_1989, XXX_1992, XIV_1995, XLVI_1999, LIV_1999):
+  **only 2 hits, both already integrated** — XLVI_1999 (83rd act's bill) and LIV_1999 (82nd act's
+  bill). All 1971–75 era files and the four act-bill targets 404 in every variant (including the
+  lowercase `asintroduced` path that the old host 164.100.24.219 used; that host no longer
+  resolves). **Nothing integrated.**
+
+### Net effect
+
+No new bills recovered; coverage stays **74/106** (01, 03, 16, 64–69, 71–77, 81–83, 85–96,
+97–106). Remaining missing (32 rows, unchanged): 21, 24–26, 28–39, 46, 48–51, 56–59, 62, 70,
+78–80, 84, 89. Definitive negatives now cover: sansad LS+RS API (re-enumerated), sansad
+getFile roman/arabic variants (~2,000 URLs probed across passes), Wayback CDX of every
+loksabha/loksabhaph/sansad/rajyasabha/parliamentofindia/164.100.* host, egazette search DB
+(1994+ only), egazette WriteReadData live files (pre-1994 bill issues not enumerable — the only
+remaining open avenue is a session-driven egazette search UI capable of pre-1994 queries, or a
+seed id per target year, neither available from the open web).
