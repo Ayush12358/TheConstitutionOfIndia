@@ -455,3 +455,49 @@ Remaining missing: 02, 04–15, 17–64, 70, 78–80, 84, 89 (49 rows — pre-19
 PDF-less 70/78/79/80/84/89). **Follow-up opportunity:** sansad's LS/RS bill DB has as-introduced PDFs for
 ~40 pre-1976 bills (02, 04–15, 17–24, 27, 42–55, 60–64 era) — each needs the same clause-match treatment;
 timeboxed out of this pass.
+
+## Pre-1994 sansad.in sweep — 34 more bills integrated (2026-08-08, same worker)
+
+The follow-up above was executed: all sansad LS/RS as-introduced PDFs for the pre-1994 gap rows were
+downloaded (`probe_ik3/sansad/pre94/`), classified by title + operative clause (text layers where
+present; rapidocr OCR for the 5 scans), and clause-matched to `AMENDMENTS/AMENDMENT_NN_ACT.txt`
+(assent dates from the API cross-checked against the CSV; **bill ordinals ≠ act ordinals** throughout —
+e.g. the 17th act came from the *Nineteenth* Amendment Bill 1964 (Bill No. 46), the 18th from the
+*Twentieth* Bill 1966 (No. 39), the 19th from the *Twenty-first* Bill 1966 (No. 57), the 20th from the
+*Twenty-third* Bill 1966 (No. 89), the 22nd from the Twenty-second Bill **1969** (No. 34; the 1968
+No. 113 named in ACT 22's SOR was withdrawn), the 40th from the *Forty-second* Bill 1976 (No. 60), the
+41st from the *Forty-third* Bill 1976 (No. 85), the 43rd from the Forty-fourth Bill 1977 (No. 148), the
+44th from the Forty-fifth Bill 1978 (No. 88), the 47th from the *Forty-eighth* Bill 1983 (No. 94 —
+Ninth Schedule entries after entry 188), the 53rd from the Fifty-third Bill 1986 (No. 88, Art 371G),
+the 54th from the Fifty-fourth Bill 1986 (No. 95, Art 125), the 55th from the Fifty-fifth Bill 1986
+(No. 145, Art 371H), the 60th from the Sixtieth Bill 1988 (No. 100, Art 276), the 61st from the
+*Sixty-second* Bill 1988 (No. 129, Art 326; ACT 61 SOR confirms), the 63rd from the Sixty-third Bill
+1989 (No. 100, Art 356(5)/359A repeal). Same-ordinal bill→act for 02, 04–15, 23, 27, 42, 45, 52.
+
+**Integrated (34 rows; sansad.in URLs; 30 with text layer → `.txt`; 4 scans → PDF only):**
+02, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 22, 23, 27, 40, 41, 42, 43, 44,
+45, 47, 52, 53, 54, 55, 60, 61, 63. Full per-row bill identity + URL in `docs/amendments.csv`.
+
+**Rejected (genuine bills, no act 01–106 match; clause-verified):** 1955 Sixth Bill (No. 61, Art 216 —
+lapsed), 1955 Seventh Bill (No. 63, negatived), 1955 Eighth Bill (No. 73 — Art 3 content identical to
+the 5th bill; sansad metadata conflicts; the 5th-named bill No. 60 was integrated instead), 1963
+Seventeenth Bill (No. 26, negatived — superseded by the 19th Bill 1964), 1964 Eighteenth Bill (No. 36,
+lapsed), 1966 Nineteenth Bill (No. 36, negatived predecessor of the 18th act's bill), 1970
+Twenty-fourth Bill (No. 53, negatived), 1989 Sixty-third Bill (No. 45 — Tripura Art 332, lapsed
+predecessor of the 72nd act's bill), 1989 Sixty-fourth Bill (No. 50 — Panchayati Raj Part IX, lapsed
+predecessor of the 73rd act's bill).
+
+**Still missing after both sweeps (18 rows):** 21, 24–26, 28–39 (1971–75 era: sansad has no bills for
+these; ACT SORs name bills not in the DB — e.g. 28th act ← 31st Bill 1972 No. 55, 31st act ← 31st Bill
+1973 No. 31, 33rd act ← 35th Bill 1974), 46, 48–51, 56–59, 62, 64, 70, 78–80, 84, 89. Of these, the
+bills for 62 (RS Sixty-second Bill 1989, No. XXVI) and 49 (Fifty-first Bill 1984, No. 79) and 50
+(Fifty-second Bill 1984, No. 80) and 51 (Fifty-third Bill 1984, No. 81) and 56 (Fifty-seventh Bill
+1987, No. 54) and 57 (Fifty-eighth Bill 1987, No. 93) and 58 (Fifty-sixth Bill 1987, No. 80) and 59
+(Fifty-ninth Bill 1988, RS No. XIV) and 70 (Seventy-sixth Bill 1992, RS) and 78 (Seventy-eighth Bill
+1995, RS No. XIV) are **identified in sansad's DB but have no PDF on the server** (getFile 404 / f=null).
+
+### Net effect (both pre-1994 and era-C passes)
+
+Bill coverage: 30/106 → **64/106**. Remaining missing (42 rows): 21, 24–26, 28–39, 46, 48–51, 56–59,
+62, 64, 70, 78–80, 84, 89 — every one either absent from the sansad DB or PDF-less; identities for
+most are recorded above and in the era-C section.
