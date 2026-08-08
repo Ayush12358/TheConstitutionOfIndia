@@ -345,3 +345,98 @@ constitutional-status bills, not amendments 01–106. All kept in `probe_ik3/dl/
 - 74–76, 78–80, 82, 84: DB coverage starts at 1994; 1994–2001 sweeps produced no bill matching
   these acts (82nd act 2000's bill not in DB; 84th act 2001 delimitation bill not in DB).
 - Pre-1994 bills (02, 04–15, 17–74): egazette search DB has no bill gazettes before 1994.
+
+## Live-site bill hunt — PRS / sansad.in / legislative.gov.in (2026-08-08, worker parlsites)
+
+Headless-Chrome live probes (earlier sweeps were CDX/archive-only). Checkpoints: `probe_ik3/`
+(gitignored; `prs_manifest.json`, `sansad/` = 37 era-C PDFs + `ocr_p1.json` page-1/2 OCR of all
+scans via rapidocr).
+
+### Source 1 — PRS billtrack (live) — nothing new
+
+- Full "Constitutional Amendments" category enumerated (`/billtrack/category/constitutional-amendments`,
+  56 entries, no pagination, 1992–2026). Search form (`BillActsBillsParliamentSearch[title]`) probed
+  with all target names: "Constitution (Ninety-first…Ninety-ninth Amendment) Bill", "…Eighty-fourth…",
+  "…Eighty-seventh…", "…Eighty-ninth…", "…Ninety-third Amendment Bill 2005", "…Eighty-fourth Amendment
+  Bill 2001/2002" — every one returns **No Result Found** (PRS titles use bill ordinals, e.g.
+  "The Constitution (109th Amendment) Bill, 2009"; the 84–96-era bills simply have no pages).
+- Only era-relevant live pages are the known decoys (all downloaded to probe_ik3/prs/ for the record):
+  79th/1992, 81st/1996, 84th/1998, 85th/1999 (women's-reservation bills; 84/85 text layers verify
+  Arts 330A/332A/334A insertion) and 103rd/2004 (National Commission for Minorities, Art 340A; lapsed).
+  None maps to any act 01–106.
+
+### Source 2 — sansad.in LS/RS bills API — 15 bills recovered (12 new here + 3 overlapping the egazette sweep)
+
+- The bills listing UI is an SPA over `https://sansad.in/api_rs/legislation/getBills` (params
+  `page`/`size`/`billName`/`house`/`billType`; **the old `pageNumber`/`pageSize` params are ignored** —
+  use `page`/`size`). It exposes as-introduced bill PDFs (`/getFile/BillsTexts/{LS,RS}BillTexts/Asintroduced/…`)
+  back to **1952** — invisible to the earlier CDX sweeps because `sansad.in/getFile/…` was not indexed.
+- Enumerated: `billName=Constitution&house=Lok Sabha` → 159 records (10/page × 16 pages, sorted
+  billIntroducedDate desc); `house=Rajya Sabha` → 39 records (4 pages). Range: LS 1952–2026, RS 1978–2024.
+- **Bill ordinals ≠ act ordinals** (bills get renumbered at passage): confirmed via the ACT txt SOR
+  headers (e.g. ACT 65: "…appended to the Constitution (Sixty-eighth Amendment) Bill, 1990 which was
+  enacted as THE CONSTITUTION (Sixty-fifth Amendment) Act, 1990"). Every integration below was
+  clause-matched to `AMENDMENTS/AMENDMENT_NN_ACT.txt` (or SOR-identified + clause-verified via OCR).
+
+**Integrated (12 rows, this worker; sansad.in URLs; scans OCR-verified "A BILL" + operative clause):**
+
+| # | Bill (as introduced) | sansad file | Evidence |
+|---|----------------------|-------------|----------|
+| 65 | Constitution (Sixty-eighth Amendment) Bill, 1990, Bill No. 98 | 98_1990_LS_Eng.pdf | ACT 65 SOR names it; Art 338 NCSC/ST clauses match |
+| 66 | Constitution (Sixty-sixth Amendment) Bill, 1990, Bill No. 53 | 53_1990_LS_eng.pdf | Ninth Schedule "after entry 202" matches ACT 66 |
+| 67 | Constitution (Seventy-sixth Amendment) Bill, 1990, Bill No. 158 | 158_1990_LS_Eng.pdf | ACT 67 SOR: "(Seventy-sixth Amendment) Bill, 1990 (Bill No. 158 of 1990)"; Art 356 third-proviso |
+| 68 | Constitution (Seventy-fifth Amendment) Bill, 1991, Bill No. 48 | 48_1991_LS_Eng.pdf | ACT 68 SOR: "(Seventy-fifth Amendment) Bill, 1991 (Bill No. 48 of 1991)"; "four years"→"five years" |
+| 69 | Constitution (Seventy-fourth Amendment) Bill, 1991, Bill No. 203 | 203_1991_LS_Eng.pdf | ACT 70 txt SOR note: 74th Bill 1991 → 69th Act; inserts Arts 239AA/239AB |
+| 71 | Constitution (Seventy-eighth Amendment) Bill, 1992, Bill No. 142 | 142_1992_ls_Eng.pdf | SOR Konkani/Manipuri/Nepali = ACT 71; assent 31-08-1992 |
+| 72 | Constitution (Seventy-fifth Amendment) Bill, 1991, Bill No. 209 | 209_1991_LS_Eng.pdf | SOR Tripura TNV settlement, Art 332; assent 04-12-1992 |
+| 73 | Constitution (Seventy-second Amendment) Bill, 1991, Bill No. 158 | 158_1991_LS_Eng.pdf | "Insertion of New Part IX"; assent 20-04-1993 |
+| 74 | Constitution (Seventy-third Amendment) Bill, 1991, Bill No. 159 | 159_1991_LS_Eng.pdf | "Insertion of New Part IXA"; assent 20-04-1993 |
+| 75 | Constitution (Seventy-seventh Amendment) Bill, 1992, Bill No. 103 | 103_1992_Eng_LS.pdf | Art 323B; assent 05-02-1994 (ledger's constitution.org attribution confirmed) |
+| 76 | Constitution (Eighty-fifth Amendment) Bill, 1994, RS Bill No. LXVI | RSBillTexts/…/AS Introduced in RS107202545656PM.pdf | ACT 76 SOR: "(Eighty-fifth Amendment) Bill, 1994 … enacted as … Seventy-sixth Amendment) Act, 1994"; Ninth Schedule entry 257A (TN Act) verbatim |
+| 82 | Constitution (Eighty-eighth Amendment) Bill, 1999, RS Bill No. LIV | RSBillTexts/…/LIV_1999.pdf | ACT 82 SOR: "(Eighty Eighth Amendment) Bill 1999 … enacted as … Eighty Second Amendment) Act 2000"; Art 335 relaxation |
+| 94* | Constitution (One Hundred and Fifth Amendment) Bill, 2006, Bill No. 15 | 15_2006.pdf | Art 164 proviso "Bihar"→"Chattisgarh, Jharkhand" verbatim = ACT 94; **text layer** → AMENDMENT_94_BILL.txt; assent 12-06-2006 |
+
+\* Row 94 was first integrated by the egazette sweep (scan-only gazette); this worker **superseded** it
+with the sansad text-layer as-introduced PDF + txt (CSV bill_url updated; egazette scan kept in git history).
+
+Also recovered but **already integrated** (duplicates not re-added): 95th act ← 109th Bill 2009 (LS No. —
+PRS copy in repo), 96th act ← 113th Bill 2010 (LS No. 28 of 2010), 97th act ← 111th Bill 2009 (LS No. 107),
+86th act ← 93rd Bill 2001 (LS No. 106 — egazette sweep already did row 86), 83rd act ← 86th Bill 1999
+(RS No. XLVI — egazette sweep already did row 83).
+
+**Authoritative identities for still-missing bills (from ACT txt SORs; PDFs unavailable):**
+80th act ← 89th Bill 2000 (sansad LS No. 41 — getFile 404s); 81st act ← 90th Bill 2000 (LS No. 90 — 404);
+84th act ← **91st Bill 2000** (LS No. 172 — 404; CORRECTS the earlier "84th act ← Eighty-fourth Amendment
+Bill 2001/2002" attribution); 78th act ← 78th Bill 1995 (RS No. XIV — no PDF in DB); 70th act ← 76th Bill
+1992 (RS — not in DB); 87th act ← 96th Bill 2003 (LS No. 31 — 404); 92nd act ← 100th Bill 2003 (LS No. 63 —
+404); 89th/90th acts ← 94th Bill 2002 (LS No. 94) and 99th Bill 2003 (LS No. 38), both assented 28-09-2003 —
+PDFs 404, per-bill mapping unresolved.
+
+**Rejected (genuine bills, no act 01–106 match; OCR-verified):** 1990-era LS bills 65th (No. 49, Art 356
+"Provided also" — lapsed), 67th (No. 93), 69th (No. 101), 72nd (No. 107), 73rd (No. 128), 74th (No. 156)
+(all lapsed), 75th (No. 157 — Art 356 3y6m→4y, text-layer, IDENTICAL content to the 67th act's bill but the
+ACT 67 SOR names Bill No. 158; sansad metadata says "assented" — treated as duplicate predecessor, NOT
+integrated); 1996 81st (No. 100, women's Art 330A decoy); RS 79th/1992 (No. LXXX, women's decoy);
+2003 102nd (No. 67 — Art 54 electoral-college content, lapsed 2003 re-introduction of the 70th act's subject);
+2004 103rd (No. 104, minorities); 2006 106th (No. 48 — Part IXB cooperatives, lapsed predecessor of the 97th
+act; matches the ledger's earlier "hybrid PRS file" note — p1 of that file WAS this bill); 2007 107th (Gorkha
+Hill Council), 2009 110th/112th, 2010 114th, 2011 115th/116th (GST/Lokpal etc. — all known lapsed decoys).
+
+### Source 3 — legislative.gov.in — BLOCKED (Akamai)
+
+- `https://www.legislative.gov.in/documents?page=1` (and without `www`, retried ×3) returns Akamai
+  "Access Denied" (errors.edgesuite.net refs) for the headless browser from this network. The static
+  HTML shell IS fetchable (Next.js, `nextExport`), but the listing is fully client-rendered (empty
+  `__NEXT_DATA__`); the data API lives in unlabeled chunks and the old Drupal `?page=N` listing is gone
+  (moved to `/archives?page=`). Web-search evidence confirms the documents portal indexes ACTS only
+  ("AMENDMENT ACTS … Fifty-second through Sixty-third Amendment Acts"), consistent with the ledger's
+  earlier CDN finding: no bill PDFs on legislative.gov.in. Nothing integrated; no further probing.
+
+### Net effect
+
+Bill coverage rose from 15/106 to **30/106** (01, 03, 16, 65–69, 71–77, 81–83, 85–96, 97–106 — the
+egazette sweep added 77, 81, 85, 87, 88, 90–93 concurrently; see that sweep's own ledger section).
+Remaining missing: 02, 04–15, 17–64, 70, 78–80, 84, 89 (49 rows — pre-1990 era, plus the identified-but-
+PDF-less 70/78/79/80/84/89). **Follow-up opportunity:** sansad's LS/RS bill DB has as-introduced PDFs for
+~40 pre-1976 bills (02, 04–15, 17–24, 27, 42–55, 60–64 era) — each needs the same clause-match treatment;
+timeboxed out of this pass.
