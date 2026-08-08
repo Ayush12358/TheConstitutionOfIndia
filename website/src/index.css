@@ -96,3 +96,85 @@
     animation: none !important;
   }
 }
+
+/* Print: a constitution reference should print as plain black-on-white text.
+   Interactive chrome is hidden, panes expand past their screen clamps, and
+   dark-mode colors are forced back to light so printouts stay readable. */
+@media print {
+  /* Force light appearance even when the saved theme is dark */
+  :root.dark {
+    color-scheme: light;
+    --background: #fff;
+    --foreground: #000;
+    --card: #fff;
+    --card-foreground: #000;
+    --muted: #f4f4f5;
+    --muted-foreground: #3f3f46;
+    --border: #d4d4d8;
+    --input: #d4d4d8;
+    --primary: #000;
+    --primary-foreground: #fff;
+    --secondary: #f4f4f5;
+    --secondary-foreground: #000;
+    --accent: #f4f4f5;
+    --accent-foreground: #000;
+    --popover: #fff;
+    --popover-foreground: #000;
+    --destructive: #b91c1c;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  /* Interactive chrome: tab nav, theme toggle, search form */
+  header nav,
+  header > button,
+  form {
+    display: none;
+  }
+
+  /* Cards print as plain text blocks: no shadow, no border */
+  [data-slot="card"] {
+    box-shadow: none;
+    border: none;
+  }
+
+  /* Dark-mode diff tints/text: restore the light-mode equivalents */
+  [class*="bg-green-950"] {
+    background: #f0fdf4 !important;
+  }
+  [class*="bg-red-950"] {
+    background: #fef2f2 !important;
+  }
+  [class*="bg-green-900"] {
+    background: #bbf7d0 !important;
+  }
+  [class*="bg-red-900"] {
+    background: #fecaca !important;
+  }
+  [class*="text-green-400"] {
+    color: #15803d !important;
+  }
+  [class*="text-red-400"] {
+    color: #b91c1c !important;
+  }
+
+  /* Screen clamps (max-h-[70vh] reading panes, max-h-80 diff panes) must
+     not clip the printed page: let every container expand. */
+  * {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Keep headings, table rows and "Amended by" chips with their content */
+  .markdown h1,
+  .markdown h2,
+  .markdown h3,
+  .markdown table,
+  .markdown tr,
+  .markdown .amended-by {
+    break-inside: avoid;
+  }
+}

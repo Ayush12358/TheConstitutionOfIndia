@@ -928,7 +928,8 @@ export function App() {
                     return (
                       q === "" ||
                       a.number.toLowerCase().includes(q) ||
-                      a.title.toLowerCase().includes(q)
+                      a.title.toLowerCase().includes(q) ||
+                      a.key_changes.toLowerCase().includes(q)
                     );
                   })
                   .map(a => (
