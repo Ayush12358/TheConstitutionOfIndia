@@ -246,8 +246,9 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
   refuses overwrite without `--force`, `--auto N` prints expected filenames (2-digit for ≤96,
   3-digit for ≥97).
 - **README.md rewritten**: post-106th current state (women's reservation not in force — awaits
-  delimitation), 39-dir layout, AMENDMENTS/ coverage (acts 106/106, bills 12/106 with honest gap
-  explanation), bundle/tag conventions, Windows-vs-bash tooling table, quick start; original
+  delimitation), 39-dir layout, AMENDMENTS/ coverage (acts 106/106, bills 74/106 — the 32
+  missing bills are ledgered in docs/bill_gaps.md), bundle/tag conventions, Windows-vs-bash
+  tooling table, quick start; original
   r-/f-Amendment narrative preserved condensed in "History".
 - **Hygiene**: `SCHEDULE_8/.DS_Store` untracked and deleted; `download_pdfs.py` removed via
   `git rm` (Python 2, dead lawmin.nic.in URLs); `.gitignore` added (`.DS_Store`, `_work/`,
@@ -347,7 +348,7 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
   — ≈80 MB removed.
 - **Why**: markdown-first repo; every Part/Schedule/Preamble is fully covered by the checked-in
   `.md` text, and the content PDFs were generated artifacts.
-- **Kept**: everything in `AMENDMENTS/` — 118 PDFs (106 acts + 12 bills), the bills-and-acts
+- **Kept**: everything in `AMENDMENTS/` — 180 PDFs (106 acts + 74 bills), the bills-and-acts
   deliverable — plus all `.md` files, docs, scripts, and the CI workflow.
 - **Restore paths**: the bundle zips are preserved in the git tag trees
   `STABLE_AMENDMENT_01..106` (each tag tree still contains its bundle zip;
@@ -359,4 +360,19 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
   check (a) requires only the `.md` content files (PDF `%PDF`/`%%EOF` guard dropped). All 5 checks
   still run; `docs/amendments-table.md` renders `zip_file` as plain text (generator updated,
   `gen_amendments_table.py`).
+
+## 11. 2026-08-08 updates (bill recovery + OCR rounds)
+
+The 2026-08-08 sessions recovered the missing bills and ran the OCR quality rounds; the numbers
+above that predate them are superseded by the current state:
+
+- **Bill coverage: 74/106** (was 12/106). The 62 recovered bills came from the sansad.in LS/RS
+  bills API, egazette.gov.in, eparlib and PRS; the remaining **32** (21, 24–26, 28–39, 46,
+  48–51, 56–59, 62, 70, 78–80, 84, 89) are still missing — `docs/bill_gaps.md` is the living
+  ledger of what was tried and found.
+- **Bill text coverage: all 74 have text** — 45 from PDF text layers + 29 vision-OCR (the
+  scan-only PDFs transcribed on 2026-08-08).
+- **Act text coverage: all 106 have text** — 93 from PDF text layers + 7 Indian Kanoon + 6
+  vision-OCR (15, 26, 66, 69, 75, 93).
+- **PDF count: 180** = 106 acts + 74 bills.
 
