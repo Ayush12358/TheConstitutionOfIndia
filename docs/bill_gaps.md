@@ -694,3 +694,5 @@ loksabha/loksabhaph/sansad/rajyasabha/parliamentofindia/164.100.* host, egazette
 (1994+ only), egazette WriteReadData live files (pre-1994 bill issues not enumerable — the only
 remaining open avenue is a session-driven egazette search UI capable of pre-1994 queries, or a
 seed id per target year, neither available from the open web).
+
+PDL re-probe 2026-08-09: still down — eparlib.sansad.in resolves to 164.100.166.186 (Cloudflare 1.1.1.1 and Google 8.8.8.8 both answer; local system resolver 10.4.20.222 refuses queries), but raw TCP to that IP times out on both :443 and :80 (curl code 28, 15–20 s, retried ×2) and https://eparlib.sansad.in/ times out (code 000, 20 s); eparlib.nic.in is NXDOMAIN at 1.1.1.1 and 8.8.8.8; r.jina.ai proxy returns 422. DNS no longer NXDOMAINs, but the site is unreachable at the network level — contents still not re-probeable.
