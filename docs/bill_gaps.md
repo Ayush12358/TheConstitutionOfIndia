@@ -9,8 +9,9 @@ provenance verbatim.
 
 - **106 amendments total; act coverage 100%** — every amendment 01–106 has a downloaded Act PDF
   (`AMENDMENTS/AMENDMENT_NN_ACT.pdf`), verified `%PDF` + content.
-- **Bill coverage: 12/106** — amendments 03, 16 (pre-1997 era) and 097–106 (downloaded by the
-  97–106 worker; see `docs/amendments_new_report.md`).
+- **Bill coverage: 14/106** — amendments 03, 16 (pre-1997 era), 095–096 (era-C sweep, see the
+  2026-08-08 section below) and 097–106 (downloaded by the 97–106 worker; see
+  `docs/amendments_new_report.md`).
 - **94 bills missing (01–96 except 03 and 16)**: `bill_file = MISSING`, `bill_url = MISSING` in
   `docs/amendments.csv`. Pre-1997 Parliament bill PDFs are largely not on the open web; the sources
   tried below returned no usable copy.
@@ -87,3 +88,82 @@ Goal: test whether any of the 94 `MISSING_BILL` rows is recoverable from the ope
   PRS / indiankanoon / legislative.gov.in hold acts only. No new `bill_url` values added to
   `docs/amendments.csv` as a result of this probe; amendment 01 stays `MISSING_BILL` as a *bill*
   (the recovered committee report is not the bill proper — flagging here for future triage).
+
+## Era C sweep — amendments 74–96 (2026-08-08)
+
+Follow-up worker research targeting the previously-unsearched 1992–2011 era (the "74".."96" CSV rows).
+Sources swept: PRS India files CDX (`prsindia.org/files/bills_acts/bills_parliament/<year>/*`, all
+PDFs 1991–2012), PRS billtrack (slug probes via Wayback availability API + live 404s), Wayback CDX of
+loksabha.nic.in / loksabhaph.nic.in / sansad.in / rajyasabha.nic.in / 164.100.24.219 / 164.100.47.132 /
+164.100.47.5 / parliamentofindia.nic.in / legislative.gov.in, eparlib jcb bitstream sweep (Step 2),
+and targeted web searches. Checkpoints in `probe_ik2/` (gitignored).
+
+### Found (2/23) — integrated 2026-08-08
+
+| # | Bill (as identified) | Source URL | Text layer | Status |
+|---|----------------------|------------|-----------|--------|
+| 95 | Constitution (One Hundred and Ninth Amendment) Bill, 2009 — Art 334 "sixty years"→"seventy years" (= 95th Act, reservation to 2020) | https://web.archive.org/web/20240505134801id_/https://prsindia.org/files/bills_acts/bills_parliament/2009/109th__Amendment.pdf | scan-only (4 pp) — no txt | OK |
+| 96 | Constitution (One Hundred and Thirteenth Amendment) Bill, 2010 (Bill No. 28 of 2010, LS) — Eighth Schedule entry 15 "Oriya"→"Odia", SOR P. Chidambaram 14-02-2010 (= 96th Act) | https://web.archive.org/web/20221207163740id_/https://prsindia.org/files/bills_acts/bills_parliament/2010/The_Constitution_One_Hundred_and_Thirteenth_Amendment_Bill_2010.pdf | text layer | OK |
+
+First 120 chars of confirmed bills:
+- 95: "THE CONSTITUTION (ONE HUNDRED AND NINTH AMENDMENT) BILL, 2009 ... In article 334 of the Constitution, for the words 'sixty years', the words 'seventy years' shall be substituted."
+- 96: "AS INTRODUCED IN LOK SABHA Bill No. 28 of 2010 THE CONSTITUTION (ONE HUNDRED AND THIRTEENTH AMENDMENT) BILL, 2010 A BILL further to amend the Constitution of India."
+
+### Not found (21/23) — per-amendment
+
+- **74–78 (bills 1991–1995)**: no digital bill texts exist. Bills were pre-Gazette-digitisation and
+  pre-egazette; PRS files (1991–2012 sweep), eparlib jcb bitstreams, loksabha/loksabhaph/
+  parliamentofindia/rajyasabha CDX all negative. Bill identities (from bill SORs quoted in
+  constitution.org act pages): 74th act ← Constitution (Seventy-third Amendment) Bill, 1991;
+  75th act ← (Seventy-seventh Amendment) Bill, 1992 (Art 323B rent tribunals; eparlib debate handle
+  882897 names the 77th bill as the 323B bill); 76th act ← (Eighty-fifth Amendment) Bill, 1994;
+  77th act ← (Eighty-sixth Amendment) Bill, 1995; 78th act ← (Eighty-first Amendment) Bill, 1994.
+  (Single-source attributions; ordinals demonstrably repeat across Lok Sabhas, so treat as indicative.)
+- **79–83 (bills 1999–2000)**: not found. The only era-C-numbered bills PRS hosts are lapsed
+  women's-reservation bills — 79th (1992), 81st (1996), 84th (1998), 85th (1999) — downloaded,
+  classified as genuine bills but subject-mismatched (insertion of Arts 330A/332A/334A), REJECTED.
+  constitution.org SOR attributions: 79th act ← 84th bill 1999; 80th ← 89th bill 2000;
+  81st ← 90th bill 2000; 82nd ← 88th bill 1999; 83rd ← 86th bill 1999. No PDFs on the open web.
+- **84–92 (bills 2001–2003)**: not found. PRS files swept (nothing beyond the 1998/1999 women's
+  decoys and committee reports); eparlib jcb negative; 164.100.24.219 (old LS BillsTexts host) has
+  only 199 captured PDFs, zero constitution bills. egazette.gov.in: homepage/search probes could not
+  demonstrate ≤2011 coverage (ASP.NET/JS app, no year metadata exposed) — per probe rules it was NOT
+  mined for bills. IK debates confirm identities (e.g. 84th bill 2001 delimitation; 93rd bill 2001 →
+  86th act RTE).
+- **93 (93rd Amendment Bill, 2005, OBC Art 15(5))**: not found. Introduced LS Aug 2005, passed
+  Dec 2005 → 93rd Act 2006. No PDF on PRS files, eparlib jcb, or via targeted web search.
+- **94 (bill 2006, tribal-welfare Minister Art 164)**: not found. The PRS 2006 file named
+  "The_constitution_one_hundred_and_sixth_amendment_bill_2006" is mislabelled/hybrid (p1 = 106th
+  bill 2006 Bill No. 48 of 2006; p2 = cooperatives Part IXB) — discarded; the 106th bill 2006
+  (Bodo/Sixth Schedule) is not an era-C bill.
+- **95 & 96**: found — see table above.
+
+### Decoy bills examined and rejected (all genuine bills, wrong amendment)
+
+107th bill 2007 (Bill No. 95 of 2007, Arts 244+332), 108th bill 2008 (women's, RS, scan),
+109th bill 2009 (Art 334 — ACCEPTED as 95th act's bill), 110th bill 2009 (Art 243D), 112th bill 2009
+(Art 243T), 113th bill 2010 (Odia — ACCEPTED as 96th act's bill), 114th bill 2010 (Arts 124/217/224),
+115th bill 2011 (GST Arts 246A/269A...), 116th bill 2011 (Lokpal Part XIVB), 117th bill 2012
+(Arts 16/341/342). 111th bill 2009 (cooperatives) already integrated as the 97th act's bill.
+
+### Step 2 — eparlib jcb committee-report CDX sweep (timeboxed)
+
+- `eparlib.nic.in/bitstream/123456789/*` + `original:.*jcb.*(constitution|amendment).*` +
+  `mimetype:application/pdf` → **45 unique bitstreams** (full list in `probe_ik2/host_cdx2.json`).
+- Constitution-amendment items (all joint-committee REPORTS reproducing bill texts — ledger only,
+  NOT bills): 1st = handle 58338 (jcb_1951_constitution_1st_amendment_bill, capture 2024-06-18 good /
+  2022-08-13 corrupt), 3rd = 58262, 16th = 58623, 81st-bill (women's) = 757609 +
+  PRS-hosted copies, and **NEW: 757628 `jcb_11_1997_scheduled_tribes`** (11th LS 1997 — JCB on the
+  Constitution (Scheduled Tribes) Order (Amendment) Bill, 1996/97; not one of amendments 01–106).
+- Filenames-with-'bill' pass: no additional constitution items beyond the above (other jcb 'bill'
+  items are non-constitution bills: estate duty, marriage, railways, etc.).
+- `eparlib.sansad.in`: no captures in Wayback CDX; live site times out (down) — contents not
+  re-probeable, matching earlier notes.
+
+### Definitive negatives (this sweep)
+
+PRS files 1991–2012 (every captured PDF checked), PRS billtrack slugs (Wayback availability: 0
+captures for all 23 ordinals ×3 years; live: 404), loksabha.nic.in / loksabhaph.nic.in /
+sansad.in / rajyasabha.nic.in / 164.100.24.219 / 164.100.47.132 / 164.100.47.5 /
+parliamentofindia.nic.in / legislative.gov.in CDX (no constitution-amendment-bill PDFs),
+egazette.gov.in (coverage unverifiable → not searched), eparlib jcb (only the 5 items above).
