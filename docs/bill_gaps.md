@@ -10,8 +10,9 @@ provenance verbatim.
 - **106 amendments total; act coverage 100%** — every amendment 01–106 has a downloaded Act PDF
   (`AMENDMENTS/AMENDMENT_NN_ACT.pdf`), verified `%PDF` + content.
 - **Bill coverage: 74/106** — the 62 missing bills recovered on 2026-08-08 from sansad.in's
-  LS/RS bills API (1952–2026), egazette.gov.in, eparlib and PRS; 45 of the 74 bills have text
-  layers (→ `.txt`), the other 29 are scan-only PDFs. See the 2026-08-08 sweep sections below.
+  LS/RS bills API (1952–2026), egazette.gov.in, eparlib and PRS; all 74 bills now have text
+  (→ `.txt`) — the 29 scan-only PDFs were transcribed with the vision model (2026-08-08 OCR
+  sweep; per-bill logs in `../probe_ik4/ocr_log.json`). See the 2026-08-08 sweep sections below.
 - **32 bills missing (21, 24–26, 28–39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89)**:
   `bill_file = MISSING`, `bill_url = MISSING` in `docs/amendments.csv`. The sources tried
   below returned no usable copy.
