@@ -696,3 +696,35 @@ remaining open avenue is a session-driven egazette search UI capable of pre-1994
 seed id per target year, neither available from the open web).
 
 PDL re-probe 2026-08-09: still down — eparlib.sansad.in resolves to 164.100.166.186 (Cloudflare 1.1.1.1 and Google 8.8.8.8 both answer; local system resolver 10.4.20.222 refuses queries), but raw TCP to that IP times out on both :443 and :80 (curl code 28, 15–20 s, retried ×2) and https://eparlib.sansad.in/ times out (code 000, 20 s); eparlib.nic.in is NXDOMAIN at 1.1.1.1 and 8.8.8.8; r.jina.ai proxy returns 422. DNS no longer NXDOMAINs, but the site is unreachable at the network level — contents still not re-probeable.
+
+## Final-source probe: Google Books / NDL / Internet Archive (2026-08-09)
+
+Worker `final-source` ran ~2.5 h (2026-08-09 04:42–07:10, per file mtimes in the gitignored
+`probe_ik3/`) probing the three remaining untested sources for the 32 missing bills. Intent:
+exact-title searches for 8 sample bills across Google Books, NDL India, and Internet Archive,
+then pull bill texts from any hits.
+
+### What was actually recorded (checkpoints)
+
+- **Internet Archive — searched; no bill texts found.** `probe_ik3/ia/adv_results.json`
+  (04:44) records 47 exact-title advancedsearch queries covering all 32 missing amendments
+  (keys 21, 24–26, 28–39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89); 33 queries returned 0
+  hits, and the 14 amendments with hits (24, 25, 39, 50, 56–59, 62, 70, 79, 80, 84, 89)
+  matched only debate transcripts (rsdebate.nic.in, eparlib.nic.in), state-legislature
+  ratification gazettes (TNLC-DB, karnatakalegislativeassembly), and DLI committee reports —
+  none contains bill text. `probe_ik3/ia/dl_status.json` (04:47): 20 such items downloaded,
+  all "ok", 0 fail. The worker then pivoted to Gazette-of-India text search:
+  `probe_ik3/ia/gaztxt/` holds 2,818 gazette full-text files (last write 07:10) plus
+  `gaz1971_80_95.json` / `gaz1971_cand.json` / `window_1971aug.json` (1971 ratification
+  window) — that search was in progress when the worker was killed.
+- **Google Books — no checkpoints.** `probe_ik3/gbooks/` was created (04:42) but is empty;
+  no query results were ever recorded. Google Books remains untested.
+- **NDL India — no checkpoints.** No directory or file exists for NDL; no evidence any
+  query ran. NDL India remains untested.
+
+### Net effect
+
+No bills were integrated; coverage stays **74/106** (missing 32 rows, unchanged: 21, 24–26,
+28–39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89). Internet Archive is now a recorded negative
+for exact-title bill searches; Google Books and NDL India were never probed — results
+inconclusive for those two sources.
