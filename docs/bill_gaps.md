@@ -728,3 +728,55 @@ No bills were integrated; coverage stays **74/106** (missing 32 rows, unchanged:
 28–39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89). Internet Archive is now a recorded negative
 for exact-title bill searches; Google Books and NDL India were never probed — results
 inconclusive for those two sources.
+
+## Internet Archive `in.gazette` full-text scan — 11 bill gazettes recovered (2026-08-09)
+
+The `final-source` worker's IA exact-title searches were negative because bill-introduction
+gazettes are filed by issue, not title. The killed worker had downloaded all **2,818** Gazette of
+India EXTRAORDINARY issue full-texts of the IA `in.gazette` collection (years 1966, 1971–75;
+`probe_ik3/ia/gaztxt/`) before being interrupted. This scan completed the work: every issue text
+was searched for `A Bill further to amend the Constitution of India` + ordinal short-title clauses,
+and each hit was clause-matched to `AMENDMENTS/AMENDMENT_NN_ACT.txt`.
+
+- **35 gazette issues** contain constitution-bill text (~40 bills total). **11 are the bills behind
+  the missing acts 21, 24–26, 28–30, 33–34, 37–38** — all Gazette of India EXTRAORDINARY
+  Part II—Section 2 (bills introduced in Parliament), verified via pdftotext (text layer present →
+  `.txt` produced) + operative-clause cross-check. Integrated from `https://archive.org/download/<item>/<pdf>`:
+
+| # | Bill (as printed in the gazette) | IA item | Issue date | Pages | bill_url |
+|---|----------------------------------|---------|-----------|-------|----------|
+| 21 | Constitution (Twenty-second Amendment) Bill, 1966 (RS Bill No. XXIV) — Sindhi, Eighth Sched. | in.gazette.e.1966.533 | 21-Nov-1966 (RS) | 1–2 | https://archive.org/download/in.gazette.e.1966.533/E-1709-1966-0060-77524.pdf |
+| 24 | Constitution (Twenty-fourth Amendment) Bill, 1971 (LS Bill No. 105) — art 13(4), 368 | in.gazette.e.1971.318 | 28-Jul-1971 | 1–3 | https://archive.org/download/in.gazette.e.1971.318/E-1383-1971-0035-61664.pdf |
+| 25 | Constitution (Twenty-fifth Amendment) Bill, 1971 (LS Bill No. 106) — art 31(2) | in.gazette.e.1971.318 | 28-Jul-1971 | 4–6 | https://archive.org/download/in.gazette.e.1971.318/E-1383-1971-0035-61664.pdf |
+| 26 | Constitution (Twenty-sixth Amendment) Bill, 1971 (LS Bill No. 112) — arts 291/362, 363A | in.gazette.e.1971.324 | 09-Aug-1971 | 1–3 | https://archive.org/download/in.gazette.e.1971.324/E-1383-1971-0041-61670.pdf |
+| 28 | Constitution (Thirty-first Amendment) Bill, 1972 (LS Bill No. 55) — new 312A, omit 314 | in.gazette.e.1972.386 | 26-May-1972 | 8–10 | https://archive.org/download/in.gazette.e.1972.386/E-1344-1972-0026-59738.pdf |
+| 29 | Constitution (Thirty-second Amendment) Bill, 1972 (LS Bill No. 56) — Kerala entries 65/66 | in.gazette.e.1972.386 | 26-May-1972 | 11–12 | https://archive.org/download/in.gazette.e.1972.386/E-1344-1972-0026-59738.pdf |
+| 30 | Constitution (Thirtieth Amendment) Bill, 1972 (LS Bill No. 53) — art 133(1) | in.gazette.e.1972.384 | 24-May-1972 | 1–4 | https://archive.org/download/in.gazette.e.1972.384/E-1344-1972-0025-59736.pdf |
+| 33 | Constitution (Thirty-fifth Amendment) Bill, 1974 (LS Bill No. 52) — art 101(3) resignation | in.gazette.e.1974.369 | 03-May-1974 | 4–6 | https://archive.org/download/in.gazette.e.1974.369/E-1273-1974-0022-56317.pdf |
+| 34 | Constitution (Thirty-fourth Amendment) Bill, 1974 — Ninth Schedule entries 65–83 | in.gazette.e.1974.369 | 03-May-1974 | 1–3 | https://archive.org/download/in.gazette.e.1974.369/E-1273-1974-0022-56317.pdf |
+| 37 | Constitution (Thirty-seventh Amendment) Bill, 1975 (LS Bill No. 32) — art 239A/240 Arunachal | in.gazette.e.1975.313 | 09-Apr-1975 | 1–2 | https://archive.org/download/in.gazette.e.1975.313/E-1241-1975-0019-54657.pdf |
+| 38 | Constitution (Thirty-ninth Amendment) Bill, 1975 (LS Bill No. 54) — conclusive-satisfaction clauses | in.gazette.e.1975.326 | 22-Jul-1975 | 5–9 | https://archive.org/download/in.gazette.e.1975.326/E-1242-1975-0032-54670.pdf |
+
+ACT SORs confirm the bill identities verbatim (21 ← 22nd Bill 1966 No. XXIV; 28 ← 31st Bill 1972
+No. 55; 29 ← 32nd Bill 1972; 32nd-act bill = 33rd Bill 1973 — not in collection; 33 ← 35th Bill
+1974; 34 ← 34th Bill 1974; 36 ← 38th Bill 1975 — not in collection; 37 ← 37th Bill 1975;
+38 ← 39th Bill 1975). Integrated as `AMENDMENTS/AMENDMENT_NN_BILL.pdf` + `.txt` (text layer);
+`docs/amendments.csv` rows 21/24/25/26/28/29/30/33/34/37/38 → `status=OK`.
+
+**Lapsed bills in the collection (rejected, ledger only):** 1966 Bills 78 (art 324A), 79 (art 370),
+80; 1966.556 = 23rd Bill 1966 No. 89 = the 20th act's bill (**duplicate** of the sansad integration,
+not re-added); 1971 Bill XXV (art 37), Bill 136, and the arts-16/19/143/145/226 bills (1971.322);
+1972 Bills 120 (arts 63A/66A), 6 (arts 93/178/182), RS I/II (art 16(6)), 7 (art 74(1) advice —
+42nd-act predecessor), 9, 10 (Eighth Sched.), 14 (art 19(1)(g)), RS VII, 29 (Kerala + Kannan Devan
+Ninth Sched.), 34 (art 31A(1) clarification), 82 (Bhojpuri), 30, 46 (art 335), 41, 43, 48 (art 19),
+49 (art 332); 1973 Bills 12 (arts 62/65), 14 (art 130A), 40 (art 80 + Fourth Sched.), 371(2) bill;
+1974 bills on arts 270(1)/171(3)(c)/352/359 (42nd-act predecessors), 343–348 language, 163/75(5)/
+74(1) CoM-size, 101–102, 190(3), 54/71, "10. Pahari (Himachali)" Eighth Sched., Orissa Ninth-Sched.
+entry 67; 1975 bills on art 120, 326A, Eighth-Sched. language entries, and the 41st Bill 1975
+(art 361 — lapsed predecessor; row 41 stays on its sansad integration). All clause-mismatched vs
+ACT txts or otherwise not acts 01–106.
+
+**Still missing in-range (5): 31** (31st Bill 1973 No. 31 — no art-81/330/332 bill gazette in the
+collection), **32** (33rd Bill 1973 — only the enacted 32nd ACT gazette in.gazette.e.1974.296 is
+present), **35** (36th Bill 1974, Sikkim associate), **36** (38th Bill 1975, Sikkim full state),
+**39** (40th Bill 1975, art 329A) — no Sikkim/329A/fortieth bill gazette anywhere in the 2,818 files.

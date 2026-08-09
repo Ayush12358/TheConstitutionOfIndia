@@ -131,7 +131,7 @@ describe("server routes", () => {
     expect(res.headers.get("content-type")).toContain("application/json");
     const body = await res.json();
     expect(Object.keys(body.act_texts)).toHaveLength(106);
-    expect(Object.keys(body.bill_texts)).toHaveLength(74);
+    expect(Object.keys(body.bill_texts)).toHaveLength(85);
     expect(body.amendments).toHaveLength(106);
     expect(Object.keys(body.contents)).toHaveLength(39);
   }, TEST_TIMEOUT_MS);
