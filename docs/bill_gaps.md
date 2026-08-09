@@ -780,3 +780,17 @@ ACT txts or otherwise not acts 01–106.
 collection), **32** (33rd Bill 1973 — only the enacted 32nd ACT gazette in.gazette.e.1974.296 is
 present), **35** (36th Bill 1974, Sikkim associate), **36** (38th Bill 1975, Sikkim full state),
 **39** (40th Bill 1975, art 329A) — no Sikkim/329A/fortieth bill gazette anywhere in the 2,818 files.
+
+## IA Gazette full-text scan (2026-08-09) — definitive outcome
+
+- **Files scanned**: 2,818 Gazette of India EXTRAORDINARY issue full-texts (IA `in.gazette`
+  collection, years 1966 + 1971–75; `probe_ik3/ia/gaztxt/`, checkpoints `scan_matches.json`).
+- **Matches**: 35 issues contain constitution-bill text; **11 confirmed bill gazettes integrated**
+  (amendments 21, 24–26, 28–30, 33–34, 37–38 — see the section above; all Extraordinary
+  Part II—Section 2, clause-verified against the ACT texts). Coverage 74/106 → **85/106**.
+- **Definitive in-range negatives (5)**: 31 (31st Bill 1973 No. 31), 32 (33rd Bill 1973), 35
+  (36th Bill 1974, Sikkim), 36 (38th Bill 1975, Sikkim), 39 (40th Bill 1975, art 329A) — no
+  matching bill gazette in the collection (Sikkim/329A/fortieth-content greps: zero hits).
+- **Confirming note — out of collection range**: rows **46, 48–51, 56–59, 62, 70, 78–80, 84, 89**
+  (bills dated 1981–2002) fall outside the `in.gazette` collection's 1966–75 range and were not
+  searched in this scan; their status is unchanged (prior sweeps' documented negatives stand).
