@@ -72,7 +72,7 @@ Provided that the Deputy Commissioner of the Tuensang district shall be the Chai
 
 (h) in article 170—
 
-(i) clause (1) shall, in relation to the Legislative Assembly of Nagaland, have effect as if for the word “sixty”, the word “forty- six” had been substituted;
+(i) clause (1) shall, in relation to the Legislative Assembly of Nagaland, have effect as if for the word “sixty”, the word “forty-six” had been substituted;
 
 (ii) in the said clause, the reference to direct election from territorial constituencies in the State shall include election by the members of the regional council established under this article;
 
@@ -150,7 +150,7 @@ Provided that the State Government may, by special order made in writing and for
 
 
 ## 371E. Establishment of Central University in Andhra Pradesh.—
-Parliament may by law provide for the establishment of a University in the State of Andhra Pradesh.]
+Parliament may by law provide for the establishment of a University in the State of Andhra Pradesh.
 
 
 

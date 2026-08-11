@@ -3,6 +3,62 @@
 All notable changes to this repository, grouped by the working sessions recorded in git history
 (Keep a Changelog-inspired structure; no versioned releases exist — everything is on `master`).
 
+## 2026-08-11 — Live-text and history-version integrity pass (pass 5)
+
+### Fixed
+- `website/scripts/generate-history.ts`: Fourth Schedule historical states repaired
+  (`fixSchedule4`). The 97+ reconstruction zips accumulated stale table blocks — each
+  `AMENDMENT_NN.zip` carried the current table plus every earlier era's table appended, so the
+  By Date view showed the Fourth Schedule two or three times over (states 99–103: 2014 table +
+  ancient 18-state table; 104–106: 2020 table + 2014 table + ancient). States with more than
+  one "Total" line are now cut at the end of the first, era-correct table: 99–103 show the
+  2014 J&K-at-21 table, 104–106 the 2020 J&K-at-31 table (identical to the live
+  `SCHEDULE_4/SCHEDULE4.md`). The 1950 original's page divider and a stray scan "|"
+  ("17. Manipur|") are dropped. Version boundaries are unchanged
+  (`[0, 7, 14, 36, 99, 104]`), so the per-amendment changed-files summary is byte-identical;
+  only the schedule4 texts changed. States 7–98 keep the archive's single column-mangled
+  table — its stated totals (225/231/233) do not match its entries, so it is not
+  mechanically reconstructable; documented, left archive-faithful.
+- `SCHEDULE_5/SCHEDULE5.md` (live Constitution text): restored the official C.O. footnotes
+  after paragraph 6 ("1. See the Scheduled Areas (Part A States) Order, 1950 (C.O. 9)…" and
+  "2. See the Madras Scheduled Areas (Cessor) Order, 1950 (C.O. 30)…"), matching the history
+  texts — the tag tree the live file was built from had dropped them.
+- `SCHEDULE_6/SCHEDULE6.md` (live Constitution text): replaced the orphan "18." marker after
+  paragraph 17 with the "* * * * *" omission marker (paragraph 18 of the Sixth Schedule was
+  omitted by the North-Eastern Areas (Reorganisation) Act, 1971); removed a stray "]" from
+  paragraph 12's heading ("…in the State of Assam]." → "…in the State of Assam." — the tag
+  tree does not carry it). Verified against the official text: the "18981," rendering
+  (footnote marker on the Code of Criminal Procedure, 1898) and "6 [the Government of the
+  State]" (substitution bracket) are official-faithful and were left as-is.
+- `SCHEDULE_2/SCHEDULE2.md` (live Constitution text): fixed the line-break glue
+  "Governor- General" → "Governor-General" (two places). The salary figures and footnote
+  markers stay as the official Schedule prints them.
+- `PART_21/PART21.md` (live Constitution text): fixed "forty- six" → "forty-six"
+  (Article 371A(2)(h)(i)); removed an orphan "]" at the end of Article 371E. Verified against
+  the official text: the bare "(1)" of Article 371 is correct (clause (1) was omitted by the
+  Thirty-second Amendment, s. 2), and Article 371D's post-2014 wording ("…or the State of
+  Telangana", "requirement of each State", "parts of such State", "various parts of the
+  States") is correct in the live view.
+- `PART_7/PART7.md` (live Constitution text): "s. 29 and Sch.." → "s. 29 and Sch." (double
+  period). The live "Omitted by the Constitution (Seventh Amendment) Act, 1956" matches the
+  act's own "Omit Part VII" operative; the history view's "Rep. by" is the archive's wording.
+- Full live-vs-history consistency check over all 39 content keys (normalized comparison):
+  after the fixes above, every remaining divergence is a documented convention (live files
+  omit marginal notes; footnote markers render inline) or a documented archive defect — no
+  further live-text repairs are warranted.
+
+### Documented (not fixed — archive-faithful)
+- Seventh Schedule: the live file correctly shows "92C. * * * * * *" (entry 92C "Taxes on
+  services", inserted by the 88th Amendment, omitted by the 101st), but the history texts for
+  states 88–100 never carried 92C (the archive's tag trees did not record the 88th's
+  insertion) — states 88–100 show 92B followed directly by 93.
+- Part XXI (Article 371D): the history texts for states 99–106 carry the pre-2014 wording
+  (the Andhra Pradesh Reorganisation Act, 2014 change is an ordinary-act change that no
+  constitutional-amendment state boundary represents); the live view has the current text.
+- Fourth Schedule states 7–98: column-mangled table with era-hybrid entries (modern state
+  values attributed to 1956–2013 snapshots) — the archive is the only source and the stated
+  totals do not match the entries, so no mechanical repair is possible.
+
 ## 2026-08-11 — History-data integrity pass, doc coverage corrections
 
 ### Fixed
@@ -11,6 +67,15 @@ All notable changes to this repository, grouped by the working sessions recorded
   cross-contaminated "Statement of Objects and Reasons" from acts 03 and 08 (their
   legislative.gov.in source PDFs carry the 2nd and 4th amendments' SORs respectively; the
   operative act text was unaffected and is correct).
+- `AMENDMENTS/*_ACT.txt`: retyped the garbled operative texts of acts 72, 79, 91 and 92 from
+  the site's own verified article texts (`website/data/history/` at the corresponding states)
+  and the official gazette wording — these four PDF text layers were dense OCR garble (e.g.
+  72's "BE it cnacted by Purliament…", 92's "re-sumberedas entries 6 t0 9"). A systematic
+  garble sweep (signature scan across all 106 act files) confirmed no other act's operative
+  text is garbled; the gazette masthead lines in 79/91/92/100 remain as scanned but the
+  operative sections are readable. Retyped content cross-checked word-for-word against the
+  site's history texts (332(3B), 334, 75(1A)/(1B), 164(1A)/(1B), 361B, Eighth-Schedule
+  entries 3/4/10/18).
 - `AMENDMENTS/*_BILL.txt`: removed `•` page-marker noise (20 files); rebuilt the garbled
   scan headers of bills 05, 12, 15, 41 with their verified bill numbers ("Bill No. 60 of
   1955", "3 of 1962", "111 of 1962", "85 of 1976" — from the sansad file names in

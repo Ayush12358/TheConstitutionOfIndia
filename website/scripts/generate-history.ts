@@ -306,6 +306,41 @@ for (const [key, ref] of Object.entries(detachedListFixes)) {
   console.log(`detached-list fix ${key}: ${states.length} states replaced from ${ref}`);
 }
 
+// Apply the Fourth Schedule fixes to every collected state.
+for (const s of Object.keys(content.schedule4 ?? {})) {
+  content.schedule4![Number(s)] = fixSchedule4(content.schedule4![Number(s)]!);
+}
+
+// --- Fourth Schedule fixes (archive render defect) ---
+// The 97+ reconstruction zips accumulate stale table blocks: each
+// AMENDMENT_NN zip's SCHEDULE_4/SCHEDULE4.txt carries the current table plus
+// every earlier era's table appended (state 99: the 2014 table then the
+// ancient 18-state table; state 104: the 2020 table, then the 2014 table,
+// then the ancient one — the By Date view showed the Fourth Schedule two or
+// three times over). The first block is the era-correct one (states 99-103:
+// the 2014 J&K-at-21 table; 104-106: the 2020 J&K-at-31 table, identical to
+// the live file), so any state whose text contains more than one "Total" line
+// is cut at the end of its first complete table. States 7-98 keep the
+// archive's single column-mangled table (names and seat values interleaved in
+// one run, stated totals not matching its entries — not mechanically
+// reconstructable, left as the archive has it). Page furniture — the bare
+// page divider of the 1950 original ("------- 211". -------") and a stray "|"
+// scan artifact ("17. Manipur|") — is dropped. Purely mechanical; no content
+// invented.
+function fixSchedule4(text: string): string {
+  const totals = [...text.matchAll(/Total/g)];
+  if (totals.length >= 2) {
+    const first = totals[0]!.index;
+    const m = /Total\s+(\d+)/.exec(text.slice(first));
+    if (m) text = text.slice(0, first) + m[0];
+  }
+  return text
+    .split("\n\n")
+    .filter(p => !/^-{3,}/.test(p.trim()))
+    .join("\n\n")
+    .replace(/\|/g, "");
+}
+
 // --- Assent dates from the manifest ---
 const csv = await Bun.file(path.join(repoRoot, "docs", "amendments.csv")).text();
 const rows = parseCSV(csv).filter(r => r.length > 0 && !(r[0] ?? "").startsWith("#"));

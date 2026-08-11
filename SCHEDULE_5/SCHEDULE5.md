@@ -57,6 +57,12 @@ PART C SCHEDULED AREAS
 
 (d) rescind, in relation to any State or States, any order or orders made under this paragraph, and in consultation with the Governor of the State concerned, make fresh orders redefining the areas which are to be Scheduled Areas; and any such order may contain such incidental and consequential provisions as appear to the President to be necessary and proper, but save as aforesaid, the order made under sub-paragraph (1) of this paragraph shall not be varied by any subsequent order.
 
+______________________________________________
+
+1. See the Scheduled Areas (Part A States) Order, 1950 (C.O. 9), the Scheduled Areas (Part B States) Order, 1950 (C.O. 26), the Scheduled Areas (Himachal Pradesh) Order, 1975 (C.O. 102) and the Scheduled Areas (States of Bihar, Gujarat, Madhya Pradesh and Orissa) Order, 1977 (C.O. 109).
+
+2. See the Madras Scheduled Areas (Cessor) Order, 1950 (C.O. 30) and the Andhra Scheduled Areas (Cessor) Order, 1955 (C.O. 50).
+
 PART D AMENDMENT OF THE SCHEDULE
 
 7. Amendment of the Schedule.—(1) Parliament may from time to time by law amend by way of addition, variation or repeal any of the provisions of this Schedule and, when the Schedule is so amended, any reference to this Schedule in this Constitution shall be construed as a reference to such Schedule as so amended.

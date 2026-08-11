@@ -4,9 +4,9 @@ PART A PROVISIONS AS TO THE PRESIDENT AND THE GOVERNORS OF STATES
 
 1. There shall be paid to the President and to the Governors of the States the following emoluments per mensem, that is to say:— The President …… 10,000 rupees. The Governor of a State …… 5,500 rupees.
 
-2. There shall also be paid to the President and to the Governors of the States such allowances as were payable respectively to the Governor- General of the Dominion of India and to the Governors of the corresponding Provinces immediately before the commencement of this Constitution.
+2. There shall also be paid to the President and to the Governors of the States such allowances as were payable respectively to the Governor-General of the Dominion of India and to the Governors of the corresponding Provinces immediately before the commencement of this Constitution.
 
-3. The President and the Governors of the States throughout their respective terms of office shall be entitled to the same privileges to which the Governor- General and the Governors of the corresponding Provinces were respectively entitled immediately before the commencement of this Constitution.
+3. The President and the Governors of the States throughout their respective terms of office shall be entitled to the same privileges to which the Governor-General and the Governors of the corresponding Provinces were respectively entitled immediately before the commencement of this Constitution.
 
 4. While the Vice-President or any other person is discharging the functions of, or is acting as, President, or any person is discharging the functions of the Governor, he shall be entitled to the same emoluments, allowances and privileges as the President or the Governor whose functions he discharges or for whom he acts, as the case may be.
 

@@ -209,7 +209,7 @@ Provided that no regulations may be made under this paragraph unless they are pa
 
 
 
-12. Application of Acts of Parliament and of the Legislature of the State of Assam to autonomous districts and autonomous regions in the State of Assam].— (1) Notwithstanding anything in this Constitution, —
+12. Application of Acts of Parliament and of the Legislature of the State of Assam to autonomous districts and autonomous regions in the State of Assam.— (1) Notwithstanding anything in this Constitution, —
 
 (a) no Act of the Legislature of the State of Assam in respect of any of the matters specified in paragraph 3 of this Schedule as matters with respect to which a District Council or a Regional Council may make laws, and no Act of the Legislature of the State of Assam prohibiting or restricting the consumption of any non-distilled alcoholic liquor shall apply to any autonomous district or autonomous region in that State unless in either case the District Council for such district or having jurisdiction over such region by public notification so directs, and the District Council in giving such direction with respect to any Act may direct that the Act shall in its application to such district or region or any part thereof have effect subject to such exceptions or modifications as it thinks fit;
 
@@ -289,9 +289,9 @@ Provided that the Governor may by a further order or orders extend the operation
 
 
 
-17. Exclusion of areas from autonomous districts in forming constituencies in such districts.—For the purposes of elections to the Legislative Assembly of Assam or Meghalaya or Tripura or Mizoram, the Governor may by order declare that any area within an autonomous district in the State of Assam or Meghalaya or Tripura or Mizoram, as the case may be, shall not form part of any constituency to fill a seat or seats in the Assembly reserved for any such district but shall form part of a constituency to fill a seat or seats in the Assembly not so reserved to be specified in the order. 18.
+17. Exclusion of areas from autonomous districts in forming constituencies in such districts.—For the purposes of elections to the Legislative Assembly of Assam or Meghalaya or Tripura or Mizoram, the Governor may by order declare that any area within an autonomous district in the State of Assam or Meghalaya or Tripura or Mizoram, as the case may be, shall not form part of any constituency to fill a seat or seats in the Assembly reserved for any such district but shall form part of a constituency to fill a seat or seats in the Assembly not so reserved to be specified in the order.
 
-
+* * * * *
 
 19. Transitional provisions.—(1) As soon as possible after the commencement of this Constitution the Governor shall take steps for the constitution of a District Council for each autonomous district in the State under this Schedule and, until a District Council is so constituted for an autonomous district, the administration of such district shall be vested in the Governor and the following provisions shall apply to the administration of the areas within such district instead of the foregoing provisions of this Schedule, namely:—
 
