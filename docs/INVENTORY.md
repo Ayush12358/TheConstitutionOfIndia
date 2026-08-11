@@ -246,7 +246,7 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
   refuses overwrite without `--force`, `--auto N` prints expected filenames (2-digit for ≤96,
   3-digit for ≥97).
 - **README.md rewritten**: post-106th current state (women's reservation not in force — awaits
-  delimitation), 39-dir layout, AMENDMENTS/ coverage (acts 106/106, bills 74/106 — the 32
+  delimitation), 39-dir layout, AMENDMENTS/ coverage (acts 106/106, bills 85/106 — the 21
   missing bills are ledgered in docs/bill_gaps.md), bundle/tag conventions, Windows-vs-bash
   tooling table, quick start; original
   r-/f-Amendment narrative preserved condensed in "History".
@@ -366,13 +366,13 @@ Late-2026-08-07 follow-ups, applied after the audit above was written:
 The 2026-08-08 sessions recovered the missing bills and ran the OCR quality rounds; the numbers
 above that predate them are superseded by the current state:
 
-- **Bill coverage: 74/106** (was 12/106). The 62 recovered bills came from the sansad.in LS/RS
-  bills API, egazette.gov.in, eparlib and PRS; the remaining **32** (21, 24–26, 28–39, 46,
-  48–51, 56–59, 62, 70, 78–80, 84, 89) are still missing — `docs/bill_gaps.md` is the living
-  ledger of what was tried and found.
-- **Bill text coverage: all 74 have text** — 45 from PDF text layers + 29 vision-OCR (the
-  scan-only PDFs transcribed on 2026-08-08).
+- **Bill coverage: 85/106** (was 12/106). The 62 recovered bills came from the sansad.in LS/RS
+  bills API, egazette.gov.in, eparlib and PRS (2026-08-08), with 11 more recovered afterwards;
+  the remaining **21** (31–32, 35–36, 39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89) are still
+  missing — `docs/bill_gaps.md` is the living ledger of what was tried and found.
+- **Bill text coverage: all 85 have text** — the scan-only bills transcribed via vision-model
+  OCR (2026-08-08 onwards).
 - **Act text coverage: all 106 have text** — 93 from PDF text layers + 7 Indian Kanoon + 6
   vision-OCR (15, 26, 66, 69, 75, 93).
-- **PDF count: 180** = 106 acts + 74 bills.
+- **PDF count: 191** = 106 acts + 85 bills.
 

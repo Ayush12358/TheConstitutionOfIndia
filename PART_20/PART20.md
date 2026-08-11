@@ -9,13 +9,13 @@
 
 Provided that if such amendment seeks to make any change in—
 
-(a) article 54, article 55, article 73, article 162, article 241 or article 279A; or
+(a) article 54, article 55, article 73, article 162, article 241 or article 279A, or
 
-(b) Chapter IV of Part V, Chapter V of Part VI, or Chapter I of Part XI; or
+(b) Chapter IV of Part V, Chapter V of Part VI, or Chapter I of Part XI, or
 
-(c) any of the Lists in the Seventh Schedule; or
+(c) any of the Lists in the Seventh Schedule, or
 
-(d) the representation of States in Parliament; or
+(d) the representation of States in Parliament, or
 
 (e) the provisions of this article, the amendment shall also require to be ratified by the Legislatures of not less than one-half of the States by resolutions to that effect passed by those Legislatures before the Bill making provision for such amendment is presented to the President for assent.
 

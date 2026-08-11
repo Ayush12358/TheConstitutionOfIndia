@@ -3,6 +3,55 @@
 All notable changes to this repository, grouped by the working sessions recorded in git history
 (Keep a Changelog-inspired structure; no versioned releases exist — everything is on `master`).
 
+## 2026-08-11 — History-data integrity pass, doc coverage corrections
+
+### Fixed
+- `AMENDMENTS/*_ACT.txt`: removed the duplicated act-title line in 17 acts (01–03, 06–12, 14,
+  16, 18, 21, 33, 37, 42) — the PDF text layers printed the title twice; and removed the
+  cross-contaminated "Statement of Objects and Reasons" from acts 03 and 08 (their
+  legislative.gov.in source PDFs carry the 2nd and 4th amendments' SORs respectively; the
+  operative act text was unaffected and is correct).
+- `AMENDMENTS/*_BILL.txt`: removed `•` page-marker noise (20 files); rebuilt the garbled
+  scan headers of bills 05, 12, 15, 41 with their verified bill numbers ("Bill No. 60 of
+  1955", "3 of 1962", "111 of 1962", "85 of 1976" — from the sansad file names in
+  `docs/amendments.csv`) and fixed bill 41's scrambled enactment clause order.
+- Bill-file assignment re-verified: the bills whose titles carry different ordinals than
+  their amendments (e.g. 7th act ← "Ninth Amendment Bill, 1956", 40th ← "Forty-second Bill
+  1976", 73rd ← "Seventy-second Bill 1991") are correctly assigned — the acts' own
+  "Statement of Objects and Reasons" pages document the provenance (see `docs/bill_gaps.md`).
+- `SCHEDULE_5/SCHEDULE5.md` (live Constitution text): restored paragraph 3 ("Report by the
+  Governor to the President regarding the administration of Scheduled Areas"), the
+  "PART B ADMINISTRATION AND CONTROL OF SCHEDULED AREAS AND SCHEDULED TRIBES" heading and the
+  main clause of paragraph 4(1) (Tribes Advisory Council) — the file had jumped from
+  paragraph 2 straight to the proviso, dropping three substantive provisions; also fixed the
+  "Governor ." spacing typo. Wording verified against the official Fifth Schedule PDF
+  (legislative.gov.in CDN).
+- `PART_20/PART20.md` (live Constitution text): Article 368(2) proviso items (a)–(d) now use
+  the official ", or" separation instead of "; or" (verified against the 101st Amendment
+  Act, s. 15 substitution text).
+- `website/data/history/*.json` regenerated: the preamble's scan-split "P REAMBLE" is joined
+  to "PREAMBLE", and stray private-use/control characters (e.g. U+F02A in the Third
+  Schedule's heading) are stripped in `scripts/generate-history.ts`. Version boundaries,
+  changed-files summary and state dates remain byte-identical.
+- `website/data/history/*.json` regenerated with scanner-noise removal: page numbers, "THE
+  CONSTITUTION OF INDIA" page headers, page-range labels, footnote-reference stars and
+  margin-duplicated paragraph numbers leaked from the 2015-era scans are stripped in
+  `scripts/generate-history.ts` (whole paragraphs only; the Fourth Schedule's seat values and
+  total are exempt — bare digits there are table content). Version boundaries, per-amendment
+  changed-files summary and state dates are byte-identical to before; only the texts changed.
+- Eleventh/Twelfth Schedule historical states repaired: the archive rendering detached every
+  item number from its text ("1." … "29." then a text dump); states now carry the corrected
+  rendering from the STABLE_AMENDMENT_106 tag tree (each schedule has a single version).
+- Regeneration picked up the 2026-08-08 archive content patches (338(5)(c), 342A(2), Ninth
+  Schedule Roman numeral) that the committed history data had not absorbed.
+- `docs/amendments-table.md` regenerated from the manifest: status column now matches
+  `docs/amendments.csv` (85 OK / 21 MISSING_BILL; 11 amendments that were marked MISSING_BILL
+  despite recovered bills are corrected).
+- Bill-coverage numbers corrected in `AMENDMENTS/README.md`, `README.md`, `docs/INVENTORY.md`
+  and this changelog: **85 of 106 bills** (was 74), **21 missing** (31–32, 35–36, 39, 46,
+  48–51, 56–59, 62, 70, 78–80, 84, 89; the 11 recovered later are 21, 24–26, 28–30, 33, 34,
+  37, 38); PDF count 191 = 106 acts + 85 bills.
+
 ## 2026-08-09 — Route tests, article-level amendment timelines, final OCR cleanup
 
 ### Added
@@ -69,4 +118,4 @@ All notable changes to this repository, grouped by the working sessions recorded
 
 ## Known limitations
 
-- **32 of 106 amendment bills are still missing** (21, 24–26, 28–39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89); the exact sources tried are documented with full provenance in `docs/bill_gaps.md` — nothing was ever fabricated.
+- **21 of 106 amendment bills are still missing** (31–32, 35–36, 39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89); the exact sources tried are documented with full provenance in `docs/bill_gaps.md` — nothing was ever fabricated.

@@ -5,7 +5,8 @@ AMENDMENT) BILL, 1956
 
 (As INTBODUOBD IN Lox S.A:BHA)
 
-ISUI .1'10. 33 01 IVII6
+
+ISUI .1'10. 33 01 IVII6
 
 THE CONSTITUTION (TENTH AMENDMENT) BILL,
 195 6
@@ -52,9 +53,9 @@ course of inter-State trade or commerce."; and
 c.
 
 ~drtimelDt
-•
 
-2
+
+2
 (b) after clause (2), the following clause shall be inserted,
 namely:"(3) Parliament may by law formulate principles for
 determining when a sale or purchase of goods takes place
@@ -78,9 +79,9 @@ such restrictions and conditions in regard to the system of
 levy, rates and other incidents of the tax as Parliament may
 by law specify.".
 
-•
 
-a
+
+a
 'STATEMENT OF OBJECTS AND REASONS
 
 While "taxes on the sale or purchase of goods other than newspapers" is an entry in the State List, article 286 of the Constitution
@@ -124,7 +125,8 @@ kinds, cloth, raw cotton, cattle feeds, iron and steel, coal, etc. to be
 e~ntial to the life of the community. Since this declaration could
 not affect pre-existing State laws imposing sales tax on these ~oods,
 
-"
+
+"
 
 the result was a wide disparity from State to States, not'only in the
 range of exempted goods, but also in the rates applicable to them.
@@ -155,7 +157,7 @@ intra-State sales should appropriately be brought under the full
 control of the Union. These recommendations of the Commission
 have been generally accepted by all the State Governments.
 The object of this Bill is to give effect to the recommendations of
-the Commission as regards the amendment of the constitutional pro•
+the Commission as regards the amendment of the constitutional pro
 visions relating to sales tax.
 In clause 2, it is proposed to add a new entry 92A in the Union'
 List placing taxes on inter-State sales and purchases within the
@@ -169,7 +171,8 @@ form part of the Consolidated Fund of India, but will accrue to the
 States themselves in accordance with such principles of distribution
 as may be fOl'mulated by Parliament by law. A further provIsion iJ
 
-5
+
+5
 proposed in article 269 expressly empowering Parliament to formulate
 by law principles for determining when a sale or purchase of goods
 takes pla{'e in the course of inter-State trade or commerce.
@@ -178,7 +181,7 @@ the explanation which has given risc to a great deal of legal controversy and pr
 286 in its present form vtill cease. to be appropriate. In its place it
 is proposed to iDsert a provision empowering Parliament to fonllulate
 principles for determining when a sale or purchase of g'Jocts takes
-place (a) outside a State, or (b) in the course of import of the goods •
+place (a) outside a State, or (b) in the course of import of the goods 
 into'the territory of fmdia or (c) in the course of export of the goods
 out of thtJ territory of India.
 It is fUI ther proposed to replace clause (3) of article 286 by a new
@@ -193,48 +196,35 @@ The 30th AJ?ril. 1956.
 
 MANILAL SHAH.
 
-6
+
+6
 ANNEXURE
 EXTRACTS FROM THE CONSTITUTION 01' INDIA
 
-•
 
-•
 
-•
 
 *
 
-•
 
 PART XU
 FINANCE. PROPERTY. CONTRACTS AND SUITS
 CHAPTER I.-FINANcE
 
-•
 
-• •
+ 
 
-•
 
-•
 
-•
 
-•
 
 Distribution of Revenues between the Union and the States
-•
 
-•
 
 *
 
-•
 
-•
 
-•
 
 Tues levied
 269. (1) The following duties and taxes shall be levied and collectand collected ed by the Government of India but shall be assigned to the States
@@ -248,7 +238,6 @@ agricultural land;
 land;
 (c) terminal taxes on goods or passengers carried by railway,
 sea or air;
-•
 (d) taxes on railway fares and freights;
 (e) taxes other than stamp duties on transactions in stockexchanges and futures markets;
 (f) taxes on the sale or purchase of newspapers and on advertisements published therein.
@@ -261,25 +250,16 @@ shall be distributed among those States in accordance with such
 principles of distribution as may be formulated by Parliament by
 law.
 
-•
 
 *
 
-•
 
-•
-•
 
-•
 
 Miscellaneous Financial Provisions
 
-•
 
-•
 
-•
-•
 
 Restrictions
 286. (1) No law of a State shall impose, or authorise the imposlas to impo- tion of, a tax on the sale or purchase of goods where such sale or
@@ -289,12 +269,12 @@ or purchase
 of goods.
 ,
 
-•
 
 (b) in the course of the import of the goods into, or export of
 the goods out of, the territory of India_
 
-7
+
+7
 the purposes of sub-clause (a), a sale or
 purchase shall be deemed to have taken place in the State in which
 the goods have actually been delivered as a direct result of such sale
@@ -319,33 +299,27 @@ for the life of the community shall have effect unless it has been
 reserved for the consideration of the President and has received his
 assent.
 
-•
 
 *
 
-•
 
-•
 
-8
+
+8
 SEVENTH SCHEDULE
 
 [Article 246]
 
-•
 
 *
 
-•
 
-•
 
 ..
 
 List D-State List
 54. Taxes on the sale or purchase of goods other than newspapers.
 
-•
 
 Tax,
 
@@ -366,13 +340,11 @@ of
 
 *
 
-•
 
-•
 
-•
 
-LOK SABHA
+
+LOK SABHA
 
 A
 Tax
@@ -408,4 +380,3 @@ of
 
 ,
 
-

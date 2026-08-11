@@ -48,7 +48,8 @@ shall be inserted,
 " (2B) Nothing in suf-clause (f) of clause (1) of article 19
 shall affect any such law as is referred to in clause (2).".
 
-SEC. 2]
+
+SEC. 2]
 
 THE GAZETTE OF INDIA EXTRAORDINARY
 
@@ -81,7 +82,8 @@ Provided that where such law is made by the Legislature of a
 State, the provisions of this article shall not apply thereto unless
 such law, having been reserved for the consideration of the President, has received his assent.".
 
-494
+
+494
 
 TH
 
@@ -133,4 +135,3 @@ Secretary.
 PRINTED BY THE GENENAL MANAGER. GOVERNMENT OF INDIA PHE3S, MINTO HOAD,
 NEW DELHI AND PUBLISHED BY THE MANAGER OF PUBLICATIONS, DELHI, 1 0 7 1
 
-

@@ -121,4 +121,4 @@ The Constitution of India text is a work of the Government of India.
 - `docs/INVENTORY.md` — authoritative audit: git archaeology, zip contents, amendment manifest, tag gaps
 - `docs/amendments.csv` — merged manifest: number, title, assent date, key changes, bill/act files + URLs, zip, status
 - `docs/AMENDMENTS.md` — human-readable index of all 106 amendments
-- `docs/bill_gaps.md` — why 32 bills are missing, with the exact sources tried
+- `docs/bill_gaps.md` — why 21 bills are missing, with the exact sources tried

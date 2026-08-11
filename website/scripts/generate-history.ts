@@ -12,7 +12,12 @@
 //   - 0:       AMENDMENT_ORIGINAL_26011950.zip (same tag).
 //
 // Each file is normalized (paragraph rewrap) so era-vs-era line wrapping does
-// not pollute diffs; consecutive identical states are deduped. Output:
+// not pollute diffs; scanner page furniture (page numbers, "THE CONSTITUTION
+// OF INDIA" headers, margin-duplicated paragraph numbers) is stripped, and
+// the detached item lists of the Eleventh/Twelfth Schedules are replaced with
+// the corrected rendering from the STABLE_AMENDMENT_106 tag tree (see
+// stripArchiveNoise / detachedListFixes below). Consecutive identical states
+// are deduped. Output:
 //   data/history/index.json   states (dates), per-file version index,
 //                             per-amendment changed-files summary
 //   data/history/<key>.json   [{ from, text }] for one content key
@@ -102,10 +107,73 @@ function splitAtArticleHeadings(para: string): string[] {
   return segments;
 }
 
-function normalize(raw: string): string {
+// The 2015-era archive txt files (and the 97+ reconstruction zips built from
+// them) leak scanner page furniture into the text: bare page numbers (e.g.
+// "23", "233"), "1-2-3" page-range labels, the running page header
+// "THE CONSTITUTION OF INDIA", footnote-reference stars, and margin-duplicated
+// paragraph numbers ("1" just before "1. Autonomous districts…"). None of it
+// is Constitution text, so it is removed before dedup. Outside the Fourth
+// Schedule, a bare-digit paragraph is never content (verified against every
+// version of every key — the strays are booklet page numbers like "1" between
+// Articles 21 and 22); the Fourth Schedule is the exception, where bare
+// digits are the seat-allocation table's values and its "233" total, so only
+// digits directly beside a page header are dropped there. Page-range labels,
+// standalone stars and "THE CONSTITUTION OF INDIA" headers never occur as
+// content (verified against the live files) and are always dropped. Only
+// whole paragraphs move; article-heading line starts are untouched, so
+// per-article attribution is unaffected.
+function stripArchiveNoise(text: string, key: string): string {
+  if (key === "preamble") return text.replace("P REAMBLE", "PREAMBLE"); // "THE CONSTITUTION OF INDIA" is its title; "P REAMBLE" is a scan split
+  const isHeader = (p: string) => p === "THE CONSTITUTION OF INDIA";
+  const isBareDigit = (p: string) => /^\d{1,3}$/.test(p);
+  const isRange = (p: string) => /^\d{1,3}(?:-\d{1,3})+$/.test(p);
+  const isStars = (p: string) => /^\*+$/.test(p);
+  const tableValues = key === "schedule4"; // Fourth Schedule: bare digits are seat values / the total
+  const paras = text.split("\n\n");
+  const noise = new Array<boolean>(paras.length).fill(false);
+  for (let i = 0; i < paras.length; i++) {
+    const p = paras[i]!.trim();
+    if (isHeader(p) || isRange(p) || isStars(p)) noise[i] = true;
+  }
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (let i = 0; i < paras.length; i++) {
+      if (noise[i]) continue;
+      const p = paras[i]!.trim();
+      if (isBareDigit(p)) {
+        const byHeader =
+          (i > 0 && isHeader(paras[i - 1]!.trim())) || (i < paras.length - 1 && isHeader(paras[i + 1]!.trim()));
+        if (tableValues ? byHeader : true) {
+          noise[i] = true;
+          changed = true;
+          continue;
+        }
+      }
+      // Margin-duplicated paragraph number, two archive shapes:
+      //  - a bare "N" paragraph directly before "N. …"
+      //  - a paragraph ending in " N" directly before "N. …"
+      const next = i < paras.length - 1 ? paras[i + 1]!.trim() : "";
+      const m = /^(\d{1,3})$/.exec(p);
+      if (m && new RegExp(`^${m[1]}\\.\\s`).test(next)) {
+        noise[i] = true;
+        changed = true;
+        continue;
+      }
+      const tm = / (\d{1,3})$/.exec(p);
+      if (tm && new RegExp(`^${tm[1]}\\.\\s`).test(next)) {
+        paras[i] = paras[i]!.replace(new RegExp(`\\s${tm[1]}$`), "");
+        changed = true;
+      }
+    }
+  }
+  return paras.filter((_, i) => !noise[i]).join("\n\n");
+}
+
+function normalize(raw: string, key: string): string {
   const fixed = raw.replace(/[ \t]+/g, " ").replace(/ *\r?\n */g, "\n").replace(/\n{3,}/g, "\n\n").trim();
   const width = 100;
-  return fixed
+  const body = fixed
     .split(/\n\s*\n/)
     .flatMap(splitAtArticleHeadings)
     .map(para => {
@@ -123,6 +191,8 @@ function normalize(raw: string): string {
     })
     .filter(Boolean)
     .join("\n\n");
+  const cleaned = body.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F\uE000-\uF8FF\uFFFD\uFEFF]/g, "");
+  return stripArchiveNoise(cleaned, key);
 }
 
 function stateFiles(tag: string): { key: string; ref: string }[] {
@@ -181,7 +251,7 @@ for (const tag of tags) {
   const files = stateFiles(tag);
   const blobs = await readBlobs(files.map(f => f.ref));
   files.forEach((f, i) => {
-    if (blobs[i]!.length > 0) (content[f.key] ??= {})[n] = normalize(blobs[i]!.toString("utf-8"));
+    if (blobs[i]!.length > 0) (content[f.key] ??= {})[n] = normalize(blobs[i]!.toString("utf-8"), f.key);
   });
 }
 
@@ -210,9 +280,30 @@ for (const n of wanted) {
     const key = keyByDir[m[1]!];
     if (!key) continue;
     txtCount++;
-    (content[key] ??= {})[n] = normalize(data.toString("utf-8"));
+    (content[key] ??= {})[n] = normalize(data.toString("utf-8"), key);
   }
   console.log(`state ${n} (${zipName}): ${txtCount} txt files`);
+}
+
+// --- Detached item lists (archive render defect) ---
+// The 2015 archive (and the 97+ reconstruction zips built from it) write the
+// Eleventh/Twelfth Schedule item lists with all numbers first and all item
+// texts dumped after, e.g. "1.\n2.\n…\n29.\n\nAgriculture, including…".
+// Every state of both schedules carries that broken rendering. The corrected
+// text lives in the STABLE_AMENDMENT_106 tag tree; each schedule has exactly
+// one version (introduced by 73/74, unchanged since), so replacing the text
+// wholesale cannot create or destroy version boundaries.
+const detachedListFixes: Record<string, string> = {
+  schedule11: "STABLE_AMENDMENT_106:SCHEDULE_11/SCHEDULE11.txt",
+  schedule12: "STABLE_AMENDMENT_106:SCHEDULE_12/SCHEDULE12.txt",
+};
+for (const [key, ref] of Object.entries(detachedListFixes)) {
+  const blobs = await readBlobs([ref]);
+  const fixed = normalize(blobs[0]!.toString("utf-8"), key);
+  const states = Object.keys(content[key] ?? {});
+  if (states.length === 0) throw new Error(`detached-list fix: no states collected for ${key}`);
+  for (const s of states) content[key]![Number(s)] = fixed;
+  console.log(`detached-list fix ${key}: ${states.length} states replaced from ${ref}`);
 }
 
 // --- Assent dates from the manifest ---

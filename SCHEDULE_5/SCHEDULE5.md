@@ -7,9 +7,15 @@ PART A GENERAL
 
 2. Executive power of a State in Scheduled Areas.—Subject to the provisions of this Schedule, the executive power of a State extends to the Scheduled Areas therein.
 
+3. Report by the Governor to the President regarding the administration of Scheduled Areas.—The Governor of each State having Scheduled Areas therein shall annually, or whenever so required by the President, make a report to the President regarding the administration of the Scheduled Areas in that State and the executive power of the Union shall extend to the giving of directions to the State as to the administration of the said areas.
+
+PART B ADMINISTRATION AND CONTROL OF SCHEDULED AREAS AND SCHEDULED TRIBES
+
+4. Tribes Advisory Council.—(1) There shall be established in each State having Scheduled Areas therein and, if the President so directs, also in any State having Scheduled Tribes but not Scheduled Areas therein, a Tribes Advisory Council consisting of not more than twenty members of whom, as nearly as may be, three-fourths shall be the representatives of the Scheduled Tribes in the Legislative Assembly of the State:
+
 Provided that if the number of representatives of the Scheduled Tribes in the Legislative Assembly of the State is less than the number of seats in the Tribes Advisory Council to be filled by such representatives, the remaining seats shall be filled by other members of those tribes.
 
-(2) It shall be the duty of the Tribes Advisory Council to advise on such matters pertaining to the welfare and advancement of the Scheduled Tribes in the State as may be referred to them by the Governor .
+(2) It shall be the duty of the Tribes Advisory Council to advise on such matters pertaining to the welfare and advancement of the Scheduled Tribes in the State as may be referred to them by the Governor.
 
 (3) The Governor may make rules prescribing or regulating, as the case may be,—
 
