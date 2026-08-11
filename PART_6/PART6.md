@@ -7,7 +7,8 @@ CHAPTER I.—GENERAL
 ## 152. Definition.—
 In this Part, unless the context otherwise requires, the expression “State” does not include the State of Jammu and Kashmir.
 
-CHAPTER II.—THE EXECUTIVE The Governor
+CHAPTER II.—THE EXECUTIVE
+The Governor
 
 
 
@@ -105,7 +106,8 @@ Provided that the number of Ministers, including the Chief Minister in a State s
 
 (4) A Minister who for any period of six consecutive months is not a member of the Legislature of the State shall at the expiration of that period cease to be a Minister.
 
-(5) The salaries and allowances of Ministers shall be such as the Legislature of the State may from time to time by law determine and, until the Legislature of the State so determines, shall be as specified in the Second Schedule. The Advocate-General for the State
+(5) The salaries and allowances of Ministers shall be such as the Legislature of the State may from time to time by law determine and, until the Legislature of the State so determines, shall be as specified in the Second Schedule.
+The Advocate-General for the State
 
 
 
@@ -136,7 +138,8 @@ It shall be the duty of the Chief Minister of each State—
 
 (c) if the Governor so requires, to submit for the consideration of the Council of Ministers any matter on which a decision has been taken by a Minister but which has not been considered by the Council.
 
-CHAPTER III.—THE STATE LEGISLATURE General
+CHAPTER III.—THE STATE LEGISLATURE
+General
 
 
 
@@ -158,7 +161,7 @@ CHAPTER III.—THE STATE LEGISLATURE General
 
 (3) No such law as aforesaid shall be deemed to be an amendment of this Constitution for the purposes of article
 
-## 368. 170. Composition of the Legislative Assemblies.—
+## 170. Composition of the Legislative Assemblies.—
 (1) Subject to the provisions of article 333, the Legislative Assembly of each State shall consist of not more than five hundred, and not less than sixty, members chosen by direct election from territorial constituencies in the State.
 
 (2) For the purposes of clause (1), each State shall be divided into territorial constituencies in such manner that the ratio between the population of each constituency and the number of seats allotted to it shall, so far as practicable, be the same throughout the State.
@@ -328,7 +331,8 @@ Provided that nothing in this clause shall, in the case of the Legislature of a 
 
 (2) The Legislature of a State may by law regulate the recruitment, and the conditions of service of persons appointed, to the secretarial staff of the House or Houses of the Legislature of the State.
 
-(3) Until provision is made by the Legislature of the State under clause (2), the Governor may, after consultation with the Speaker of the Legislative Assembly or the Chairman of the Legislative Council, as the case may be, make rules regulating the recruitment, and the conditions of service of persons appointed, to the secretarial staff of the Assembly or the Council, and any rules so made shall have effect subject to the provisions of any law made under the said clause. Conduct of Business
+(3) Until provision is made by the Legislature of the State under clause (2), the Governor may, after consultation with the Speaker of the Legislative Assembly or the Chairman of the Legislative Council, as the case may be, make rules regulating the recruitment, and the conditions of service of persons appointed, to the secretarial staff of the Assembly or the Council, and any rules so made shall have effect subject to the provisions of any law made under the said clause.
+Conduct of Business
 
 
 
@@ -344,7 +348,8 @@ Every member of the Legislative Assembly or the Legislative Council of a State s
 
 (3) Until the Legislature of the State by law otherwise provides, the quorum to constitute a meeting of a House of the Legislature of a State shall be ten members or one-tenth of the total number of members of the House, whichever is greater.
 
-(4) If at any time during a meeting of the Legislative Assembly or the Legislative Council of a State there is no quorum, it shall be the duty of the Speaker or Chairman, or person acting as such, either to adjourn the House or to suspend the meeting until there is a quorum. Disqualifications of Members
+(4) If at any time during a meeting of the Legislative Assembly or the Legislative Council of a State there is no quorum, it shall be the duty of the Speaker or Chairman, or person acting as such, either to adjourn the House or to suspend the meeting until there is a quorum.
+Disqualifications of Members
 
 
 
@@ -408,7 +413,8 @@ If a person sits or votes as a member of the Legislative Assembly or the Legisla
 
 
 ## 195. Salaries and allowances of members.—
-Members of the Legislative Assembly and the Legislative Council of a State shall be entitled to receive such salaries and allowances as may from time to time be determined, by the Legislature of the State by law and, until provision in that respect is so made, salaries and allowances at such rates and upon such conditions as were immediately before the commencement of this Constitution applicable in the case of members of the Legislative Assembly of the corresponding Province. Legislative Procedure
+Members of the Legislative Assembly and the Legislative Council of a State shall be entitled to receive such salaries and allowances as may from time to time be determined, by the Legislature of the State by law and, until provision in that respect is so made, salaries and allowances at such rates and upon such conditions as were immediately before the commencement of this Constitution applicable in the case of members of the Legislative Assembly of the corresponding Province.
+Legislative Procedure
 
 
 
@@ -494,7 +500,8 @@ Provided that the Governor may, as soon as possible after the presentation to hi
 ## 201. Bills reserved for consideration.—
 When a Bill is reserved by a Governor for the consideration of the President, the President shall declare either that he assents to the Bill or that he withholds assent therefrom:
 
-Provided that, where the Bill is not a Money Bill, the President may direct the Governor to return the Bill to the House or, as the case may be, the Houses of the Legislature of the State together with such a message as is mentioned in the first proviso to article 200 and, when a Bill is so returned, the House or Houses shall reconsider it accordingly within a period of six months from the date of receipt of such message and, if it is again passed by the House or Houses with or without amendment, it shall be presented again to the President for his consideration. Procedure in Financial Matters
+Provided that, where the Bill is not a Money Bill, the President may direct the Governor to return the Bill to the House or, as the case may be, the Houses of the Legislature of the State together with such a message as is mentioned in the first proviso to article 200 and, when a Bill is so returned, the House or Houses shall reconsider it accordingly within a period of six months from the date of receipt of such message and, if it is again passed by the House or Houses with or without amendment, it shall be presented again to the President for his consideration.
+Procedure in Financial Matters
 
 
 
@@ -576,7 +583,8 @@ Provided that no recommendation shall be required under this clause for the movi
 
 (2) A Bill or amendment shall not be deemed to make provision for any of the matters aforesaid by reason only that it provides for the imposition of fines or other pecuniary penalties, or for the demand or payment of fees for licences or fees for services rendered, or by reason that it provides for the imposition, abolition, remission, alteration or regulation of any tax by any local authority or body for local purposes.
 
-(3) A Bill which, if enacted and brought into operation, would involve expenditure from the Consolidated Fund of a State shall not be passed by a House of the Legislature of the State unless the Governor has recommended to that House the consideration of the Bill. Procedure Generally
+(3) A Bill which, if enacted and brought into operation, would involve expenditure from the Consolidated Fund of a State shall not be passed by a House of the Legislature of the State unless the Governor has recommended to that House the consideration of the Bill.
+Procedure Generally
 
 
 

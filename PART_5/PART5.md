@@ -1,6 +1,7 @@
 # PART V THE UNION
 
-CHAPTER I.—THE EXECUTIVE The President and Vice-President
+CHAPTER I.—THE EXECUTIVE
+The President and Vice-President
 
 
 
@@ -393,7 +394,8 @@ A person shall not be qualified to be chosen to fill a seat in Parliament unless
 
 
 ## 88. Rights of Ministers and Attorney-General as respects Houses.—
-Every Minister and the Attorney-General of India shall have the right to speak in, and otherwise to take part in the proceedings of, either House, any joint sitting of the Houses, and any committee of Parliament of which he may be named a member, but shall not by virtue of this article be entitled to vote. Officers of Parliament
+Every Minister and the Attorney-General of India shall have the right to speak in, and otherwise to take part in the proceedings of, either House, any joint sitting of the Houses, and any committee of Parliament of which he may be named a member, but shall not by virtue of this article be entitled to vote.
+Officers of Parliament
 
 
 
@@ -475,7 +477,8 @@ Provided that nothing in this clause shall be construed as preventing the creati
 
 (2) Parliament may by law regulate the recruitment, and the conditions of service of persons appointed, to the secretarial staff of either House of Parliament.
 
-(3) Until provision is made by Parliament under clause (2), the President may, after consultation with the Speaker of the House of the People or the Chairman of the Council of States, as the case may be, make rules regulating the recruitment, and the conditions of service of persons appointed, to the secretarial staff of the House of the People or the Council of States, and any rules so made shall have effect subject to the provisions of any law made under the said clause. Conduct of Business
+(3) Until provision is made by Parliament under clause (2), the President may, after consultation with the Speaker of the House of the People or the Chairman of the Council of States, as the case may be, make rules regulating the recruitment, and the conditions of service of persons appointed, to the secretarial staff of the House of the People or the Council of States, and any rules so made shall have effect subject to the provisions of any law made under the said clause.
+Conduct of Business
 
 
 
@@ -491,7 +494,8 @@ Every member of either House of Parliament shall, before taking his seat, make a
 
 (3) Until Parliament by law otherwise provides, the quorum to constitute a meeting of either House of Parliament shall be one-tenth of the total number of members of the House.
 
-(4) If at any time during a meeting of a House there is no quorum, it shall be the duty of the Chairman or Speaker, or person acting as such, either to adjourn the House or to suspend the meeting until there is a quorum. Disqualifications of Members
+(4) If at any time during a meeting of a House there is no quorum, it shall be the duty of the Chairman or Speaker, or person acting as such, either to adjourn the House or to suspend the meeting until there is a quorum.
+Disqualifications of Members
 
 
 
@@ -559,7 +563,8 @@ If a person sits or votes as a member of either House of Parliament before he ha
 
 
 ## 106. Salaries and allowances of members.—
-Members of either House of Parliament shall be entitled to receive such salaries and allowances as may from time to time be determined by Parliament by law and, until provision in that respect is so made, allowances at such rates and upon such conditions as were immediately before the commencement of this Constitution applicable in the case of members of the Constituent Assembly of the Dominion of India. Legislative Procedure
+Members of either House of Parliament shall be entitled to receive such salaries and allowances as may from time to time be determined by Parliament by law and, until provision in that respect is so made, allowances at such rates and upon such conditions as were immediately before the commencement of this Constitution applicable in the case of members of the Constituent Assembly of the Dominion of India.
+Legislative Procedure
 
 
 
@@ -646,7 +651,8 @@ Provided that at a joint sitting—
 ## 111. Assent to Bills.—
 When a Bill has been passed by the Houses of Parliament, it shall be presented to the President, and the President shall declare either that he assents to the Bill, or that he withholds assent therefrom:
 
-Provided that the President may, as soon as possible after the presentation to him of a Bill for assent, return the Bill if it is not a Money Bill to the Houses with a message requesting that they will reconsider the Bill or any specified provisions thereof and, in particular, will consider the desirability of introducing any such amendments as he may recommend in his message, and when a Bill is so returned, the Houses shall reconsider the Bill accordingly, and if the Bill is passed again by the Houses with or without amendment and presented to the President for assent, the President shall not withhold assent therefrom. Procedure in Financial Matters
+Provided that the President may, as soon as possible after the presentation to him of a Bill for assent, return the Bill if it is not a Money Bill to the Houses with a message requesting that they will reconsider the Bill or any specified provisions thereof and, in particular, will consider the desirability of introducing any such amendments as he may recommend in his message, and when a Bill is so returned, the Houses shall reconsider the Bill accordingly, and if the Bill is passed again by the Houses with or without amendment and presented to the President for assent, the President shall not withhold assent therefrom.
+Procedure in Financial Matters
 
 
 
@@ -734,7 +740,8 @@ Provided that no recommendation shall be required under this clause for the movi
 
 (2) A Bill or amendment shall not be deemed to make provision for any of the matters aforesaid by reason only that it provides for the imposition of fines or other pecuniary penalties, or for the demand or payment of fees for licences or fees for services rendered, or by reason that it provides for the imposition, abolition, remission, alteration or regulation of any tax by any local authority or body for local purposes.
 
-(3) A Bill which, if enacted and brought into operation, would involve expenditure from the Consolidated Fund of India shall not be passed by either House of Parliament unless the President has recommended to that House the consideration of the Bill. Procedure Generally
+(3) A Bill which, if enacted and brought into operation, would involve expenditure from the Consolidated Fund of India shall not be passed by either House of Parliament unless the President has recommended to that House the consideration of the Bill.
+Procedure Generally
 
 
 

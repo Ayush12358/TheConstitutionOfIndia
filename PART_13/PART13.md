@@ -33,7 +33,7 @@ Provided that no Bill or amendment for the purposes of clause (b) shall be intro
 ## 305. Saving of existing laws and laws providing for State monopolies.—
 Nothing in articles 301 and 303 shall affect the provisions of any existing law except in so far as the President may by order otherwise direct; and nothing in article 301 shall affect the operation of any law made before the commencement of the Constitution (Fourth Amendment) Act, 1955, in so far as it relates to, or prevent Parliament or the Legislature of a State from making any law relating to, any such matter as is referred to in sub-clause (ii) of clause (6) of article
 
-## 19. 306. [Power of certain States in Part B of the First Schedule to impose restrictions on trade and commerce.].—
+## 306. [Power of certain States in Part B of the First Schedule to impose restrictions on trade and commerce.].—
 Omitted by the Constitution (Seventh Amendment) Act, 1956, s. 29 and Sch..
 
 

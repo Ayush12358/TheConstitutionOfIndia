@@ -20,9 +20,8 @@ Bills in `AMENDMENTS/` through the **106th Amendment (2023)** — the latest ena
   from the working tree) keep their .txt members in the tag trees.
 - **Every act and bill has plain text** (`AMENDMENT_NN_ACT.txt` / `AMENDMENT_NN_BILL.txt`): 106/106 acts have text — 93 from the PDF text layers, plus the 7
   scanned acts (94, 96, 97–98, 102, 103, 105) transcribed from Indian Kanoon, plus 6 acts
-  (15, 26, 66, 69, 75, 93) vision-OCR'd from scans on 2026-08-08. All 74 bills
-  recovered on 2026-08-08 have text — the last 29 scan-only PDFs were transcribed with
-  the vision model (see AMENDMENTS/README.md).
+  (15, 26, 66, 69, 75, 93) vision-OCR'd from scans on 2026-08-08. All 85 recovered bills
+  have text — the scan-only PDFs were transcribed with the vision model (see AMENDMENTS/README.md).
 - Amendment **105's** assent date is recorded as **2021-08-19** (Gazette extraordinary date); some
   secondary sources say 18 Aug 2021.
 
@@ -37,12 +36,12 @@ SCHEDULE_1/ … SCHEDULE_12/
 AMENDMENTS/
     → Act PDFs for ALL 106 amendments (AMENDMENT_NN_ACT.pdf, zero-padded: 01–96 two-digit,
       097–106 three-digit) — 106/106 acts
-    → Bill PDFs for 74 of 106, recovered 2026-08-08 from sansad.in's LS/RS bills API
-      (1952–2026), egazette.gov.in, eparlib and PRS; the 32 gaps (21, 24–26, 28–39, 46, 48–51,
-      56–59, 62, 70, 78–80, 84, 89) are documented with full provenance in docs/bill_gaps.md
-      (never fabricated)
-    → Plain text of every act (AMENDMENT_NN_ACT.txt) and of all 74 bills
-      (AMENDMENT_NN_BILL.txt) — the 29 scan-only bills were transcribed via vision-model OCR
+    → Bill PDFs for 85 of 106 — 74 recovered 2026-08-08 from sansad.in's LS/RS bills API
+      (1952–2026), egazette.gov.in, eparlib and PRS, 11 more added later; the 21 remaining gaps
+      (31, 32, 35, 36, 39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89) are documented with full
+      provenance in docs/bill_gaps.md (never fabricated)
+    → Plain text of every act (AMENDMENT_NN_ACT.txt) and of all 85 bills
+      (AMENDMENT_NN_BILL.txt) — the scan-only bills were transcribed via vision-model OCR
       — note PART_9_B (Co-operative Societies) was inserted by the 97th Amendment, so post-97
       bundles contain 39 content dirs vs 38 for 1..96
 Bundle zips removed 2026-08-07 (markdown-first): the 108 per-amendment bundles

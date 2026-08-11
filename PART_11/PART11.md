@@ -1,6 +1,7 @@
 # PART XI RELATIONS BETWEEN THE UNION AND THE STATES
 
-CHAPTER I.—LEGISLATIVE RELATIONS Distribution of Legislative Powers
+CHAPTER I.—LEGISLATIVE RELATIONS
+Distribution of Legislative Powers
 
 
 
@@ -96,7 +97,8 @@ No Act of Parliament or of the Legislature of a State, and no provision in any s
 
 (c) where the recommendation or previous sanction required was that of the President, by the President.
 
-CHAPTER II.—ADMINISTRATIVE RELATIONS General
+CHAPTER II.—ADMINISTRATIVE RELATIONS
+General
 
 
 

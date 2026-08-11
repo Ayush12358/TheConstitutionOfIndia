@@ -7,9 +7,9 @@ with three views:
   **12 Schedules**, a reading pane with slugified article anchors on every heading for deep links
   (e.g. `#12-definition` for Article 12 in Part III), per-article **"Amended by"** chips (which
   amendments changed each article, derived from the history diffs), and full-text search over the
-  Constitution, all **106 act texts** and **74 bill texts** (scope selector: Constitution /
+  Constitution, all **106 act texts** and **85 bill texts** (scope selector: Constitution /
   Acts & Bills / All).
-- **Bills & Amendments** — all **106 amendment acts** (and the 74 recovered bills) in two views:
+- **Bills & Amendments** — all **106 amendment acts** (and the 85 recovered bills) in two views:
   a **Text** view (the act/bill's plain text — extracted from the PDFs; the 7 scan-only acts
   were sourced from Indian Kanoon) and a **Git diff** view (what the amendment changed in the
   Constitution text, rendered as a unified diff with per-line highlighting, straight from the
@@ -112,7 +112,7 @@ bun run build    # -> dist/ (HTML/JS/CSS + content.json + history/ + amendments/
 
 `build.ts` bundles the app, then embeds all 39 markdown files, the amendments manifest and all
 act/bill texts into `dist/content.json`, copies `data/history/` into `dist/history/` and the
-180 amendment PDFs (106 acts + 74 bills) into `dist/amendments/` (written after the bundle
+191 amendment PDFs (106 acts + 85 bills) into `dist/amendments/` (written after the bundle
 step, since the build
 starts by wiping `dist/`). The result is a **self-contained static site**: the app fetches
 `/content.json` once and does everything client-side, so it works with zero API calls on any

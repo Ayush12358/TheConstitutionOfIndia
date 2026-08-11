@@ -1,4 +1,4 @@
-# Bill gaps — amendments 01–96 (as of 2026-08-08)
+# Bill gaps — amendments 01–96 (as of 2026-08-11)
 
 Provenance ledger for the `status = MISSING_BILL` rows in `docs/amendments.csv`, so the hunt is not
 repeated. Source: `docs/backfill_report.md` (worker report, 2026-08-07, converted from CSV) —
@@ -9,13 +9,18 @@ provenance verbatim.
 
 - **106 amendments total; act coverage 100%** — every amendment 01–106 has a downloaded Act PDF
   (`AMENDMENTS/AMENDMENT_NN_ACT.pdf`), verified `%PDF` + content.
-- **Bill coverage: 74/106** — the 62 missing bills recovered on 2026-08-08 from sansad.in's
-  LS/RS bills API (1952–2026), egazette.gov.in, eparlib and PRS; all 74 bills now have text
-  (→ `.txt`) — the 29 scan-only PDFs were transcribed with the vision model (2026-08-08 OCR
+- **Bill coverage: 85/106** — 74 missing bills were recovered on 2026-08-08 from sansad.in's
+  LS/RS bills API (1952–2026), egazette.gov.in, eparlib and PRS, and 11 more have been added
+  since (21, 24–26, 28–30, 33, 34, 37, 38); all 85 bills now have text
+  (→ `.txt`) — the scan-only PDFs were transcribed with the vision model (2026-08-08 OCR
   sweep; per-bill logs in `../probe_ik4/ocr_log.json`). See the 2026-08-08 sweep sections below.
-- **32 bills missing (21, 24–26, 28–39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89)**:
+- **21 bills missing (31, 32, 35, 36, 39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89)**:
   `bill_file = MISSING`, `bill_url = MISSING` in `docs/amendments.csv`. The sources tried
   below returned no usable copy.
+
+> Ledger note: the per-row provenance below reflects the 2026-08-08 state, when 32 bills were
+> missing; 11 of those gaps (21, 24–26, 28–30, 33, 34, 37, 38) have since been filled. The
+> `status` column in `docs/amendments.csv` is authoritative.
 
 ## What was tried (per-row `bill_url` = MISSING)
 

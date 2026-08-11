@@ -1,4 +1,5 @@
-# PART III FUNDAMENTAL RIGHTS General
+# PART III FUNDAMENTAL RIGHTS
+General
 
 
 
@@ -18,7 +19,8 @@ In this Part, unless the context otherwise requires, “the State” includes th
 
 (b) “laws in force” includes laws passed or made by a Legislature or other competent authority in the territory of India before the commencement of this Constitution and not previously repealed, notwithstanding that any such law or any part thereof may not be then in operation either at all or in particular areas.
 
-(4) Nothing in this article shall apply to any amendment of this Constitution made under article 368. Right to Equality
+(4) Nothing in this article shall apply to any amendment of this Constitution made under article 368.
+Right to Equality
 
 
 
@@ -79,7 +81,8 @@ Explanation.—For the purposes of this article and article 16, "economically we
 
 (3) No person who is not a citizen of India shall, while he holds any office of profit or trust under the State, accept without the consent of the President any title from any foreign State.
 
-(4) No person holding any office of profit or trust under the State shall, without the consent of the President, accept any present, emolument, or office of any kind from or under any foreign State. Right to Freedom
+(4) No person holding any office of profit or trust under the State shall, without the consent of the President, accept any present, emolument, or office of any kind from or under any foreign State.
+Right to Freedom
 
 
 
@@ -164,7 +167,8 @@ Provided that nothing in this sub-clause shall authorise the detention of any pe
 
 (b) the maximum period for which any person may in any class or classes of cases be detained under any law providing for preventive detention; and
 
-(c) the procedure to be followed by an Advisory Board in an inquiry under sub-clause (a) of clause (4). Right against Exploitation
+(c) the procedure to be followed by an Advisory Board in an inquiry under sub-clause (a) of clause (4).
+Right against Exploitation
 
 
 
@@ -176,7 +180,8 @@ Provided that nothing in this sub-clause shall authorise the detention of any pe
 
 
 ## 24. Prohibition of employment of children in factories, etc.—
-No child below the age of fourteen years shall be employed to work in any factory or mine or engaged in any other hazardous employment. Right to Freedom of Religion
+No child below the age of fourteen years shall be employed to work in any factory or mine or engaged in any other hazardous employment.
+Right to Freedom of Religion
 
 
 
@@ -218,7 +223,8 @@ No person shall be compelled to pay any taxes, the proceeds of which are specifi
 
 (2) Nothing in clause (1) shall apply to an educational institution which is administered by the State but has been established under any endowment or trust which requires that religious instruction shall be imparted in such institution.
 
-(3) No person attending any educational institution recognised by the State or receiving aid out of State funds shall be required to take part in any religious instruction that may be imparted in such institution or to attend any religious worship that may be conducted in such institution or in any premises attached thereto unless such person or, if such person is a minor, his guardian has given his consent thereto. Cultural and Educational Rights
+(3) No person attending any educational institution recognised by the State or receiving aid out of State funds shall be required to take part in any religious instruction that may be imparted in such institution or to attend any religious worship that may be conducted in such institution or in any premises attached thereto unless such person or, if such person is a minor, his guardian has given his consent thereto.
+Cultural and Educational Rights
 
 
 
@@ -235,7 +241,8 @@ No person shall be compelled to pay any taxes, the proceeds of which are specifi
 (2) The State shall not, in granting aid to educational institutions, discriminate against any educational institution on the ground that it is under the management of a minority, whether based on religion or language.
 
 ## 31. [Compulsory acquisition of property.].—
-Omitted by the Constitution (Forty-fourth Amendment) Act, 1978, s. 6. Saving of Certain Laws
+Omitted by the Constitution (Forty-fourth Amendment) Act, 1978, s. 6.
+Saving of Certain Laws
 
 
 
@@ -278,8 +285,9 @@ Notwithstanding anything contained in article 13, no law giving effect to the po
 
 Provided that where such law is made by the Legislature of a State, the provisions of this article shall not apply thereto unless such law, having been reserved for the consideration of the President, has received his assent.
 
-## 731D. [Saving of laws in respect of anti-national activities.].—
-Omitted by the Constitution (Forty-third Amendment) Act,1977, s. 2. Right to Constitutional Remedies
+## 31D. [Saving of laws in respect of anti-national activities.].—
+Omitted by the Constitution (Forty-third Amendment) Act,1977, s. 2.
+Right to Constitutional Remedies
 
 
 
@@ -292,7 +300,7 @@ Omitted by the Constitution (Forty-third Amendment) Act,1977, s. 2. Right to Con
 
 (4) The right guaranteed by this article shall not be suspended except as otherwise provided for by this Constitution.
 
-## 132A. [Constitutional validity of State laws not to be considered in proceedings under article 32.].—
+## 32A. [Constitutional validity of State laws not to be considered in proceedings under article 32.].—
 Omitted by the Constitution (Forty-third Amendment) Act, 1977, s. 3.
 
 

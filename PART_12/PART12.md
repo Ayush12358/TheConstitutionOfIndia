@@ -243,7 +243,8 @@ Omitted by the Constitution (Seventh Amendment) Act, 1956, s. 29 and Sch..
 
 
 ## 281. Recommendations of the Finance Commission.—
-The President shall cause every recommendation made by the Finance Commission under the provisions of this Constitution together with an explanatory memorandum as to the action taken thereon to be laid before each House of Parliament. Miscellaneous Financial Provisions
+The President shall cause every recommendation made by the Finance Commission under the provisions of this Constitution together with an explanatory memorandum as to the action taken thereon to be laid before each House of Parliament.
+Miscellaneous Financial Provisions
 
 
 

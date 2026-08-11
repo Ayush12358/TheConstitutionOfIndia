@@ -194,7 +194,7 @@ Provided that the President may, by public notification, direct that the provisi
 
 (3) Notwithstanding anything in this Constitution, Parliament may, by law, extend the provisions of this Part to the Scheduled Areas and the tribal areas referred to in clause (1) subject to such exceptions and modifications as may be specified in such law, and no such law shall be deemed to be an amendment of this Constitution for the purposes of article
 
-## 368. 243ZD. Committee for district planning.—
+## 243ZD. Committee for district planning.—
 (1) There shall be constituted in every State at the district level a District Planning Committee to consolidate the plans prepared by the Panchayats and the Municipalities in the district and to prepare a draft development plan for the district as a whole.
 
 (2) The Legislature of a State may, by law, make provision with respect to—
