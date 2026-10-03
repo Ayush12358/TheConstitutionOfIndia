@@ -5,13 +5,17 @@ Git archive of the Constitution of India: every Part (Articles), Schedule and th
 Bills in `AMENDMENTS/` through the **106th Amendment (2023)** — the latest enacted as of
 **2026-08-07**.
 
-## Current state (2026-08-07)
+## Current state (2026-10-03)
 
 - **106 amendments enacted; nothing beyond.** The 106th Amendment (Nari Shakti Vandan Adhiniyam,
   women's reservation, assent 28 Sep 2023) is the newest Act. It was **brought into force on
   16-04-2026** by notification S.O. 1922(E) under s.1(2); the reserved seats themselves still
-  await delimitation after the next census. Amendments 107+ have not been enacted: the 129th/130th/131st
-  Bills (ONOE etc.) failed or were withdrawn in 2024–2026 (the 131st was negatived in the Lok Sabha on 17-04-2026).
+  await delimitation on Census 2027 figures (houselisting Apr–Sep 2026, enumeration Feb 2027,
+  reference 1 Mar 2027). Nothing beyond the 106th has been enacted: the 129th Bill (simultaneous
+  elections) and the 130th Bill (removal of ministers upon detention) are both before Joint
+  Parliamentary Committees, and the 131st Bill (delimitation on the 2011 census) was negatived
+  in the Lok Sabha on 17-04-2026 (298–230, needed 352). Pending bills are tracked in
+  `docs/PENDING.md` — they enter `AMENDMENTS/` only if enacted.
 - **Content tree regenerated 2026-08-07** from the official consolidated text (Legislative
   Department pocket editions through the 105th) with the 106th Amendment applied from the Gazette —
   i.e. the post-106th state; extraction defects found in audit were fixed against the printed pages
@@ -120,5 +124,6 @@ The Constitution of India text is a work of the Government of India.
 
 - `docs/INVENTORY.md` — authoritative audit: git archaeology, zip contents, amendment manifest, tag gaps
 - `docs/amendments.csv` — merged manifest: number, title, assent date, key changes, bill/act files + URLs, zip, status
+- `docs/PENDING.md` — pending constitution-amendment bills (129th/130th in JPC, 131st negatived): verified bill-text links, promotion checklist on enactment
 - `docs/AMENDMENTS.md` — human-readable index of all 106 amendments
 - `docs/bill_gaps.md` — why 21 bills are missing, with the exact sources tried
