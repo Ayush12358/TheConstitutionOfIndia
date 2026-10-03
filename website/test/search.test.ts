@@ -4,7 +4,12 @@ import { searchRecords, type SearchRecord } from "../src/lib/search";
 describe("searchRecords", () => {
   test("plain substring match, anywhere in a line", () => {
     const records: SearchRecord[] = [
-      { id: "part9b", title: "Part IXB", text: "line one\nco-operative societies are governed here\nline three", kind: "constitution" },
+      {
+        id: "part9b",
+        title: "Part IXB",
+        text: "line one\nco-operative societies are governed here\nline three",
+        kind: "constitution",
+      },
     ];
     const hits = searchRecords(records, "co-operative");
     expect(hits).toHaveLength(1);
@@ -33,12 +38,17 @@ describe("searchRecords", () => {
       { id: "twice", title: "Twice", text: "tax here\ntax there\ntax everywhere", kind: "constitution" },
     ];
     const hits = searchRecords(records, "tax");
-    expect(hits.map(h => h.id)).toEqual(["twice", "once"]);
+    expect(hits.map((h) => h.id)).toEqual(["twice", "once"]);
   });
 
   test("first matching line becomes the snippet; matches capped at 5", () => {
     const records: SearchRecord[] = [
-      { id: "many", title: "Many", text: ["first hit line", "second hit line", "x", "x", "x", "x", "sixth hit line"].join("\n"), kind: "act" },
+      {
+        id: "many",
+        title: "Many",
+        text: ["first hit line", "second hit line", "x", "x", "x", "x", "sixth hit line"].join("\n"),
+        kind: "act",
+      },
       { id: "few", title: "Few", text: "one hit line only", kind: "act" },
     ];
     const hits = searchRecords(records, "hit line");
@@ -54,7 +64,12 @@ describe("searchRecords", () => {
   });
 
   test("limit caps the result count", () => {
-    const records: SearchRecord[] = ["a", "b", "c"].map(k => ({ id: k, title: k, text: "needle", kind: "constitution" as const }));
+    const records: SearchRecord[] = ["a", "b", "c"].map((k) => ({
+      id: k,
+      title: k,
+      text: "needle",
+      kind: "constitution" as const,
+    }));
     expect(searchRecords(records, "needle", 2)).toHaveLength(2);
     expect(searchRecords(records, "needle")).toHaveLength(3);
   });
@@ -69,11 +84,16 @@ describe("searchRecords", () => {
   test("multi-record search across kinds keeps kind and stable order on ties", () => {
     const records: SearchRecord[] = [
       { id: "09b", title: "Part IXB", text: "co-operative societies", kind: "constitution" },
-      { id: "097", title: "Act 097: Ninety-Seventh Amendment", text: "co-operative societies\nco-operative societies", kind: "act" },
+      {
+        id: "097",
+        title: "Act 097: Ninety-Seventh Amendment",
+        text: "co-operative societies\nco-operative societies",
+        kind: "act",
+      },
       { id: "097", title: "Bill 097: Ninety-Seventh Amendment", text: "co-operative societies", kind: "bill" },
       { id: "01", title: "Act 01: First Amendment", text: "unrelated", kind: "act" },
     ];
     const hits = searchRecords(records, "CO-OPERATIVE");
-    expect(hits.map(h => `${h.kind}:${h.id}`)).toEqual(["act:097", "constitution:09b", "bill:097"]);
+    expect(hits.map((h) => `${h.kind}:${h.id}`)).toEqual(["act:097", "constitution:09b", "bill:097"]);
   });
 });

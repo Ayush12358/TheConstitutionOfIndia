@@ -83,7 +83,7 @@ export const CONTENT_MAP: Record<string, string> = {
 
 // Title of a markdown file: the first "# " heading line, else the fallback key.
 export function titleOf(markdown: string, fallback: string): string {
-  const line = markdown.split("\n").find(l => l.startsWith("# "));
+  const line = markdown.split("\n").find((l) => l.startsWith("# "));
   return line ? line.slice(2).trim() : fallback;
 }
 
@@ -105,8 +105,19 @@ export type Amendment = {
 // bill_url,act_url,zip_file,status. Comment/header filtering happens in the
 // callers (loadAmendments in src/index.ts, build.ts) before this mapping.
 export function parseAmendments(rows: string[][]): Amendment[] {
-  return rows.map(r => {
-    const [number = "", title = "", assent_date = "", key_changes = "", , , bill_url = "", act_url = "", , status = ""] = r;
+  return rows.map((r) => {
+    const [
+      number = "",
+      title = "",
+      assent_date = "",
+      key_changes = "",
+      ,
+      ,
+      bill_url = "",
+      act_url = "",
+      ,
+      status = "",
+    ] = r;
     return {
       number,
       title,
@@ -143,7 +154,7 @@ export function buildPayload(
   billTexts: Record<string, string>,
   generated?: string,
 ): ContentPayload {
-  const index = Object.keys(CONTENT_MAP).map(key => ({
+  const index = Object.keys(CONTENT_MAP).map((key) => ({
     key,
     title: titleOf(markdowns[key] ?? "", key),
   }));

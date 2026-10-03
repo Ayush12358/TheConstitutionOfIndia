@@ -88,7 +88,7 @@ function rawResponse(rawPath: string): Promise<{ status: number; contentType: st
     sock.destroy();
     reject(new Error(`raw request timed out: ${rawPath}`));
   });
-  sock.on("data", d => {
+  sock.on("data", (d) => {
     buf += d.toString("latin1");
     const headEnd = buf.indexOf("\r\n\r\n");
     if (headEnd === -1) return;
@@ -102,7 +102,7 @@ function rawResponse(rawPath: string): Promise<{ status: number; contentType: st
     const contentType =
       head
         .split("\r\n")
-        .find(l => l.toLowerCase().startsWith("content-type:"))
+        .find((l) => l.toLowerCase().startsWith("content-type:"))
         ?.split(":")[1]
         ?.trim() ?? "";
     resolve({ status, contentType });
@@ -125,103 +125,135 @@ describe("server routes", () => {
     await Promise.race([proc.exited, Bun.sleep(2_000)]);
   });
 
-  test("GET /content.json: full static payload", async () => {
-    const res = await fetch(`${baseUrl()}/content.json`);
-    expect(res.status).toBe(200);
-    expect(res.headers.get("content-type")).toContain("application/json");
-    const body = await res.json();
-    expect(Object.keys(body.act_texts)).toHaveLength(106);
-    expect(Object.keys(body.bill_texts)).toHaveLength(85);
-    expect(body.amendments).toHaveLength(106);
-    expect(Object.keys(body.contents)).toHaveLength(39);
-  }, TEST_TIMEOUT_MS);
-
-  test("GET /api/search: secular hits the preamble; 1-char query -> 400", async () => {
-    const res = await fetch(`${baseUrl()}/api/search?q=secular`);
-    expect(res.status).toBe(200);
-    const results: Array<{ key: string; title: string; matches: Array<{ line: string; snippet: string }> }> =
-      await res.json();
-    expect(results.length).toBeGreaterThan(0);
-    const preamble = results.find(r => r.key === "preamble");
-    expect(preamble).toBeDefined();
-    expect(preamble!.matches.some(m => m.line.includes("SECULAR"))).toBe(true);
-
-    const short = await fetch(`${baseUrl()}/api/search?q=s`);
-    expect(short.status).toBe(400);
-  }, TEST_TIMEOUT_MS);
-
-  test("GET /api/amendments: 106 rows, amendment 01 has a bill", async () => {
-    const res = await fetch(`${baseUrl()}/api/amendments`);
-    expect(res.status).toBe(200);
-    const rows = (await res.json()) as Array<{ number: string; has_bill: boolean; act_url?: string }>;
-    expect(rows).toHaveLength(106);
-    const first = rows.find(r => r.number === "01");
-    expect(first?.has_bill).toBe(true);
-    // Historical 6-field shape: external URLs are only in /content.json.
-    expect(first).not.toHaveProperty("act_url");
-  }, TEST_TIMEOUT_MS);
-
-  test("GET /api/content/preamble: markdown; unknown key -> 404", async () => {
-    const res = await fetch(`${baseUrl()}/api/content/preamble`);
-    expect(res.status).toBe(200);
-    const body = (await res.json()) as { key: string; markdown: string };
-    expect(body.key).toBe("preamble");
-    expect(body.markdown).toContain("WE, THE PEOPLE");
-
-    const missing = await fetch(`${baseUrl()}/api/content/notakey`);
-    expect(missing.status).toBe(404);
-  }, TEST_TIMEOUT_MS);
-
-  test("GET /api/file/:kind/:n: act/bill 106 are PDFs, invalid -> 404", async () => {
-    for (const kind of ["act", "bill"]) {
-      const res = await fetch(`${baseUrl()}/api/file/${kind}/106`);
+  test(
+    "GET /content.json: full static payload",
+    async () => {
+      const res = await fetch(`${baseUrl()}/content.json`);
       expect(res.status).toBe(200);
-      expect(res.headers.get("content-type")).toBe("application/pdf");
-    }
-    expect((await fetch(`${baseUrl()}/api/file/act/999`)).status).toBe(404);
-    expect((await fetch(`${baseUrl()}/api/file/bogus/1`)).status).toBe(404);
-  }, TEST_TIMEOUT_MS);
+      expect(res.headers.get("content-type")).toContain("application/json");
+      const body = await res.json();
+      expect(Object.keys(body.act_texts)).toHaveLength(106);
+      expect(Object.keys(body.bill_texts)).toHaveLength(85);
+      expect(body.amendments).toHaveLength(106);
+      expect(Object.keys(body.contents)).toHaveLength(39);
+    },
+    TEST_TIMEOUT_MS,
+  );
 
-  test("GET /amendments/:file: canonical PDF 200, unknown name 404, traversal never serves a file", async () => {
-    const ok = await fetch(`${baseUrl()}/amendments/AMENDMENT_106_ACT.pdf`);
-    expect(ok.status).toBe(200);
-    expect(ok.headers.get("content-type")).toBe("application/pdf");
-    const magic = new TextDecoder().decode(new Uint8Array(await ok.arrayBuffer()).subarray(0, 4));
-    expect(magic).toBe("%PDF");
+  test(
+    "GET /api/search: secular hits the preamble; 1-char query -> 400",
+    async () => {
+      const res = await fetch(`${baseUrl()}/api/search?q=secular`);
+      expect(res.status).toBe(200);
+      const results: Array<{ key: string; title: string; matches: Array<{ line: string; snippet: string }> }> =
+        await res.json();
+      expect(results.length).toBeGreaterThan(0);
+      const preamble = results.find((r) => r.key === "preamble");
+      expect(preamble).toBeDefined();
+      expect(preamble!.matches.some((m) => m.line.includes("SECULAR"))).toBe(true);
 
-    expect((await fetch(`${baseUrl()}/amendments/AMENDMENT_999_ACT.pdf`)).status).toBe(404);
+      const short = await fetch(`${baseUrl()}/api/search?q=s`);
+      expect(short.status).toBe(400);
+    },
+    TEST_TIMEOUT_MS,
+  );
 
-    // Raw socket so the client can't rewrite the path. Bun normalizes dot
-    // segments (WHATWG URL) before any handler runs, so a literal ".." can
-    // never reach the file resolver — it falls through to the SPA fallback.
-    // Contract: traversal must never serve a PDF.
-    const { status, contentType } = await rawResponse("/amendments/../etc");
-    expect(contentType).not.toBe("application/pdf");
-    if (status === 404) {
-      expect(contentType).toContain("application/json");
-    } else {
-      expect(contentType.startsWith("text/html")).toBe(true);
-    }
-  }, TEST_TIMEOUT_MS);
+  test(
+    "GET /api/amendments: 106 rows, amendment 01 has a bill",
+    async () => {
+      const res = await fetch(`${baseUrl()}/api/amendments`);
+      expect(res.status).toBe(200);
+      const rows = (await res.json()) as Array<{ number: string; has_bill: boolean; act_url?: string }>;
+      expect(rows).toHaveLength(106);
+      const first = rows.find((r) => r.number === "01");
+      expect(first?.has_bill).toBe(true);
+      // Historical 6-field shape: external URLs are only in /content.json.
+      expect(first).not.toHaveProperty("act_url");
+    },
+    TEST_TIMEOUT_MS,
+  );
 
-  test("GET /history/index.json: 107 states", async () => {
-    const res = await fetch(`${baseUrl()}/history/index.json`);
-    expect(res.status).toBe(200);
-    const body = (await res.json()) as { states: unknown[] };
-    expect(body.states).toHaveLength(107);
-  }, TEST_TIMEOUT_MS);
+  test(
+    "GET /api/content/preamble: markdown; unknown key -> 404",
+    async () => {
+      const res = await fetch(`${baseUrl()}/api/content/preamble`);
+      expect(res.status).toBe(200);
+      const body = (await res.json()) as { key: string; markdown: string };
+      expect(body.key).toBe("preamble");
+      expect(body.markdown).toContain("WE, THE PEOPLE");
 
-  test("GET /history/:file: part3 has versions; unknown key -> 404", async () => {
-    const res = await fetch(`${baseUrl()}/history/part3.json`);
-    expect(res.status).toBe(200);
-    const versions = (await res.json()) as Array<{ from: number; text: string }>;
-    expect(Array.isArray(versions)).toBe(true);
-    expect(versions.length).toBeGreaterThanOrEqual(1);
-    expect(versions[0]?.from).toBeTypeOf("number");
-    expect(versions[0]?.text).toBeTypeOf("string");
+      const missing = await fetch(`${baseUrl()}/api/content/notakey`);
+      expect(missing.status).toBe(404);
+    },
+    TEST_TIMEOUT_MS,
+  );
 
-    expect((await fetch(`${baseUrl()}/history/nope.json`)).status).toBe(404);
-  }, TEST_TIMEOUT_MS);
+  test(
+    "GET /api/file/:kind/:n: act/bill 106 are PDFs, invalid -> 404",
+    async () => {
+      for (const kind of ["act", "bill"]) {
+        const res = await fetch(`${baseUrl()}/api/file/${kind}/106`);
+        expect(res.status).toBe(200);
+        expect(res.headers.get("content-type")).toBe("application/pdf");
+      }
+      expect((await fetch(`${baseUrl()}/api/file/act/999`)).status).toBe(404);
+      expect((await fetch(`${baseUrl()}/api/file/bogus/1`)).status).toBe(404);
+    },
+    TEST_TIMEOUT_MS,
+  );
+
+  test(
+    "GET /amendments/:file: canonical PDF 200, unknown name 404, traversal never serves a file",
+    async () => {
+      const ok = await fetch(`${baseUrl()}/amendments/AMENDMENT_106_ACT.pdf`);
+      expect(ok.status).toBe(200);
+      expect(ok.headers.get("content-type")).toBe("application/pdf");
+      const magic = new TextDecoder().decode(new Uint8Array(await ok.arrayBuffer()).subarray(0, 4));
+      expect(magic).toBe("%PDF");
+
+      expect((await fetch(`${baseUrl()}/amendments/AMENDMENT_999_ACT.pdf`)).status).toBe(404);
+
+      // Raw socket so the client can't rewrite the path. Bun normalizes dot
+      // segments (WHATWG URL) before any handler runs, so a literal ".." can
+      // never reach the file resolver — it falls through to the SPA fallback.
+      // Contract: traversal must never serve a PDF.
+      const { status, contentType } = await rawResponse("/amendments/../etc");
+      expect(contentType).not.toBe("application/pdf");
+      if (status === 404) {
+        expect(contentType).toContain("application/json");
+      } else {
+        expect(contentType.startsWith("text/html")).toBe(true);
+      }
+    },
+    TEST_TIMEOUT_MS,
+  );
+
+  test(
+    "GET /history/index.json: 107 states",
+    async () => {
+      const res = await fetch(`${baseUrl()}/history/index.json`);
+      expect(res.status).toBe(200);
+      const body = (await res.json()) as { states: unknown[] };
+      expect(body.states).toHaveLength(107);
+    },
+    TEST_TIMEOUT_MS,
+  );
+
+  test(
+    "GET /history/:file: part3 has versions; unknown key -> 404",
+    async () => {
+      const res = await fetch(`${baseUrl()}/history/part3.json`);
+      expect(res.status).toBe(200);
+      const versions = (await res.json()) as Array<{ from: number; text: string }>;
+      expect(Array.isArray(versions)).toBe(true);
+      expect(versions.length).toBeGreaterThanOrEqual(1);
+      expect(versions[0]?.from).toBeTypeOf("number");
+      expect(versions[0]?.text).toBeTypeOf("string");
+
+      expect((await fetch(`${baseUrl()}/history/nope.json`)).status).toBe(404);
+    },
+    TEST_TIMEOUT_MS,
+  );
 
   test("GET /api/nonexistent: 404 JSON, not the SPA fallback", async () => {
     const res = await fetch(`${baseUrl()}/api/nonexistent`);

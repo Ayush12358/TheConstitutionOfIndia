@@ -36,7 +36,7 @@ async function loadAmendments(): Promise<Amendment[] | null> {
   if (!full.startsWith(repoRoot + path.sep)) return null;
   try {
     const text = await Bun.file(full).text();
-    const rows = parseCSV(text).filter(r => r.length > 0 && !(r[0] ?? "").startsWith("#"));
+    const rows = parseCSV(text).filter((r) => r.length > 0 && !(r[0] ?? "").startsWith("#"));
     // Drop the header row ("number,title,...").
     const data = rows[0]?.[0] === "number" ? rows.slice(1) : rows;
     amendmentsCache = parseAmendments(data);
@@ -125,7 +125,7 @@ const server = serve({
       return Response.json(buildPayload(markdowns, amendments, texts.acts, texts.bills));
     },
 
-    "/api/content/:key": async req => {
+    "/api/content/:key": async (req) => {
       const content = await loadContent(req.params.key);
       if (!content) return Response.json({ error: `Unknown content key: ${req.params.key}` }, { status: 404 });
       return Response.json(content);
@@ -133,7 +133,7 @@ const server = serve({
 
     "/api/index": async () => {
       const items = await Promise.all(
-        Object.keys(CONTENT_MAP).map(async key => {
+        Object.keys(CONTENT_MAP).map(async (key) => {
           const content = await loadContent(key);
           return { key, title: content?.title ?? key };
         }),
@@ -141,7 +141,7 @@ const server = serve({
       return Response.json(items);
     },
 
-    "/api/search": async req => {
+    "/api/search": async (req) => {
       const q = (new URL(req.url).searchParams.get("q") ?? "").trim();
       if (q.length < 2) return Response.json({ error: "query too short" }, { status: 400 });
 
@@ -173,7 +173,7 @@ const server = serve({
       return Response.json(amendments.map(({ act_url, bill_url, ...rest }) => rest));
     },
 
-    "/api/file/:kind/:n": async req => {
+    "/api/file/:kind/:n": async (req) => {
       const { kind, n: nRaw } = req.params;
       if (kind !== "act" && kind !== "bill") {
         return Response.json({ error: "Not found" }, { status: 404 });
@@ -206,7 +206,7 @@ const server = serve({
         : Response.json({ error: "Not found — run scripts/generate-history.ts" }, { status: 404 });
     },
 
-    "/history/:file": async req => {
+    "/history/:file": async (req) => {
       const name = req.params.file.replace(/\.json$/, "");
       // Whitelist: only known content keys may be fetched.
       if (!(name in CONTENT_MAP)) {
@@ -221,7 +221,7 @@ const server = serve({
     // Amendment PDFs at stable /amendments/<file> URLs: the dev server reads
     // them from ../AMENDMENTS; the static build copies them into dist so both
     // hosts serve the same links.
-    "/amendments/:file": async req => {
+    "/amendments/:file": async (req) => {
       const name = req.params.file;
       const m = name.match(/^AMENDMENT_(\d{2,3})_(ACT|BILL)\.pdf$/);
       const n = m ? Number(m[1]) : 0;

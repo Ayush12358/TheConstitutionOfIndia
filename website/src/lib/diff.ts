@@ -26,7 +26,7 @@ export function lineDiff(a: string, b: string): DiffLine[] {
   const B = b === "" ? [] : b.split("\n");
   if (A.length > DP_LINE_LIMIT || B.length > DP_LINE_LIMIT) {
     // Fallback: the whole file as one replace (still honest, just unaligned).
-    return [...A.map(text => ({ kind: "del" as const, text })), ...B.map(text => ({ kind: "add" as const, text }))];
+    return [...A.map((text) => ({ kind: "del" as const, text })), ...B.map((text) => ({ kind: "add" as const, text }))];
   }
   if (A.length === 0 && B.length === 0) return [];
 

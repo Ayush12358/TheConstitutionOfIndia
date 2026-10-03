@@ -28,5 +28,5 @@ export function searchRecords(records: SearchRecord[], q: string, limit = 20): S
     }
   }
   found.sort((a, b) => b.count - a.count); // stable: ties keep record order
-  return found.slice(0, limit).map(f => f.hit);
+  return found.slice(0, limit).map((f) => f.hit);
 }

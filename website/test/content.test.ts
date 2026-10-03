@@ -28,7 +28,10 @@ describe("parseCSV", () => {
   });
 
   test("CRLF line endings", () => {
-    expect(parseCSV("a,b\r\nc,d")).toEqual([["a", "b"], ["c", "d"]]);
+    expect(parseCSV("a,b\r\nc,d")).toEqual([
+      ["a", "b"],
+      ["c", "d"],
+    ]);
   });
 
   test("single trailing newline adds no empty row", () => {
@@ -42,7 +45,7 @@ describe("parseCSV", () => {
   test("real docs/amendments.csv parses to exactly 106 data rows", async () => {
     // Mirrors loadAmendments: drop '#' comments and the "number,..." header.
     const text = await Bun.file("../docs/amendments.csv").text();
-    const rows = parseCSV(text).filter(r => r.length > 0 && !(r[0] ?? "").startsWith("#"));
+    const rows = parseCSV(text).filter((r) => r.length > 0 && !(r[0] ?? "").startsWith("#"));
     const data = rows[0]?.[0] === "number" ? rows.slice(1) : rows;
     expect(data).toHaveLength(106);
   });
@@ -73,9 +76,9 @@ describe("buildPayload", () => {
     expect(payload.generated).toBe("2026-08-07T00:00:00.000Z");
     expect(payload.index).toHaveLength(39);
     expect(payload.index[0]).toEqual({ key: "preamble", title: "PREAMBLE" });
-    expect(payload.index.find(i => i.key === "part3")?.title).toBe("PART III FUNDAMENTAL RIGHTS");
+    expect(payload.index.find((i) => i.key === "part3")?.title).toBe("PART III FUNDAMENTAL RIGHTS");
     // Missing markdown → title falls back to the key, key still listed.
-    expect(payload.index.find(i => i.key === "schedule12")?.title).toBe("schedule12");
+    expect(payload.index.find((i) => i.key === "schedule12")?.title).toBe("schedule12");
     // contents mirrors the markdowns map passed in; index is the full CONTENT_MAP.
     expect(Object.keys(payload.contents)).toEqual(["preamble", "part3"]);
     // act/bill texts pass through verbatim.
@@ -93,12 +96,52 @@ describe("buildPayload", () => {
 
   test("parseAmendments maps CSV columns to the payload shape", () => {
     const rows = [
-      ["01", "Title", "1951-06-18", "changes", "MISSING", "AMENDMENT_01_ACT.pdf", "MISSING", "https://a/1.pdf", "z.zip", "MISSING_BILL"],
-      ["02", "Title2", "1953-05-01", "changes", "MISSING", "AMENDMENT_02_ACT.pdf", "MISSING", "https://a/2.pdf", "z.zip", "OK"],
+      [
+        "01",
+        "Title",
+        "1951-06-18",
+        "changes",
+        "MISSING",
+        "AMENDMENT_01_ACT.pdf",
+        "MISSING",
+        "https://a/1.pdf",
+        "z.zip",
+        "MISSING_BILL",
+      ],
+      [
+        "02",
+        "Title2",
+        "1953-05-01",
+        "changes",
+        "MISSING",
+        "AMENDMENT_02_ACT.pdf",
+        "MISSING",
+        "https://a/2.pdf",
+        "z.zip",
+        "OK",
+      ],
     ];
     expect(parseAmendments(rows)).toEqual([
-      { number: "01", title: "Title", assent_date: "1951-06-18", key_changes: "changes", status: "MISSING_BILL", has_bill: false, act_url: "https://a/1.pdf", bill_url: "MISSING" },
-      { number: "02", title: "Title2", assent_date: "1953-05-01", key_changes: "changes", status: "OK", has_bill: true, act_url: "https://a/2.pdf", bill_url: "MISSING" },
+      {
+        number: "01",
+        title: "Title",
+        assent_date: "1951-06-18",
+        key_changes: "changes",
+        status: "MISSING_BILL",
+        has_bill: false,
+        act_url: "https://a/1.pdf",
+        bill_url: "MISSING",
+      },
+      {
+        number: "02",
+        title: "Title2",
+        assent_date: "1953-05-01",
+        key_changes: "changes",
+        status: "OK",
+        has_bill: true,
+        act_url: "https://a/2.pdf",
+        bill_url: "MISSING",
+      },
     ]);
   });
 });

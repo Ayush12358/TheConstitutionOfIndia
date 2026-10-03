@@ -171,12 +171,16 @@ function stripArchiveNoise(text: string, key: string): string {
 }
 
 function normalize(raw: string, key: string): string {
-  const fixed = raw.replace(/[ \t]+/g, " ").replace(/ *\r?\n */g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+  const fixed = raw
+    .replace(/[ \t]+/g, " ")
+    .replace(/ *\r?\n */g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
   const width = 100;
   const body = fixed
     .split(/\n\s*\n/)
     .flatMap(splitAtArticleHeadings)
-    .map(para => {
+    .map((para) => {
       const words = para.split(/\s+/);
       const lines: string[] = [];
       let cur = "";
@@ -209,7 +213,12 @@ function stateFiles(tag: string): { key: string; ref: string }[] {
 
 async function readBlobs(refs: string[]): Promise<Buffer[]> {
   if (refs.length === 0) return [];
-  const proc = Bun.spawn(["git", "cat-file", "--batch"], { cwd: repoRoot, stdin: "pipe", stdout: "pipe", stderr: "pipe" });
+  const proc = Bun.spawn(["git", "cat-file", "--batch"], {
+    cwd: repoRoot,
+    stdin: "pipe",
+    stdout: "pipe",
+    stderr: "pipe",
+  });
   proc.stdin.write(new TextEncoder().encode(refs.join("\n") + "\n"));
   proc.stdin.end();
   const out = proc.stdout;
@@ -249,7 +258,7 @@ for (const tag of tags) {
   const n = Number(m[1]);
   if (n < 1 || n > 96) continue;
   const files = stateFiles(tag);
-  const blobs = await readBlobs(files.map(f => f.ref));
+  const blobs = await readBlobs(files.map((f) => f.ref));
   files.forEach((f, i) => {
     if (blobs[i]!.length > 0) (content[f.key] ??= {})[n] = normalize(blobs[i]!.toString("utf-8"), f.key);
   });
@@ -259,7 +268,7 @@ for (const tag of tags) {
 const last = "STABLE_AMENDMENT_106";
 const zipNames = run(["git", "ls-tree", "--name-only", last])
   .out.split("\n")
-  .filter(n => n.endsWith(".zip"));
+  .filter((n) => n.endsWith(".zip"));
 const byN = new Map<number, string>();
 for (const name of zipNames) {
   const m = name.match(/^AMENDMENT_(\d+)_/);
@@ -336,21 +345,23 @@ function fixSchedule4(text: string): string {
   }
   return text
     .split("\n\n")
-    .filter(p => !/^-{3,}/.test(p.trim()))
+    .filter((p) => !/^-{3,}/.test(p.trim()))
     .join("\n\n")
     .replace(/\|/g, "");
 }
 
 // --- Assent dates from the manifest ---
 const csv = await Bun.file(path.join(repoRoot, "docs", "amendments.csv")).text();
-const rows = parseCSV(csv).filter(r => r.length > 0 && !(r[0] ?? "").startsWith("#"));
+const rows = parseCSV(csv).filter((r) => r.length > 0 && !(r[0] ?? "").startsWith("#"));
 const data = rows[0]?.[0] === "number" ? rows.slice(1) : rows;
-const metaByN = new Map(data.map(r => [Number(r[0]!), { date: r[2] ?? "", title: r[1] ?? "" }]));
+const metaByN = new Map(data.map((r) => [Number(r[0]!), { date: r[2] ?? "", title: r[1] ?? "" }]));
 
 // --- Per-key version lists (dedupe consecutive identical states) ---
 const versions: Record<string, { from: number; text: string }[]> = {};
 for (const [key, byState] of Object.entries(content)) {
-  const sorted = Object.keys(byState).map(Number).sort((a, b) => a - b);
+  const sorted = Object.keys(byState)
+    .map(Number)
+    .sort((a, b) => a - b);
   const list: { from: number; text: string }[] = [];
   let last = "\u0000";
   for (const n of sorted) {
@@ -368,16 +379,16 @@ for (const [key, list] of Object.entries(versions)) {
   for (const v of list) (changesByN[v.from] ??= []).push(key);
 }
 
-const statesOut = [0, ...Array.from({ length: 106 }, (_, i) => i + 1)].map(n => ({
+const statesOut = [0, ...Array.from({ length: 106 }, (_, i) => i + 1)].map((n) => ({
   n,
-  date: n === 0 ? "1950-01-26" : metaByN.get(n)?.date ?? "",
-  title: n === 0 ? "Original Constitution" : metaByN.get(n)?.title ?? `Amendment ${n}`,
+  date: n === 0 ? "1950-01-26" : (metaByN.get(n)?.date ?? ""),
+  title: n === 0 ? "Original Constitution" : (metaByN.get(n)?.title ?? `Amendment ${n}`),
 }));
 
 const index = {
   generated: new Date().toISOString(),
   states: statesOut,
-  versions: Object.fromEntries(Object.entries(versions).map(([k, v]) => [k, v.map(x => x.from)])),
+  versions: Object.fromEntries(Object.entries(versions).map(([k, v]) => [k, v.map((x) => x.from)])),
   changes: changesByN,
 };
 
@@ -389,9 +400,9 @@ for (const [key, list] of Object.entries(versions)) {
   total += body.length;
   await writeFile(path.join(outdir, `${key}.json`), body);
 }
-const stateCoverage = statesOut.filter(s => Object.values(content).some(by => by[s.n] !== undefined)).length;
+const stateCoverage = statesOut.filter((s) => Object.values(content).some((by) => by[s.n] !== undefined)).length;
 console.log(`states with content: ${stateCoverage}/107`);
 console.log(`amendments touching files: ${Object.keys(changesByN).length}`);
 console.log(`total payload: ${(total / 1024 / 1024).toFixed(1)} MB`);
-const noChange = statesOut.filter(s => s.n > 0 && !changesByN[s.n]).map(s => s.n);
+const noChange = statesOut.filter((s) => s.n > 0 && !changesByN[s.n]).map((s) => s.n);
 console.log(`amendments with no recorded change: ${noChange.join(", ")}`);

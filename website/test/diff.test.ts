@@ -4,7 +4,7 @@ import { diffHunks, edgeChars, lineDiff } from "../src/lib/diff";
 describe("lineDiff", () => {
   test("identical texts produce only context", () => {
     const out = lineDiff("a\nb\nc", "a\nb\nc");
-    expect(out.every(l => l.kind === "ctx")).toBe(true);
+    expect(out.every((l) => l.kind === "ctx")).toBe(true);
     expect(out).toHaveLength(3);
   });
 
@@ -28,13 +28,13 @@ describe("lineDiff", () => {
 
   test("replacement of one line", () => {
     const out = lineDiff("a\nold\nb", "a\nnew\nb");
-    const kinds = out.map(l => l.kind);
+    const kinds = out.map((l) => l.kind);
     expect(kinds).toEqual(["ctx", "del", "add", "ctx"]);
   });
 
   test("whole-file replace when one side is empty", () => {
-    expect(lineDiff("", "x\ny").map(l => l.kind)).toEqual(["add", "add"]);
-    expect(lineDiff("x\ny", "").map(l => l.kind)).toEqual(["del", "del"]);
+    expect(lineDiff("", "x\ny").map((l) => l.kind)).toEqual(["add", "add"]);
+    expect(lineDiff("x\ny", "").map((l) => l.kind)).toEqual(["del", "del"]);
   });
 
   test("huge inputs fall back to a full replace (no hang)", () => {
@@ -52,9 +52,9 @@ describe("diffHunks", () => {
     const hunks = diffHunks(a, b, 1);
     // changes at line 3 and 7, gap of 3 > 2*1+1 → two hunks
     expect(hunks).toHaveLength(2);
-    expect(hunks[0]!.del.map(l => l.text)).toEqual(["3"]);
-    expect(hunks[0]!.add.map(l => l.text)).toEqual(["X"]);
-    expect(hunks[1]!.del.map(l => l.text)).toEqual(["7"]);
+    expect(hunks[0]!.del.map((l) => l.text)).toEqual(["3"]);
+    expect(hunks[0]!.add.map((l) => l.text)).toEqual(["X"]);
+    expect(hunks[1]!.del.map((l) => l.text)).toEqual(["7"]);
   });
 
   test("close changes merge into one hunk", () => {

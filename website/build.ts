@@ -45,7 +45,7 @@ for (const [key, rel] of Object.entries(CONTENT_MAP)) {
   markdowns[key] = await Bun.file(path.resolve(repoRoot, rel)).text();
 }
 const csv = await Bun.file(path.resolve(repoRoot, "docs/amendments.csv")).text();
-const rows = parseCSV(csv).filter(r => r.length > 0 && !(r[0] ?? "").startsWith("#"));
+const rows = parseCSV(csv).filter((r) => r.length > 0 && !(r[0] ?? "").startsWith("#"));
 const data = rows[0]?.[0] === "number" ? rows.slice(1) : rows;
 const amendments = parseAmendments(data);
 
@@ -62,13 +62,15 @@ const readTexts = async (kind: "act" | "bill", filter: (a: Amendment) => boolean
   return texts;
 };
 const actTexts = await readTexts("act", () => true);
-const billTexts = await readTexts("bill", a => a.has_bill);
+const billTexts = await readTexts("bill", (a) => a.has_bill);
 
 const json = JSON.stringify(buildPayload(markdowns, amendments, actTexts, billTexts));
 
 await mkdir(outdir, { recursive: true });
 await writeFile(path.join(outdir, "content.json"), json);
-console.log(` content.json  ${(Buffer.byteLength(json) / 1024).toFixed(1)} KB (${Object.keys(actTexts).length} acts, ${Object.keys(billTexts).length} bills as text)`);
+console.log(
+  ` content.json  ${(Buffer.byteLength(json) / 1024).toFixed(1)} KB (${Object.keys(actTexts).length} acts, ${Object.keys(billTexts).length} bills as text)`,
+);
 
 // --- History states for the date browser (generated, committed) ---
 await cp(path.join(process.cwd(), "data", "history"), path.join(outdir, "history"), { recursive: true });

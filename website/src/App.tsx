@@ -48,10 +48,32 @@ type HistoryFile = { from: number; text: string }[];
 
 // Part keys in display order: part1..part22, then the lettered parts.
 const PART_KEYS = [
-  "part1", "part2", "part3", "part4", "part5", "part6", "part7", "part8", "part9",
-  "part10", "part11", "part12", "part13", "part14", "part15", "part16", "part17",
-  "part18", "part19", "part20", "part21", "part22",
-  "part4a", "part9a", "part9b", "part14a",
+  "part1",
+  "part2",
+  "part3",
+  "part4",
+  "part5",
+  "part6",
+  "part7",
+  "part8",
+  "part9",
+  "part10",
+  "part11",
+  "part12",
+  "part13",
+  "part14",
+  "part15",
+  "part16",
+  "part17",
+  "part18",
+  "part19",
+  "part20",
+  "part21",
+  "part22",
+  "part4a",
+  "part9a",
+  "part9b",
+  "part14a",
 ];
 
 function slugify(text: string): string {
@@ -61,13 +83,15 @@ function slugify(text: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-// Post-pass over marked's HTML: give every <h2>/<h3> a slugified id and wrap the
-// text in a same-page anchor so clicking a heading sets the URL hash (deep links).
+// Post-pass over marked's HTML: give every <h2>/<h3> a slugified id, an
+// in-page anchor (click scrolls without touching the route hash) and a
+// copy-link button (copies a routeful #/constitution/<key>/<id> URL).
 function withHeadingAnchors(html: string): string {
   return html.replace(/<h([23])>([^<]*)<\/h\1>/g, (_, level, text) => {
     const id = slugify(text);
+    const safe = text.replace(/"/g, "&quot;");
     return id
-      ? `<h${level} id="${id}"><a href="#${id}" class="heading-link">${text}</a></h${level}>`
+      ? `<h${level} id="${id}"><a href="#${id}" data-article="${id}" class="heading-link">${text}</a><button type="button" data-copy="${id}" class="copy-link" aria-label="Copy link to ${safe}" title="Copy link">⧉</button></h${level}>`
       : `<h${level}>${text}</h${level}>`;
   });
 }
@@ -85,14 +109,123 @@ function withAmendedBy(html: string, timeline: Record<string, number[]> | null):
     const key = articleKey(inner.replace(/<[^>]*>/g, ""));
     const froms = key ? timeline[key] : undefined;
     if (!froms || froms.length === 0) return heading;
-    const chips = froms.map(n => `<button type="button" data-amend="${n}">${n}</button>`).join(", ");
+    const chips = froms.map((n) => `<button type="button" data-amend="${n}">${n}</button>`).join(", ");
     return `${heading}<div class="amended-by" data-article="${key}">Amended by: ${chips}</div>`;
   });
+}
+
+// Escape-then-highlight a snippet on the literal query (case-insensitive).
+function highlightSnippet(snippet: string, q: string): string {
+  const needle = q.trim();
+  if (!needle) return snippet.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  const esc = snippet.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  const qesc = needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return esc.replace(new RegExp(`(${qesc})`, "gi"), "<mark>$1</mark>");
 }
 
 // Manifest numbers are zero-padded ("01"…"96", "097"…"106").
 function padNumber(n: number): string {
   return n <= 96 ? String(n).padStart(2, "0") : String(n).padStart(3, "0");
+}
+
+// --- Hash routing (shareable, reload-safe URLs) ---
+// Routes (all under "#/", so legacy "#article-id" hashes never collide):
+//   #/constitution [<key> [<article>]]
+//   #/amendments [<n> [<view>]]
+//   #/dates [<YYYY-MM-DD> [<YYYY-MM-DD>]]
+type Route =
+  | { tab: "constitution"; key?: string; article?: string }
+  | { tab: "amendments"; n?: number; view?: "text" | "git" }
+  | { tab: "dates"; a?: string; b?: string };
+
+function parseHash(hash: string): Route | null {
+  if (!hash.startsWith("#/")) return null;
+  const seg = hash.slice(2).split("/").map(decodeURIComponent);
+  if (seg[0] === "constitution") {
+    return { tab: "constitution", key: seg[1] || undefined, article: seg[2] || undefined };
+  }
+  if (seg[0] === "amendments") {
+    const n = seg[1] !== undefined && seg[1] !== "" ? Number(seg[1]) : undefined;
+    const view = seg[2] === "text" || seg[2] === "git" ? seg[2] : undefined;
+    if (seg[1] !== undefined && seg[1] !== "" && (!Number.isInteger(n!) || n! < 1 || n! > 106)) return null;
+    return { tab: "amendments", n: n ?? undefined, view };
+  }
+  if (seg[0] === "dates" || seg[0] === "date") {
+    const ok = (d: string | undefined) => d === undefined || /^\d{4}-\d{2}-\d{2}$/.test(d);
+    if (!ok(seg[1]) || !ok(seg[2])) return null;
+    return { tab: "dates", a: seg[1] || undefined, b: seg[2] || undefined };
+  }
+  return null;
+}
+
+function buildHash(r: Route): string {
+  if (r.tab === "constitution") {
+    let h = "#/constitution";
+    if (r.key) h += `/${encodeURIComponent(r.key)}`;
+    if (r.key && r.article) h += `/${encodeURIComponent(r.article)}`;
+    return h;
+  }
+  if (r.tab === "amendments") {
+    let h = "#/amendments";
+    if (r.n !== undefined) h += `/${padNumber(r.n)}`;
+    if (r.n !== undefined && r.view) h += `/${r.view}`;
+    return h;
+  }
+  let h = "#/dates";
+  if (r.a) h += `/${r.a}`;
+  if (r.a && r.b) h += `/${r.b}`;
+  return h;
+}
+
+// 1 → "1st", 2 → "2nd", 3 → "3rd", else "Nth".
+function ord(n: number): string {
+  return `${n}${n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th"}`;
+}
+
+// Assent year → decade label ("1950s" … "2020s").
+function decadeOf(assentDate: string): string {
+  return `${Math.floor(Number(assentDate.slice(0, 4)) / 10) * 10}s`;
+}
+
+// Outline of a markdown file: ## / ### headings with slugified ids.
+// Lines are CR-stripped first: content files use CRLF, and without the `m`
+// flag JS `$` matches only at the absolute end of input (a trailing \r would
+// otherwise make every heading miss).
+function tocOf(markdown: string): { level: 2 | 3; text: string; id: string }[] {
+  const out: { level: 2 | 3; text: string; id: string }[] = [];
+  for (const raw of markdown.split("\n")) {
+    const line = raw.replace(/\r$/, "");
+    const m = line.match(/^(#{2,3})\s+(.*)$/);
+    if (!m || !m[1] || m[2] === undefined) continue;
+    const id = slugify(m[2].trim());
+    if (id) out.push({ level: m[1] === "##" ? 2 : 3, text: m[2].trim(), id });
+  }
+  return out;
+}
+
+// Collapsible "amended by" chip list (module scope so toggle state survives
+// parent re-renders): first 8 inline, expandable to all.
+function ChangedByChips({ nums, onPick }: { nums: number[]; onPick: (n: number) => void }) {
+  const [expanded, setExpanded] = useState(false);
+  if (nums.length === 0) return null;
+  const shown = expanded ? nums : nums.slice(0, 8);
+  return (
+    <p className="text-muted-foreground mt-1 text-xs">
+      amended by{" "}
+      {shown
+        .map((f) => (
+          <button key={f} className="hover:text-primary inline-block py-0.5 underline" onClick={() => onPick(f)}>
+            {f === 0 ? "orig" : f}
+          </button>
+        ))
+        .reduce<React.ReactNode[]>((acc, chip, i) => (i === 0 ? [chip] : [...acc, ", ", chip]), [])}
+      {nums.length > 8 && (
+        <button className="hover:text-primary ml-1 underline" onClick={() => setExpanded(!expanded)}>
+          {expanded ? "show less" : `+${nums.length - 8} more`}
+        </button>
+      )}
+    </p>
+  );
 }
 
 // In-flight history-file fetches, shared across renders (module scope so a
@@ -139,12 +272,18 @@ export function App() {
   const [openHistory, setOpenHistory] = useState<string | null>(null);
   const [compareOpen, setCompareOpen] = useState<string | null>(null);
   const [historyError, setHistoryError] = useState("");
+  // Routeful article target: scrolled to after the reader renders.
+  const [articleTarget, setArticleTarget] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  // Amendments list filters.
+  const [decadeFilter, setDecadeFilter] = useState<string>("all");
+  const [billFilter, setBillFilter] = useState<"all" | "has" | "missing">("all");
 
   // Search records for the chosen scope: the 39 content files (constitution,
   // identical results to the old inline scan) plus act/bill texts ("acts" and
   // "all" scopes), keyed by manifest number. Matching lives in src/lib/search.ts.
   const recordsFor = (s: "constitution" | "acts" | "all"): SearchRecord[] => {
-    const titleOf = new Map(items.map(i => [i.key, i.title]));
+    const titleOf = new Map(items.map((i) => [i.key, i.title]));
     const constitution: SearchRecord[] = Object.entries(contents).map(([key, text]) => ({
       id: key,
       title: titleOf.get(key) ?? key,
@@ -152,7 +291,7 @@ export function App() {
       kind: "constitution",
     }));
     if (s === "constitution") return constitution;
-    const amendmentTitle = new Map(amendments.map(a => [a.number, a.title]));
+    const amendmentTitle = new Map(amendments.map((a) => [a.number, a.title]));
     const acts: SearchRecord[] = Object.entries(actTexts).map(([num, text]) => ({
       id: num,
       title: `Act ${num}: ${amendmentTitle.get(num) ?? `Amendment ${num}`}`,
@@ -183,7 +322,7 @@ export function App() {
     // pane + search), amendments, act/bill texts. On static hosts this is
     // dist/content.json.
     fetch("/content.json")
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
       })
@@ -202,19 +341,146 @@ export function App() {
   useEffect(() => {
     if (history || (tab !== "dates" && !detail)) return;
     fetch("/history/index.json")
-      .then(res => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
       .then((data: HistoryIndex) => setHistory(data))
-      .catch(() => setHistoryError("Failed to load the amendment history index — run scripts/generate-history.ts and rebuild"));
+      .catch(() =>
+        setHistoryError("Failed to load the amendment history index — run scripts/generate-history.ts and rebuild"),
+      );
   }, [tab, detail, history]);
 
-  const open = (item: IndexItem) => {
+  // Apply a parsed route to state. Returns true when handled.
+  // Runs on mount (once contents/amendments arrive) and on hashchange;
+  // hashes that are not "#/…" routes (legacy "#article-id") are ignored.
+  const applyRoute = (r: Route): boolean => {
+    if (r.tab === "constitution") {
+      if (tab !== "constitution") setTab("constitution");
+      if (r.key) {
+        const item = items.find((i) => i.key === r.key);
+        if (item && contents[r.key] !== undefined && selected?.key !== r.key) {
+          open(item, { article: r.article ?? null, push: false });
+        } else if (r.article) {
+          setArticleTarget(r.article);
+        }
+      } else if (!r.article) {
+        setArticleTarget(null);
+      }
+      return true;
+    }
+    if (r.tab === "amendments") {
+      if (tab !== "amendments") setTab("amendments");
+      if (r.n !== undefined) {
+        const a = amendments.find((x) => x.number === padNumber(r.n!));
+        if (a) {
+          if (detail?.number !== a.number) setDetail(a);
+          if (r.view) setDetailView(r.view);
+        }
+      } else if (detail !== null) {
+        setDetail(null);
+      }
+      return true;
+    }
+    if (r.tab === "dates") {
+      if (tab !== "dates") setTab("dates");
+      if (r.a !== undefined && r.a !== dateARef.current) setDateA(r.a);
+      const b = r.b ?? "";
+      if (b !== dateBRef.current) setDateB(b);
+      return true;
+    }
+    return false;
+  };
+  // Refs so the hashchange listener (registered once) sees fresh state.
+  const dateARef = useRef(dateA);
+  dateARef.current = dateA;
+  const dateBRef = useRef(dateB);
+  dateBRef.current = dateB;
+
+  // Initial route: once the payload arrives, honor the URL hash.
+  const routedInit = useRef(false);
+  useEffect(() => {
+    if (routedInit.current || items.length === 0) return;
+    routedInit.current = true;
+    const r = parseHash(window.location.hash);
+    if (r) applyRoute(r);
+    else window.history.replaceState(null, "", buildHash({ tab: "constitution" }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items, contents, amendments]);
+
+  // Back/forward + external routeful links.
+  useEffect(() => {
+    const onHash = () => {
+      const r = parseHash(window.location.hash);
+      if (r) applyRoute(r);
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items, contents, amendments, tab, selected, detail, dateA, dateB]);
+
+  // State → URL mirror. Skipped until the initial route is honored (or
+  // defaulted) so a deep link is never clobbered before the payload arrives.
+  // Pushes a history entry when the primary target (tab / open part / open
+  // amendment) changes so Back steps through them; sub-state (dates,
+  // article, detail view) uses replaceState.
+  const prevRouteKey = useRef("");
+  useEffect(() => {
+    if (!routedInit.current) return;
+    const primary = `${tab}|${selected?.key ?? ""}|${detail?.number ?? ""}`;
+    let h: string;
+    if (tab === "constitution") {
+      h = buildHash({ tab, key: selected?.key, article: articleTarget ?? undefined });
+    } else if (tab === "amendments") {
+      h = detail ? buildHash({ tab, n: Number(detail.number), view: detailView }) : buildHash({ tab });
+    } else {
+      h = buildHash({ tab, a: dateA, b: dateB || undefined });
+    }
+    if (window.location.hash === h) {
+      prevRouteKey.current = primary;
+      return;
+    }
+    if (prevRouteKey.current !== primary) {
+      prevRouteKey.current = primary;
+      window.location.hash = h; // push: new primary target
+    } else {
+      window.history.replaceState(null, "", h);
+    }
+  }, [tab, selected, detail, detailView, dateA, dateB, articleTarget]);
+
+  // Per-view document title.
+  useEffect(() => {
+    if (tab === "amendments" && detail) document.title = `${detail.number} ${detail.title} — Constitution of India`;
+    else if (tab === "constitution" && selected) document.title = `${selected.title} — Constitution of India`;
+    else if (tab === "dates") document.title = `As of ${dateA} — Constitution of India`;
+    else document.title = "The Constitution of India";
+  }, [tab, selected, detail, dateA]);
+
+  // Scroll to a routeful article once the reader (re)renders.
+  useEffect(() => {
+    if (tab === "constitution" && selected && articleTarget) {
+      const t = window.setTimeout(() => {
+        document.getElementById(articleTarget)?.scrollIntoView({ block: "start" });
+      }, 50);
+      return () => window.clearTimeout(t);
+    }
+  }, [tab, selected, articleTarget, timeline]);
+
+  const open = (item: IndexItem, opts?: { article?: string | null; push?: boolean }) => {
     const markdown = contents[item.key];
     if (markdown === undefined) return;
     setSelected({ key: item.key, title: item.title, markdown });
     timelineKey.current = item.key;
     setTimeline(null); // never show a previous part's chips while loading
+    setArticleTarget(opts?.article ?? null);
+    if (opts?.push !== false) {
+      const h = buildHash({ tab: "constitution", key: item.key });
+      if (window.location.hash !== h) window.location.hash = h;
+    }
+    // Reader moved above the grid: bring it into view (article scroll, if
+    // any, happens after render and overrides this).
+    requestAnimationFrame(() => {
+      document.getElementById("reader")?.scrollIntoView({ block: "start" });
+    });
     if (item.key === "preamble") return; // no per-article history for the Preamble
-    versionFile(item.key).then(file => {
+    versionFile(item.key).then((file) => {
       if (timelineKey.current !== item.key) return; // stale: a newer part was opened
       setTimeline(file ? amendmentTimeline(file) : null);
     });
@@ -227,30 +493,34 @@ export function App() {
       open({ key: hit.id, title: hit.title });
       return;
     }
-    const a = amendments.find(x => x.number === hit.id);
+    const a = amendments.find((x) => x.number === hit.id);
     if (a) {
       setDetail(a);
       setDetailView("text");
       setTab("amendments");
+      const h = buildHash({ tab: "amendments", n: Number(a.number), view: "text" });
+      if (window.location.hash !== h) window.location.hash = h;
     }
   };
 
   // Group the index into Parts (explicit display order) and Schedules (numeric).
   const parts = items
-    .filter(item => PART_KEYS.includes(item.key))
+    .filter((item) => PART_KEYS.includes(item.key))
     .sort((a, b) => PART_KEYS.indexOf(a.key) - PART_KEYS.indexOf(b.key));
   const schedules = items
-    .filter(item => /^schedule\d+$/.test(item.key))
+    .filter((item) => /^schedule\d+$/.test(item.key))
     .sort((a, b) => Number(a.key.slice(8)) - Number(b.key.slice(8)));
 
-  const indexButtons = (group: IndexItem[], onPick?: (item: IndexItem) => void) => (
-    <div className="mt-2 grid grid-cols-2 items-start gap-2 md:grid-cols-4">
-      {group.map(item => (
+  // Compact vertical nav list for the left sidebar (replaces the old grid).
+  const navList = (group: IndexItem[]) => (
+    <div className="flex flex-col gap-1">
+      {group.map((item) => (
         <Button
           key={item.key}
-          variant="outline"
-          className="h-auto min-w-0 justify-start py-2 text-left text-xs leading-snug whitespace-normal"
-          onClick={() => (onPick ? onPick(item) : open(item))}
+          variant={selected?.key === item.key ? "default" : "ghost"}
+          aria-current={selected?.key === item.key ? "true" : undefined}
+          className="h-auto min-w-0 justify-start py-1.5 text-left text-xs leading-snug font-normal whitespace-normal"
+          onClick={() => open(item)}
         >
           {item.title}
         </Button>
@@ -272,14 +542,13 @@ export function App() {
     return n;
   };
 
-  const stateMeta = (n: number): HistoryState | undefined =>
-    history?.states.find(s => s.n === n);
+  const stateMeta = (n: number): HistoryState | undefined => history?.states.find((s) => s.n === n);
 
   // Keys present at state n (the part/schedule existed by then).
   const keysAtState = (n: number): string[] =>
     history
       ? Object.entries(history.versions)
-          .filter(([, froms]) => froms.some(f => f <= n))
+          .filter(([, froms]) => froms.some((f) => f <= n))
           .map(([key]) => key)
       : [];
 
@@ -293,9 +562,9 @@ export function App() {
     const inFlight = historyRequests.get(key);
     if (inFlight) return inFlight;
     const request = fetch(`/history/${key}.json`)
-      .then(res => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
       .then((data: HistoryFile) => {
-        setHistoryCache(prev => ({ ...prev, [key]: data }));
+        setHistoryCache((prev) => ({ ...prev, [key]: data }));
         return data;
       })
       .catch(() => {
@@ -315,44 +584,98 @@ export function App() {
   };
 
   // Amendments that changed `key` up to and including state n (for the chips).
-  const changedBy = (key: string, n: number): number[] =>
-    (history?.versions[key] ?? []).filter(f => f <= n);
+  const changedBy = (key: string, n: number): number[] => (history?.versions[key] ?? []).filter((f) => f <= n);
 
-  const openAmendment = (n: number) => {
-    const a = amendments.find(x => x.number === padNumber(n));
+  const openAmendment = (n: number, view?: "text" | "git") => {
+    const a = amendments.find((x) => x.number === padNumber(n));
     if (a) {
       setDetail(a);
-      setDetailView("git");
+      setDetailView(view ?? detailView);
       setTab("amendments");
+      const h = buildHash({ tab: "amendments", n, view: view ?? detailView });
+      if (window.location.hash !== h) window.location.hash = h;
     }
   };
 
-  // One delegated handler for all "Amended by" chips in the reading pane.
+  // Scroll to an article heading inside the open reader; optionally mirror
+  // it into the route (copy-link / heading click) via replaceState.
+  const scrollToArticle = (id: string, mirror: boolean) => {
+    setArticleTarget(id);
+    requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({ block: "start" });
+    });
+    if (mirror && selected) {
+      const h = buildHash({ tab: "constitution", key: selected.key, article: id });
+      window.history.replaceState(null, "", h);
+    }
+  };
+
+  const copyArticleLink = (id: string) => {
+    if (!selected) return;
+    const url = `${window.location.origin}${window.location.pathname}#/constitution/${selected.key}/${id}`;
+    navigator.clipboard?.writeText(url).catch(() => {});
+    setCopiedId(id);
+    window.setTimeout(() => setCopiedId((current) => (current === id ? null : current)), 1500);
+    const h = buildHash({ tab: "constitution", key: selected.key, article: id });
+    window.history.replaceState(null, "", h);
+    setArticleTarget(id);
+  };
+
+  // One delegated handler for the reading pane: "Amended by" chips,
+  // heading-anchor clicks (scroll w/o touching the route) and copy buttons.
   const onReadingPaneClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const amend = (e.target as HTMLElement).dataset.amend;
-    if (amend) openAmendment(Number(amend));
+    const el = e.target as HTMLElement;
+    const amend = el.dataset.amend;
+    if (amend) {
+      openAmendment(Number(amend), "git");
+      return;
+    }
+    const copy = (el.closest("[data-copy]") as HTMLElement | null)?.dataset.copy;
+    if (copy) {
+      copyArticleLink(copy);
+      return;
+    }
+    const anchor = el.closest("a.heading-link") as HTMLAnchorElement | null;
+    if (anchor) {
+      e.preventDefault();
+      const id = anchor.getAttribute("href")?.slice(1);
+      if (id) scrollToArticle(id, true);
+    }
   };
 
   const renderHistoryText = (text: string) => (
-    <pre className="text-foreground max-h-[70vh] max-w-prose overflow-y-auto whitespace-pre-wrap pr-4 font-serif text-[13px] leading-relaxed">
+    <pre className="text-foreground max-h-[70vh] max-w-prose overflow-y-auto pr-4 font-serif text-[13px] leading-relaxed whitespace-pre-wrap">
       {text}
     </pre>
   );
 
   // --- Diff rendering (git views + compare) ---
 
-  const DiffBlock = ({ title, aText, bText, note }: { title: string; aText: string | null; bText: string | null; note?: string }) => {
+  const DiffBlock = ({
+    title,
+    aText,
+    bText,
+    note,
+  }: {
+    title: string;
+    aText: string | null;
+    bText: string | null;
+    note?: string;
+  }) => {
     if (!aText && !bText) return null;
     if (!aText) {
       // whole file added
       const lines = (bText ?? "").split("\n");
       return (
         <div className="rounded border text-xs">
-          <div className="border-b bg-muted px-2 py-1 font-mono font-medium">{title} <span className="text-green-700 dark:text-green-400">(+{lines.length})</span></div>
+          <div className="bg-muted border-b px-2 py-1 font-mono font-medium">
+            {title} <span className="text-green-700 dark:text-green-400">(+{lines.length})</span>
+          </div>
           <pre className="max-h-80 overflow-y-auto p-2">
             {lines.map((l, i) => (
-              <div key={i} className="bg-green-50 dark:bg-green-950/50 px-1">
-                <span className="text-green-700 dark:text-green-400 select-none">+ </span>{l || " "}
+              <div key={i} className="bg-green-50 px-1 dark:bg-green-950/50">
+                <span className="text-green-700 select-none dark:text-green-400">+ </span>
+                {l || " "}
               </div>
             ))}
           </pre>
@@ -363,11 +686,14 @@ export function App() {
       const lines = aText.split("\n");
       return (
         <div className="rounded border text-xs">
-          <div className="border-b bg-muted px-2 py-1 font-mono font-medium">{title} <span className="text-red-700 dark:text-red-400">(−{lines.length})</span></div>
+          <div className="bg-muted border-b px-2 py-1 font-mono font-medium">
+            {title} <span className="text-red-700 dark:text-red-400">(−{lines.length})</span>
+          </div>
           <pre className="max-h-80 overflow-y-auto p-2">
             {lines.map((l, i) => (
-              <div key={i} className="bg-red-50 dark:bg-red-950/50 px-1">
-                <span className="text-red-700 dark:text-red-400 select-none">- </span>{l || " "}
+              <div key={i} className="bg-red-50 px-1 dark:bg-red-950/50">
+                <span className="text-red-700 select-none dark:text-red-400">- </span>
+                {l || " "}
               </div>
             ))}
           </pre>
@@ -375,35 +701,35 @@ export function App() {
       );
     }
     const hunks = diffHunks(aText, bText);
-    const stats = hunks.reduce(
-      (acc, h) => ({ del: acc.del + h.del.length, add: acc.add + h.add.length }),
-      { del: 0, add: 0 },
-    );
+    const stats = hunks.reduce((acc, h) => ({ del: acc.del + h.del.length, add: acc.add + h.add.length }), {
+      del: 0,
+      add: 0,
+    });
     if (stats.del + stats.add === 0) return null;
     return (
       <div className="rounded border text-xs">
-        <div className="border-b bg-muted px-2 py-1 font-mono font-medium">
-          {title}{" "}
-          <span className="text-green-700 dark:text-green-400">+{stats.add}</span>{" "}
+        <div className="bg-muted border-b px-2 py-1 font-mono font-medium">
+          {title} <span className="text-green-700 dark:text-green-400">+{stats.add}</span>{" "}
           <span className="text-red-700 dark:text-red-400">−{stats.del}</span>
         </div>
-        <div className="max-h-[60vh] overflow-y-auto whitespace-pre-wrap p-2 font-mono">
+        <div className="max-h-[60vh] overflow-y-auto p-2 font-mono whitespace-pre-wrap">
           {hunks.map((h, hi) => (
             <div key={hi} className="mb-2">
               {h.ctx.map((l, i) => (
                 <div key={i} className="text-muted-foreground px-1">
-                  <span className="select-none">  </span>{l.text || " "}
+                  <span className="select-none"> </span>
+                  {l.text || " "}
                 </div>
               ))}
               {h.del.map((l, i) => (
-                <div key={`d${i}`} className="bg-red-50 dark:bg-red-950/50 px-1">
-                  <span className="text-red-700 dark:text-red-400 select-none">- </span>
+                <div key={`d${i}`} className="bg-red-50 px-1 dark:bg-red-950/50">
+                  <span className="text-red-700 select-none dark:text-red-400">- </span>
                   <Highlighted side="del" line={l.text} pair={h.add[i]?.text ?? ""} />
                 </div>
               ))}
               {h.add.map((l, i) => (
-                <div key={`a${i}`} className="bg-green-50 dark:bg-green-950/50 px-1">
-                  <span className="text-green-700 dark:text-green-400 select-none">+ </span>
+                <div key={`a${i}`} className="bg-green-50 px-1 dark:bg-green-950/50">
+                  <span className="text-green-700 select-none dark:text-green-400">+ </span>
                   <Highlighted side="add" line={l.text} pair={h.del[i]?.text ?? ""} />
                 </div>
               ))}
@@ -430,8 +756,19 @@ export function App() {
 
   // --- Amendment detail (Text / Git views) ---
 
+  // Pick an amendment from the sidebar list: show it in the main column and
+  // bring it into view (matters on stacked/mobile layouts).
+  const pickAmendment = (a: Amendment, view?: "text" | "git") => {
+    setDetail(a);
+    if (view) setDetailView(view);
+    setTab("amendments");
+    requestAnimationFrame(() => {
+      document.getElementById("amendment-detail")?.scrollIntoView({ block: "start" });
+    });
+  };
+
   const amendmentDetail = detail && (
-    <Card>
+    <Card id="amendment-detail" className="scroll-mt-24">
       <CardHeader className="space-y-1">
         <Button variant="ghost" size="sm" className="-ml-2 w-fit" onClick={() => setDetail(null)}>
           ← All amendments
@@ -441,7 +778,9 @@ export function App() {
         </CardTitle>
         <p className="text-muted-foreground text-sm">
           Assented {detail.assent_date}
-          {detail.status === "MISSING_BILL" && <span className="italic"> · bill text not available (lost before 1997)</span>}
+          {detail.status === "MISSING_BILL" && (
+            <span className="italic"> · bill text not available (lost before 1997)</span>
+          )}
         </p>
         {detail.key_changes && <p className="text-muted-foreground text-sm">{detail.key_changes}</p>}
         <div className="flex flex-wrap gap-2 pt-1">
@@ -458,21 +797,25 @@ export function App() {
             </Button>
           )}
           <div className="ml-auto flex gap-1">
-            <Button size="sm" variant={detailView === "text" ? "default" : "outline"} onClick={() => setDetailView("text")}>
+            <Button
+              size="sm"
+              variant={detailView === "text" ? "default" : "outline"}
+              onClick={() => setDetailView("text")}
+            >
               Text
             </Button>
-            <Button size="sm" variant={detailView === "git" ? "default" : "outline"} onClick={() => setDetailView("git")}>
+            <Button
+              size="sm"
+              variant={detailView === "git" ? "default" : "outline"}
+              onClick={() => setDetailView("git")}
+            >
               Git diff
             </Button>
           </div>
         </div>
       </CardHeader>
       <CardContent>
-        {detailView === "text" ? (
-          <AmendmentText amendment={detail} />
-        ) : (
-          <AmendmentGit amendment={detail} />
-        )}
+        {detailView === "text" ? <AmendmentText amendment={detail} /> : <AmendmentGit amendment={detail} />}
       </CardContent>
     </Card>
   );
@@ -505,7 +848,7 @@ export function App() {
         )}
       </div>
     );
-  };
+  }
 
   function AmendmentGit({ amendment }: { amendment: Amendment }) {
     const n = Number(amendment.number);
@@ -516,8 +859,8 @@ export function App() {
     if (keys.length === 0) {
       return (
         <p className="text-muted-foreground text-sm">
-          No file changes are recorded in this archive for amendment {n} — the historical bundles did not
-          capture them. The <span className="font-medium">Text</span> tab shows what the Act itself did.
+          No file changes are recorded in this archive for amendment {n} — the historical bundles did not capture them.
+          The <span className="font-medium">Text</span> tab shows what the Act itself did.
         </p>
       );
     }
@@ -527,12 +870,12 @@ export function App() {
           What the {n === 1 ? "1st" : n === 2 ? "2nd" : n === 3 ? "3rd" : `${n}th`} Amendment changed in the
           Constitution text — archive diff between state {n - 1} and state {n}.
         </p>
-        {keys.map(key => (
-          <AsyncDiff key={key} title={items.find(i => i.key === key)?.title ?? key} keyName={key} a={n - 1} b={n} />
+        {keys.map((key) => (
+          <AsyncDiff key={key} title={items.find((i) => i.key === key)?.title ?? key} keyName={key} a={n - 1} b={n} />
         ))}
       </div>
     );
-  };
+  }
 
   function AsyncDiff({ title, keyName, a, b }: { title: string; keyName: string; a: number; b: number }) {
     const [state, setState] = useState<{ a: string | null; b: string | null } | null>(null);
@@ -555,7 +898,7 @@ export function App() {
     if (!state) return <p className="text-muted-foreground text-xs">Loading {title}…</p>;
     const block = <DiffBlock title={title} aText={state.a} bText={state.b} />;
     return block ?? <p className="text-muted-foreground text-xs">No change recorded for {title}.</p>;
-  };
+  }
 
   // --- Date browser ---
 
@@ -564,49 +907,143 @@ export function App() {
   const metaA = stateMeta(nA);
   const metaB = nB !== null ? stateMeta(nB) : null;
 
-  const dateBrowser = (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Constitution as of a date</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex flex-wrap items-end gap-4">
-            <label className="text-sm">
-              <span className="text-muted-foreground block text-xs">As of</span>
-              <Input type="date" value={dateA} min="1950-01-26" max={today()} onChange={e => setDateA(e.target.value)} className="mt-1 w-44" />
-            </label>
-            <label className="text-sm">
-              <span className="text-muted-foreground block text-xs">Compare with (optional)</span>
-              <Input type="date" value={dateB} min="1950-01-26" max={today()} onChange={e => setDateB(e.target.value)} className="mt-1 w-44" />
-              {dateB && (
-                <button className="text-muted-foreground mt-1 text-xs underline" onClick={() => setDateB("")}>
-                  clear
-                </button>
-              )}
-            </label>
-          </div>
-          {historyError && <p className="text-destructive text-sm">{historyError}</p>}
-          {metaA && (
-            <p className="text-sm">
-              As of <span className="font-medium">{dateA}</span> — the Constitution as amended by the{" "}
-              <button className="text-primary underline" onClick={() => openAmendment(metaA.n)}>
-                {metaA.n === 0 ? "original version" : `${metaA.n === 1 ? "1st" : metaA.n === 2 ? "2nd" : metaA.n === 3 ? "3rd" : `${metaA.n}th`} Amendment`}
-              </button>{" "}
-              ({metaA.title.split("Act, ")[1] ?? metaA.title}, assented {metaA.date}).
-            </p>
-          )}
-          {nB !== null && metaA && metaB && nB !== nA && (
-            <p className="text-sm">
-              Comparing with <span className="font-medium">{dateB}</span> (after the {metaB.n === 1 ? "1st" : metaB.n === 2 ? "2nd" : metaB.n === 3 ? "3rd" : `${metaB.n}th`} Amendment).
-            </p>
-          )}
-        </CardContent>
-      </Card>
+  // --- By Date: left = controls, right = state summary, main = compare/list ---
 
-      {nB !== null && metaA && metaB && nB !== nA && (
-        <ComparePanel nA={nA} nB={nB} />
-      )}
+  const dateControls = (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-base">Constitution as of a date</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="flex flex-wrap items-end gap-4">
+          <label className="text-sm">
+            <span className="text-muted-foreground block text-xs">As of</span>
+            <Input
+              type="date"
+              value={dateA}
+              min="1950-01-26"
+              max={today()}
+              onChange={(e) => setDateA(e.target.value)}
+              className="mt-1 w-44"
+            />
+          </label>
+          <label className="text-sm">
+            <span className="text-muted-foreground block text-xs">Compare with (optional)</span>
+            <Input
+              type="date"
+              value={dateB}
+              min="1950-01-26"
+              max={today()}
+              onChange={(e) => setDateB(e.target.value)}
+              className="mt-1 w-44"
+            />
+            {dateB && (
+              <button className="text-muted-foreground mt-1 text-xs underline" onClick={() => setDateB("")}>
+                clear
+              </button>
+            )}
+          </label>
+        </div>
+        {historyError && <p className="text-destructive text-sm">{historyError}</p>}
+        {history && (
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={nA <= 0}
+              onClick={() => {
+                const t = history.states.find((s) => s.n === nA - 1);
+                if (t) setDateA(t.date);
+              }}
+              aria-label="Previous amendment state"
+            >
+              ‹ Prev
+            </Button>
+            <input
+              type="range"
+              min={0}
+              max={106}
+              step={1}
+              value={nA}
+              onChange={(e) => {
+                const t = history.states.find((s) => s.n === Number(e.target.value));
+                if (t) setDateA(t.date);
+              }}
+              aria-label="Amendment state scrubber"
+              className="min-w-40 flex-1"
+            />
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={nA >= 106}
+              onClick={() => {
+                const t = history.states.find((s) => s.n === nA + 1);
+                if (t) setDateA(t.date);
+              }}
+              aria-label="Next amendment state"
+            >
+              Next ›
+            </Button>
+            <span className="text-muted-foreground text-xs" role="status">
+              {nA === 0 ? "Original (1950)" : `${ord(nA)} amendment`}
+            </span>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+
+  const dateAside = (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-base">This state</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-2 text-sm">
+        {metaA ? (
+          <>
+            <p>
+              As of <span className="font-medium">{dateA}</span> — as amended by the{" "}
+              <button className="text-primary underline" onClick={() => openAmendment(metaA.n, "git")}>
+                {metaA.n === 0 ? "original version" : `${ord(metaA.n)} Amendment`}
+              </button>{" "}
+              ({metaA.title}, assented {metaA.date}).
+            </p>
+            {nB !== null && metaA && metaB && nB !== nA && (
+              <p>
+                Comparing with <span className="font-medium">{dateB}</span> (after the {ord(metaB.n)} Amendment).
+              </p>
+            )}
+            {history &&
+              (() => {
+                const changedHere = history.changes[nA] ?? [];
+                return (
+                  changedHere.length > 0 && (
+                    <div>
+                      <h3 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                        Changed in this state
+                      </h3>
+                      <ul className="mt-1 space-y-1">
+                        {changedHere.map((key) => (
+                          <li key={key} className="text-xs">
+                            {items.find((i) => i.key === key)?.title ?? key}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )
+                );
+              })()}
+          </>
+        ) : (
+          <p className="text-muted-foreground text-sm">Loading history…</p>
+        )}
+      </CardContent>
+    </Card>
+  );
+
+  const dateMain = (
+    <div className="space-y-6">
+      {nB !== null && metaA && metaB && nB !== nA && <ComparePanel nA={nA} nB={nB} />}
 
       {(!nB || nB === nA) && (
         <Card>
@@ -619,53 +1056,39 @@ export function App() {
                 <div>
                   <h2 className="text-sm font-semibold">Parts</h2>
                   <div className="mt-2 space-y-1">
-                    {parts.filter(p => keysAtState(nA).includes(p.key)).map(p => (
-                      <div key={p.key} className="rounded border p-2">
-                        <button
-                          className="w-full text-left text-sm font-medium hover:underline"
-                          onClick={() => setOpenHistory(openHistory === p.key ? null : p.key)}
-                        >
-                          {p.title}
-                        </button>
-                        {changedBy(p.key, nA).length > 0 && (
-                          <p className="text-muted-foreground mt-1 text-xs">
-                            amended by{" "}
-                            {changedBy(p.key, nA).map(f => (
-                              <button key={f} className="hover:text-primary underline inline-block py-0.5" onClick={() => openAmendment(f)}>
-                                {f === 0 ? "orig" : f}
-                              </button>
-                            )).reduce<React.ReactNode[]>((acc, chip, i) => (i === 0 ? [chip] : [...acc, ", ", chip]), [])}
-                          </p>
-                        )}
-                        {openHistory === p.key && <HistoryReader keyName={p.key} n={nA} />}
-                      </div>
-                    ))}
+                    {parts
+                      .filter((p) => keysAtState(nA).includes(p.key))
+                      .map((p) => (
+                        <div key={p.key} className="rounded border p-2">
+                          <button
+                            className="w-full text-left text-sm font-medium hover:underline"
+                            onClick={() => setOpenHistory(openHistory === p.key ? null : p.key)}
+                          >
+                            {p.title}
+                          </button>
+                          <ChangedByChips nums={changedBy(p.key, nA)} onPick={(n) => openAmendment(n, "git")} />
+                          {openHistory === p.key && <HistoryReader keyName={p.key} n={nA} />}
+                        </div>
+                      ))}
                   </div>
                 </div>
                 <div>
                   <h2 className="text-sm font-semibold">Schedules</h2>
                   <div className="mt-2 space-y-1">
-                    {schedules.filter(s => keysAtState(nA).includes(s.key)).map(s => (
-                      <div key={s.key} className="rounded border p-2">
-                        <button
-                          className="w-full text-left text-sm font-medium hover:underline"
-                          onClick={() => setOpenHistory(openHistory === s.key ? null : s.key)}
-                        >
-                          {s.title}
-                        </button>
-                        {changedBy(s.key, nA).length > 0 && (
-                          <p className="text-muted-foreground mt-1 text-xs">
-                            amended by{" "}
-                            {changedBy(s.key, nA).map(f => (
-                              <button key={f} className="hover:text-primary underline inline-block py-0.5" onClick={() => openAmendment(f)}>
-                                {f === 0 ? "orig" : f}
-                              </button>
-                            )).reduce<React.ReactNode[]>((acc, chip, i) => (i === 0 ? [chip] : [...acc, ", ", chip]), [])}
-                          </p>
-                        )}
-                        {openHistory === s.key && <HistoryReader keyName={s.key} n={nA} />}
-                      </div>
-                    ))}
+                    {schedules
+                      .filter((s) => keysAtState(nA).includes(s.key))
+                      .map((s) => (
+                        <div key={s.key} className="rounded border p-2">
+                          <button
+                            className="w-full text-left text-sm font-medium hover:underline"
+                            onClick={() => setOpenHistory(openHistory === s.key ? null : s.key)}
+                          >
+                            {s.title}
+                          </button>
+                          <ChangedByChips nums={changedBy(s.key, nA)} onPick={(n) => openAmendment(n, "git")} />
+                          {openHistory === s.key && <HistoryReader keyName={s.key} n={nA} />}
+                        </div>
+                      ))}
                   </div>
                 </div>
               </>
@@ -684,7 +1107,7 @@ export function App() {
     useEffect(() => {
       if (resolved.current === n) return; // already rendered for this state
       let alive = true;
-      textAtState(keyName, n).then(t => {
+      textAtState(keyName, n).then((t) => {
         if (alive) {
           setText(t);
           resolved.current = n;
@@ -697,7 +1120,7 @@ export function App() {
     if (text === null) return <p className="text-muted-foreground text-sm">Loading…</p>;
     if (text === undefined) return <p className="text-muted-foreground text-sm">Not in force at this date.</p>;
     return <div className="mt-3">{renderHistoryText(text)}</div>;
-  };
+  }
 
   function ComparePanel({ nA, nB }: { nA: number; nB: number }) {
     const [files, setFiles] = useState<Record<string, { a: string | null; b: string | null }> | null>(null);
@@ -712,11 +1135,11 @@ export function App() {
         const lo = Math.min(nA, nB);
         const hi = Math.max(nA, nB);
         const keys = history
-          ? Object.keys(history.versions).filter(key => (history.versions[key] ?? []).some(f => f > lo && f <= hi))
+          ? Object.keys(history.versions).filter((key) => (history.versions[key] ?? []).some((f) => f > lo && f <= hi))
           : [];
         const entries: Record<string, { a: string | null; b: string | null }> = {};
         const results = await Promise.all(
-          keys.map(async key => [key, await textAtState(key, nA), await textAtState(key, nB)] as const),
+          keys.map(async (key) => [key, await textAtState(key, nA), await textAtState(key, nB)] as const),
         );
         for (const [key, ta, tb] of results) {
           if (alive && ta !== tb) entries[key] = { a: ta, b: tb };
@@ -736,7 +1159,12 @@ export function App() {
         <CardHeader>
           <CardTitle>
             Changes between {dateA} and {dateB}
-            {list && <span className="text-muted-foreground text-sm font-normal"> — {list.length} file{list.length === 1 ? "" : "s"} differ</span>}
+            {list && (
+              <span className="text-muted-foreground text-sm font-normal">
+                {" "}
+                — {list.length} file{list.length === 1 ? "" : "s"} differ
+              </span>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -748,11 +1176,11 @@ export function App() {
                 className="hover:text-primary text-sm font-medium underline"
                 onClick={() => setCompareOpen(compareOpen === key ? null : key)}
               >
-                {items.find(i => i.key === key)?.title ?? key}
+                {items.find((i) => i.key === key)?.title ?? key}
               </button>
               {compareOpen === key && (
                 <div className="mt-2">
-                  <DiffBlock title={items.find(i => i.key === key)?.title ?? key} aText={v.a} bText={v.b} />
+                  <DiffBlock title={items.find((i) => i.key === key)?.title ?? key} aText={v.a} bText={v.b} />
                 </div>
               )}
             </div>
@@ -760,17 +1188,50 @@ export function App() {
         </CardContent>
       </Card>
     );
+  }
+
+  // --- Sidebar derivations (left nav / right context per tab) ---
+
+  const preambleItem = items.find((i) => i.key === "preamble");
+
+  const amendmentMatches = (a: Amendment) => {
+    const q = amendmentQuery.trim().toLowerCase();
+    const hit =
+      q === "" ||
+      a.number.toLowerCase().includes(q) ||
+      a.title.toLowerCase().includes(q) ||
+      a.key_changes.toLowerCase().includes(q);
+    const decOk = decadeFilter === "all" || decadeOf(a.assent_date) === decadeFilter;
+    const billOk = billFilter === "all" || (billFilter === "has" ? a.has_bill : !a.has_bill);
+    return hit && decOk && billOk;
   };
+  const filteredAmendments = amendments.filter(amendmentMatches);
+  const decades = Array.from(new Set(amendments.map((a) => decadeOf(a.assent_date)))).sort();
+  const groupedAmendments = (() => {
+    const groups = new Map<string, Amendment[]>();
+    for (const a of filteredAmendments) {
+      const dec = decadeOf(a.assent_date);
+      if (!groups.has(dec)) groups.set(dec, []);
+      groups.get(dec)!.push(a);
+    }
+    return [...groups.entries()].sort(([x], [y]) => (x < y ? -1 : 1));
+  })();
+
+  const toc = selected ? tocOf(selected.markdown) : [];
+  const detailDecade = detail ? decadeOf(detail.assent_date) : null;
+  const sameDecade = detail
+    ? amendments.filter((a) => a.number !== detail.number && decadeOf(a.assent_date) === detailDecade).slice(0, 8)
+    : [];
 
   return (
-    <div className="mx-auto flex max-w-4xl flex-col gap-6 p-6">
-      <header className="flex items-start justify-between gap-4">
-        <div className="min-w-0">
-          <h1 className="text-2xl font-bold sm:text-3xl">The Constitution of India</h1>
-          <p className="text-muted-foreground text-sm">
-            As amended up to the 106th Amendment (in force 16-04-2026)
-          </p>
-          <nav className="mt-3 flex flex-wrap gap-2">
+    <div className="bg-background min-h-screen">
+      <header className="bg-background/95 sticky top-0 z-30 border-b backdrop-blur">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
+          <div className="min-w-0">
+            <h1 className="text-xl font-bold sm:text-2xl">The Constitution of India</h1>
+            <p className="text-muted-foreground text-xs">As amended up to the 106th Amendment (in force 16-04-2026)</p>
+          </div>
+          <nav className="flex flex-wrap gap-2" role="tablist" aria-label="Site sections">
             {(
               [
                 ["constitution", "Constitution"],
@@ -778,203 +1239,419 @@ export function App() {
                 ["dates", "By Date"],
               ] as const
             ).map(([id, label]) => (
-              <Button key={id} variant={tab === id ? "default" : "outline"} size="sm" onClick={() => setTab(id)}>
+              <Button
+                key={id}
+                role="tab"
+                aria-selected={tab === id}
+                variant={tab === id ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTab(id)}
+              >
                 {label}
               </Button>
             ))}
           </nav>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setDark(!dark)}
+            aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+            className="ml-auto shrink-0"
+          >
+            {dark ? <Sun /> : <Moon />}
+          </Button>
         </div>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setDark(!dark)}
-          aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-          className="shrink-0"
-        >
-          {dark ? <Moon /> : <Sun />}
-        </Button>
       </header>
 
-      {error && <p className="text-destructive text-sm">{error}</p>}
+      {error && <p className="text-destructive mx-auto max-w-7xl px-4 pt-4 text-sm">{error}</p>}
 
       {tab === "constitution" && (
-        <>
-          <Card>
-            <CardHeader>
-              <CardTitle>Search</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-2 flex gap-1">
-                {(
-                  [
-                    ["constitution", "Constitution"],
-                    ["acts", "Acts & Bills"],
-                    ["all", "All"],
-                  ] as const
-                ).map(([id, label]) => (
-                  <Button
-                    key={id}
-                    size="sm"
-                    variant={scope === id ? "default" : "outline"}
-                    onClick={() => setScope(id)}
-                  >
-                    {label}
-                  </Button>
-                ))}
-              </div>
-              <form className="flex gap-2" onSubmit={runSearch}>
-                <Input
-                  placeholder="Search the Constitution, acts & bills… e.g. secular, service tax, Nari Shakti"
-                  value={query}
-                  onChange={e => setQuery(e.target.value)}
-                />
-                <Button type="submit">Search</Button>
-              </form>
-              {results && (
-                results.length === 0 ? (
-                  <p className="text-muted-foreground mt-4 text-sm">No matches</p>
-                ) : (
-                  <div className="mt-2 grid grid-cols-1 gap-2 md:grid-cols-2">
-                    {results.map(r => (
-                      <Button
-                        key={`${r.kind}-${r.id}`}
-                        variant="outline"
-                        className="h-auto justify-start py-2 text-left text-xs leading-snug"
-                        onClick={() => openHit(r)}
-                      >
-                        <span className="min-w-0">
-                          <span className="block truncate font-medium">
-                            <span className="text-muted-foreground mr-1 rounded bg-muted px-1 py-0.5 align-middle text-[10px] font-semibold tracking-wide uppercase">
-                              {r.kind === "constitution" ? "PART" : r.kind === "act" ? "ACT" : "BILL"}
-                            </span>
-                            {r.title}
-                          </span>
-                          <span className="text-muted-foreground block truncate">{r.snippet}</span>
-                        </span>
-                      </Button>
-                    ))}
-                  </div>
-                )
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Preamble</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {preamble ? (
-                // Trusted content: markdown is embedded from this repo's own files into /content.json.
-                <div
-                  className="markdown max-w-prose"
-                  dangerouslySetInnerHTML={{ __html: render(preamble) }}
-                />
-              ) : (
-                <p className="text-muted-foreground text-sm">Loading…</p>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Parts &amp; Schedules</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h2 className="text-sm font-semibold">Parts</h2>
-                {indexButtons(parts)}
-              </div>
-              <div>
-                <h2 className="text-sm font-semibold">Schedules</h2>
-                {indexButtons(schedules)}
-              </div>
-            </CardContent>
-          </Card>
-
-          {selected && (
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[260px_minmax(0,1fr)_280px]">
+          <aside className="sidebar-left min-w-0" aria-label="Parts and schedules">
             <Card>
               <CardHeader>
-                <CardTitle>{selected.title}</CardTitle>
+                <CardTitle className="text-base">Contents</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div
-                  className="markdown max-h-[70vh] max-w-prose overflow-y-auto pr-4"
-                  onClick={onReadingPaneClick}
-                  dangerouslySetInnerHTML={{ __html: withAmendedBy(render(selected.markdown), timeline) }}
-                />
+              <CardContent className="max-h-[50vh] space-y-4 overflow-y-auto lg:max-h-[calc(100vh-12rem)]">
+                {preambleItem && (
+                  <Button
+                    variant={selected?.key === "preamble" ? "default" : "ghost"}
+                    aria-current={selected?.key === "preamble" ? "true" : undefined}
+                    className="h-auto w-full justify-start py-1.5 text-left text-xs font-semibold"
+                    onClick={() => open(preambleItem)}
+                  >
+                    Preamble
+                  </Button>
+                )}
+                <div>
+                  <h2 className="text-muted-foreground mb-1 text-xs font-semibold tracking-wide uppercase">Parts</h2>
+                  {navList(parts)}
+                </div>
+                <div>
+                  <h2 className="text-muted-foreground mb-1 text-xs font-semibold tracking-wide uppercase">
+                    Schedules
+                  </h2>
+                  {navList(schedules)}
+                </div>
               </CardContent>
             </Card>
-          )}
-        </>
+          </aside>
+
+          <main className="min-w-0 space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Search</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-2 flex gap-1" role="radiogroup" aria-label="Search scope">
+                  {(
+                    [
+                      ["constitution", "Constitution"],
+                      ["acts", "Acts & Bills"],
+                      ["all", "All"],
+                    ] as const
+                  ).map(([id, label]) => (
+                    <Button
+                      key={id}
+                      size="sm"
+                      variant={scope === id ? "default" : "outline"}
+                      aria-pressed={scope === id}
+                      onClick={() => setScope(id)}
+                    >
+                      {label}
+                    </Button>
+                  ))}
+                </div>
+                <form className="flex gap-2" onSubmit={runSearch}>
+                  <Input
+                    placeholder="Search the Constitution, acts & bills… e.g. secular, service tax, Nari Shakti"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                  />
+                  <Button type="submit">Search</Button>
+                </form>
+                {results &&
+                  (results.length === 0 ? (
+                    <p className="text-muted-foreground mt-4 text-sm">No matches for “{query.trim()}”</p>
+                  ) : (
+                    <>
+                      <p className="text-muted-foreground mt-3 text-xs" role="status">
+                        {results.length} result{results.length === 1 ? "" : "s"} for “{query.trim()}”
+                      </p>
+                      <div className="mt-2 grid grid-cols-1 gap-2 md:grid-cols-2">
+                        {results.map((r) => (
+                          <Button
+                            key={`${r.kind}-${r.id}`}
+                            variant="outline"
+                            className="h-auto justify-start py-2 text-left text-xs leading-snug"
+                            onClick={() => openHit(r)}
+                          >
+                            <span className="min-w-0">
+                              <span className="block truncate font-medium">
+                                {r.kind !== "constitution" && (
+                                  <span className="text-muted-foreground bg-muted mr-1 rounded px-1 py-0.5 align-middle text-[10px] font-semibold tracking-wide uppercase">
+                                    {r.kind === "act" ? "ACT" : "BILL"}
+                                  </span>
+                                )}{" "}
+                                {r.title}
+                              </span>
+                              <span
+                                className="text-muted-foreground block truncate"
+                                dangerouslySetInnerHTML={{ __html: highlightSnippet(r.snippet, query) }}
+                              />
+                            </span>
+                          </Button>
+                        ))}
+                      </div>
+                    </>
+                  ))}
+              </CardContent>
+            </Card>
+
+            {selected && (
+              <Card id="reader" className="scroll-mt-24">
+                <CardHeader className="border-b pb-4">
+                  <div className="flex items-start justify-between gap-2">
+                    <CardTitle>{selected.title}</CardTitle>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="shrink-0"
+                      onClick={() => {
+                        setSelected(null);
+                        setArticleTarget(null);
+                        timelineKey.current = null;
+                      }}
+                      aria-label="Close reading pane"
+                    >
+                      ✕
+                    </Button>
+                  </div>
+                  {copiedId && (
+                    <p className="text-muted-foreground text-xs" role="status">
+                      Link copied: #/constitution/{selected.key}/{copiedId}
+                    </p>
+                  )}
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <div
+                    className="markdown max-h-[70vh] max-w-prose overflow-y-auto pr-4"
+                    onClick={onReadingPaneClick}
+                    dangerouslySetInnerHTML={{ __html: withAmendedBy(render(selected.markdown), timeline) }}
+                  />
+                </CardContent>
+              </Card>
+            )}
+
+            {!selected && (
+              <Card>
+                <CardContent className="pt-6">
+                  <p className="text-muted-foreground text-sm">
+                    Select the Preamble, a Part or a Schedule from the contents sidebar — or search above. Article links
+                    look like <span className="font-mono text-xs">#/constitution/part3</span> and survive reloads.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </main>
+
+          <aside className="sidebar-right min-w-0" aria-label="Article outline">
+            {selected && toc.length > 0 ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">On this page</CardTitle>
+                </CardHeader>
+                <CardContent className="max-h-[50vh] overflow-y-auto lg:max-h-[calc(100vh-12rem)]">
+                  <ul className="space-y-0.5">
+                    {toc.map((h) => (
+                      <li key={h.id}>
+                        <button
+                          className={`hover:text-primary w-full truncate text-left text-xs hover:underline ${h.level === 3 ? "pl-4" : "font-medium"} ${articleTarget === h.id ? "text-primary font-medium" : "text-muted-foreground"}`}
+                          onClick={() => scrollToArticle(h.id, true)}
+                          title={h.text}
+                        >
+                          {h.text.length > 60 ? `${h.text.slice(0, 60)}…` : h.text}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">About</CardTitle>
+                </CardHeader>
+                <CardContent className="text-muted-foreground space-y-2 text-xs">
+                  <p>
+                    Full text of the Constitution as amended up to the 106th Amendment, with per-article amendment chips
+                    derived from the archive diffs.
+                  </p>
+                  <p>Every heading has a ⧉ button that copies a shareable link to that article.</p>
+                </CardContent>
+              </Card>
+            )}
+          </aside>
+        </div>
       )}
 
       {tab === "amendments" && (
-        detail ? amendmentDetail : (
-          <Card>
-            <CardHeader>
-              <CardTitle>Bills &amp; Amendments</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Input
-                placeholder="Filter amendments… e.g. 105, women's reservation"
-                value={amendmentQuery}
-                onChange={e => setAmendmentQuery(e.target.value)}
-              />
-              <div className="max-h-[60vh] space-y-1 overflow-y-auto pr-1">
-                {amendments
-                  .filter(a => {
-                    const q = amendmentQuery.trim().toLowerCase();
-                    return (
-                      q === "" ||
-                      a.number.toLowerCase().includes(q) ||
-                      a.title.toLowerCase().includes(q) ||
-                      a.key_changes.toLowerCase().includes(q)
-                    );
-                  })
-                  .map(a => (
-                    <div
-                      key={a.number}
-                      className="flex items-start justify-between gap-2 border-b py-2 text-sm last:border-b-0"
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[300px_minmax(0,1fr)_280px]">
+          <aside className="sidebar-left min-w-0" aria-label="Amendment list">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Bills &amp; Amendments</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <Input
+                  placeholder="Filter… e.g. 105, women's reservation"
+                  value={amendmentQuery}
+                  onChange={(e) => setAmendmentQuery(e.target.value)}
+                  aria-label="Filter amendments"
+                />
+                <div className="flex flex-wrap items-end gap-3">
+                  <label className="text-xs">
+                    <span className="text-muted-foreground block">Decade</span>
+                    <select
+                      value={decadeFilter}
+                      onChange={(e) => setDecadeFilter(e.target.value)}
+                      className="border-input bg-background mt-1 rounded-md border px-2 py-1 text-sm"
                     >
-                      <button className="min-w-0 text-left" onClick={() => setDetail(a)}>
-                        <span className="text-muted-foreground font-mono text-xs">{a.number}</span>{" "}
-                        <span className="font-medium leading-snug hover:underline">{a.title}</span>
-                        {a.key_changes && (
-                          <span className="text-muted-foreground line-clamp-2 block text-xs">
-                            {a.key_changes}
+                      <option value="all">All</option>
+                      {decades.map((d) => (
+                        <option key={d} value={d}>
+                          {d}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="text-xs">
+                    <span className="text-muted-foreground block">Bill</span>
+                    <select
+                      value={billFilter}
+                      onChange={(e) => setBillFilter(e.target.value as "all" | "has" | "missing")}
+                      className="border-input bg-background mt-1 rounded-md border px-2 py-1 text-sm"
+                    >
+                      <option value="all">All</option>
+                      <option value="has">Has bill</option>
+                      <option value="missing">Missing</option>
+                    </select>
+                  </label>
+                  <p className="text-muted-foreground ml-auto text-xs" role="status">
+                    {filteredAmendments.length} of {amendments.length}
+                  </p>
+                </div>
+                <div className="max-h-[50vh] space-y-1 overflow-y-auto pr-1 lg:max-h-[calc(100vh-22rem)]">
+                  {groupedAmendments.map(([dec, list]) => (
+                    <div key={dec}>
+                      <h3 className="text-muted-foreground bg-card sticky top-0 py-1 text-xs font-semibold tracking-wide uppercase">
+                        {dec} · {list.length}
+                      </h3>
+                      {list.map((a) => (
+                        <button
+                          key={a.number}
+                          className={`hover:bg-muted block w-full rounded px-2 py-1.5 text-left text-xs leading-snug ${detail?.number === a.number ? "bg-muted font-medium" : ""}`}
+                          onClick={() => pickAmendment(a)}
+                          aria-current={detail?.number === a.number ? "true" : undefined}
+                        >
+                          <span className="text-muted-foreground font-mono">{a.number}</span>{" "}
+                          <span className="leading-snug">{a.title}</span>
+                          <span className="text-muted-foreground block">
+                            {a.assent_date}
+                            {a.status === "MISSING_BILL" && <span className="italic"> · bill missing</span>}
                           </span>
-                        )}
-                        <span className="text-muted-foreground block text-xs">
-                          {a.assent_date}
-                          {a.status === "MISSING_BILL" && (
-                            <span className="italic"> · bill missing</span>
-                          )}
-                        </span>
-                      </button>
-                      <div className="flex shrink-0 gap-1">
-                        <Button asChild variant="outline" size="sm">
-                          <a href={`/amendments/${amendmentPdfName("act", Number(a.number))}`} target="_blank" rel="noopener">
-                            Act
-                          </a>
-                        </Button>
-                        {a.has_bill && (
-                          <Button asChild variant="outline" size="sm">
-                            <a href={`/amendments/${amendmentPdfName("bill", Number(a.number))}`} target="_blank" rel="noopener">
-                              Bill
-                            </a>
-                          </Button>
-                        )}
-                      </div>
+                        </button>
+                      ))}
                     </div>
                   ))}
-              </div>
-            </CardContent>
-          </Card>
-        )
+                  {groupedAmendments.length === 0 && (
+                    <p className="text-muted-foreground py-4 text-center text-xs">No amendments match the filters.</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </aside>
+
+          <main className="min-w-0">
+            {detail ? (
+              amendmentDetail
+            ) : (
+              <Card>
+                <CardContent className="pt-6">
+                  <p className="text-muted-foreground text-sm">
+                    Select an amendment from the list — or filter by number, title, decade or bill availability. Each
+                    amendment opens in Text and Git-diff views with its PDFs.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </main>
+
+          <aside className="sidebar-right min-w-0" aria-label="Amendment details">
+            {detail ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">At a glance</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-xs">
+                  <p className="text-muted-foreground">
+                    <span className="font-mono">{detail.number}</span> · assented {detail.assent_date} ·{" "}
+                    {detail.has_bill ? "bill available" : <span className="italic">bill missing</span>}
+                  </p>
+                  {detail.key_changes && <p className="leading-relaxed">{detail.key_changes}</p>}
+                  <div className="flex flex-wrap gap-1">
+                    <Button asChild variant="outline" size="sm">
+                      <a
+                        href={`/amendments/${amendmentPdfName("act", Number(detail.number))}`}
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        Act PDF
+                      </a>
+                    </Button>
+                    {detail.has_bill && (
+                      <Button asChild variant="outline" size="sm">
+                        <a
+                          href={`/amendments/${amendmentPdfName("bill", Number(detail.number))}`}
+                          target="_blank"
+                          rel="noopener"
+                        >
+                          Bill PDF
+                        </a>
+                      </Button>
+                    )}
+                  </div>
+                  {(() => {
+                    const changed = history?.changes[Number(detail.number)] ?? [];
+                    return (
+                      changed.length > 0 && (
+                        <div>
+                          <h3 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                            Files changed
+                          </h3>
+                          <ul className="mt-1 space-y-0.5">
+                            {changed.map((key) => (
+                              <li key={key}>{items.find((i) => i.key === key)?.title ?? key}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )
+                    );
+                  })()}
+                  {sameDecade.length > 0 && (
+                    <div>
+                      <h3 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                        Same decade
+                      </h3>
+                      <ul className="mt-1 space-y-0.5">
+                        {sameDecade.map((a) => (
+                          <li key={a.number}>
+                            <button
+                              className="hover:text-primary text-left hover:underline"
+                              onClick={() => pickAmendment(a)}
+                            >
+                              <span className="font-mono">{a.number}</span>{" "}
+                              {a.title.length > 48 ? `${a.title.slice(0, 48)}…` : a.title}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">About</CardTitle>
+                </CardHeader>
+                <CardContent className="text-muted-foreground space-y-2 text-xs">
+                  <p>
+                    All 106 amendment acts (85 with recovered bills) in plain text plus a git-style diff of what each
+                    changed.
+                  </p>
+                  <p>
+                    21 pre-1997 bills are lost; provenance is documented in{" "}
+                    <span className="font-mono">docs/bill_gaps.md</span>.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </aside>
+        </div>
       )}
 
-      {tab === "dates" && dateBrowser}
+      {tab === "dates" && (
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[300px_minmax(0,1fr)_280px]">
+          <aside className="sidebar-left min-w-0" aria-label="Date controls">
+            {dateControls}
+          </aside>
+          <main className="min-w-0">{dateMain}</main>
+          <aside className="sidebar-right min-w-0" aria-label="State summary">
+            {dateAside}
+          </aside>
+        </div>
+      )}
     </div>
   );
 }
