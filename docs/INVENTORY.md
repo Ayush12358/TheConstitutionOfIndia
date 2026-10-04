@@ -382,11 +382,11 @@ Seven more bills recovered from Internet Archive `gazetteofindia` Extraordinary
 issues (the 2026-08-09 IA scan had covered only 1966 + 1971–75; the collection
 holds ~1,000–2,000 issues per year through 2005):
 
-- **Bill coverage: 92/106**; still missing **13** (31–32, 35–36, 39, 46, 48, 49,
-  58, 79, 80, 84, 89).
-- **Bill text coverage: all 93 have text** (the new scan-only bills
+- **Bill coverage: 94/106**; still missing **12** (31–32, 35–36, 39, 46, 48, 49,
+  58, 80, 84, 89).
+- **Bill text coverage: all 94 have text** (the new scan-only bills
   transcribed from the gazette pages).
-- **PDF count: 203** = 106 acts + 93 bills.
+- **PDF count: 200** = 106 acts + 94 bills.
 - Full provenance in `docs/bill_gaps.md` (2026-10-03/04 sections); manifest rows
-  50/51/56/57/59/62/78/70 now `OK`.
+  50/51/56/57/59/62/78/70/79 now `OK`.
 

@@ -20,7 +20,7 @@ provenance verbatim.
 - **21 bills missing (31, 32, 35, 36, 39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89)**:
   `bill_file = MISSING`, `bill_url = MISSING` in `docs/amendments.csv`. The sources tried
   below returned no usable copy. (2026-10-03: 50/51 filled — **19 missing**; 2026-10-04:
-  56/57/59/62/78/70 filled — **13 missing**: 31, 32, 35, 36, 39, 46, 48, 49, 58, 79, 80, 84, 89.)
+  56/57/59/62/78/70/79 filled - **12 missing**: 31, 32, 35, 36, 39, 46, 48, 49, 58, 80, 84, 89.)
 
 > Ledger note: the per-row provenance below reflects the 2026-08-08 state, when 32 bills were
 > missing; 11 of those gaps (21, 24–26, 28–30, 33, 34, 37, 38) have since been filled. The
@@ -1015,3 +1015,30 @@ and the scan confirms it:
   the already-integrated 77th act's bill (duplicate, not re-added).
 - The other 7 hits: generic-titled private-member Constitution (Amendment)
   Bills on unrelated subjects (Arts 44, 164, 1B, 102, 174, 101). Rejected.
+
+## IA gazette sweep, year 9: 1999 — bill 79 recovered (2026-10-04)
+
+All 1,925 `in.gazette.e.1999.*` issues scanned → 8 hits; full texts in
+`probe_ia/hit1999/`.
+
+- in.gazette.e.1999.19 (`E_14_2013_204.pdf`, 12-page issue of 26 Oct 1999):
+  Eighty-fourth Amendment Bill (**LS No. 67 of 1999**), Art 334 "fifty
+  years"→"sixty years", SOR Ram Jethmalani 21-10-1999 + Financial Memorandum
+  — operative verbatim identical to the 79th ACT (reservation to 2010); timing
+  fits (introduced Oct 1999, assent 21-01-2000); no competing Art-334 bill in
+  the full-year scan = **79th act's bill. INTEGRATED** (pp. 6–8 extracted →
+  `AMENDMENT_79_BILL.pdf` + `.txt`; CSV row 79 → OK). (Note: sansad has no
+  record for No. 67/1999 and the ACT SOR does not name the bill number — the
+  identification rests on verbatim operative identity + timing + uniqueness,
+  recorded here explicitly.)
+- in.gazette.e.1999.31's "Eighty-fifth Amendment" bill = **LS No. 99 of
+  1999** — the known women's-reservation decoy (Arts 330A/332A). Rejected.
+- in.gazette.e.1999.18's "Eighty-sixth/Sixth-seventh Amendment" bills relate
+  to Art 243M/243C (Arunachal panchayats) — unrelated subjects. Rejected.
+- The other 5 hits: generic-titled private-member Constitution (Amendment)
+  Bills on unrelated subjects. Rejected.
+
+### Net effect
+
+Bill coverage: 93/106 → **94/106**. Still missing (12): 31, 32, 35, 36, 39,
+46, 48, 49, 58, 80, 84, 89.

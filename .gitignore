@@ -20,3 +20,4 @@ _leg_*.html
 _leg_*.json
 _wiki_raw.txt
 amend_acts_page.html
+.playwright-mcp

@@ -3,7 +3,7 @@
 All notable changes to this repository, grouped by the working sessions recorded in git history
 (Keep a Changelog-inspired structure; no versioned releases exist — everything is on `master`).
 
-## 2026-10-03/04 — Bills 50, 51, 56, 57, 59, 62, 78, 70 recovered from IA gazettes
+## 2026-10-03/04 — Bills 50, 51, 56, 57, 59, 62, 78, 70, 79 recovered from IA gazettes
 
 ### Added
 - `AMENDMENTS/AMENDMENT_50_BILL.pdf` + `.txt`: Constitution (Fifty-second Amendment)
@@ -38,6 +38,10 @@ All notable changes to this repository, grouped by the working sessions recorded
   Bill, 1992 (Rajya Sabha Bill No. XXX of 1992, Art 54 Explanation + Art 239AA(7)(b)),
   single-bill Gazette No. 23, 3 Apr 1992
   (`https://archive.org/download/in.gazette.e.1992.371/E-0496-1992-0023-19517.pdf`)
+- `AMENDMENTS/AMENDMENT_79_BILL.pdf` + `.txt`: Constitution (Eighty-fourth Amendment)
+  Bill, 1999 (LS Bill No. 67 of 1999, Art 334 fifty→sixty years), pp. 6–8 of the
+  12-page Gazette issue of 26 Oct 1999
+  (`https://archive.org/download/in.gazette.e.1999.19/E_14_2013_204.pdf`)
 - `docs/PENDING.md`: pending-bill tracker (129th/130th in JPC, 131st negatived)
   with verified bill-text links
 - `probe_ia/scan.mjs`: resumable IA `gazetteofindia` Extraordinary-issue scanner
@@ -46,9 +50,9 @@ All notable changes to this repository, grouped by the working sessions recorded
   bills on other subjects)
 
 ### Changed
-- Bill coverage 85/106 → **93/106**; still missing: 31, 32, 35, 36, 39, 46, 48,
-  49, 58, 79, 80, 84, 89 (13 rows); PDF count 191 → 203
-- `docs/amendments.csv` rows 50/51 (+56/57/59/62/78/70) → `status=OK` with IA `bill_url`s;
+- Bill coverage 85/106 → **94/106**; still missing: 31, 32, 35, 36, 39, 46, 48,
+  49, 58, 80, 84, 89 (12 rows); PDF count 191 → 200
+- `docs/amendments.csv` rows 50/51 (+56/57/59/62/78/70/79) → `status=OK` with IA `bill_url`s;
   `docs/amendments-table.md` rows updated; counts synced across READMEs,
   `website/src/index.html` meta and `docs/INVENTORY.md`
 - README current state re-dated 2026-10-03 (129th/130th JPC correction,
@@ -239,4 +243,4 @@ All notable changes to this repository, grouped by the working sessions recorded
 
 ## Known limitations
 
-- **13 of 106 amendment bills are still missing** (31–32, 35–36, 39, 46, 48, 49, 58, 79, 80, 84, 89); the exact sources tried are documented with full provenance in `docs/bill_gaps.md` — nothing was ever fabricated.
+- **12 of 106 amendment bills are still missing** (31–32, 35–36, 39, 46, 48, 49, 58, 80, 84, 89); the exact sources tried are documented with full provenance in `docs/bill_gaps.md` — nothing was ever fabricated.
