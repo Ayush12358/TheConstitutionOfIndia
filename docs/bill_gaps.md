@@ -14,9 +14,13 @@ provenance verbatim.
   since (21, 24–26, 28–30, 33, 34, 37, 38); all 85 bills now have text
   (→ `.txt`) — the scan-only PDFs were transcribed with the vision model (2026-08-08 OCR
   sweep; per-bill logs in `../probe_ik4/ocr_log.json`). See the 2026-08-08 sweep sections below.
+  2026-10-03: **87/106** — the 50th/51st bills recovered from IA gazettes (see the 2026-10-03
+  section at the end of this file); 2026-10-04: **89/106** — the 56th/57th bills recovered
+  the same way.
 - **21 bills missing (31, 32, 35, 36, 39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89)**:
   `bill_file = MISSING`, `bill_url = MISSING` in `docs/amendments.csv`. The sources tried
-  below returned no usable copy.
+  below returned no usable copy. (2026-10-03: 50/51 filled — **19 missing**; 2026-10-04:
+  56/57/59/62/78/70 filled — **13 missing**: 31, 32, 35, 36, 39, 46, 48, 49, 58, 79, 80, 84, 89.)
 
 > Ledger note: the per-row provenance below reflects the 2026-08-08 state, when 32 bills were
 > missing; 11 of those gaps (21, 24–26, 28–30, 33, 34, 37, 38) have since been filled. The
@@ -799,3 +803,215 @@ present), **35** (36th Bill 1974, Sikkim associate), **36** (38th Bill 1975, Sik
 - **Confirming note — out of collection range**: rows **46, 48–51, 56–59, 62, 70, 78–80, 84, 89**
   (bills dated 1981–2002) fall outside the `in.gazette` collection's 1966–75 range and were not
   searched in this scan; their status is unchanged (prior sweeps' documented negatives stand).
+
+## IA gazetteofindia Extraordinary sweep — bills 50 & 51 recovered (2026-10-03)
+
+The 2026-08-09 IA scan covered only ~2,818 issues (1966 + 1971–75). The IA
+`gazetteofindia` collection actually holds ~1,000–2,000 Extraordinary issues per
+year through 2005 (still growing — uploads as recent as Sep 2026), so the
+1981–2002 bills were never searched there. New resumable scanner:
+`probe_ia/scan.mjs` (gitignored; identifier enumeration → per-item metadata →
+`_djvu.txt` → "A Bill further to amend the Constitution" grep; hits in
+`probe_ia/hits-<year>-<series>.json`). Checkpoints: `probe_ia/hit1984/`
+(full texts of the 10 hits).
+
+### sansad alternate file fields (fresh angle, mostly negative)
+
+Re-enumerated the full sansad LS (819 records) + RS (628) APIs dumping **every**
+file field (the August passes only chased `billIntroducedFile`):
+- `billSynopsisFile` exists for 3 records: 2002-94, 2000-41, 2000-172
+  (`BillsPDFFiles/synopsis/{year}-{no}-Synop.pdf`, `source=loksabhadocs`).
+  Downloaded and read page-by-page: these are Lok Sabha **synopses** (Objects &
+  Reasons + "Important provisions" + introduced/debated/passed/assent history),
+  NOT as-introduced bill texts — ledger-only, not integrated. (The 2000-41 file
+  is a mixed compilation: its later pages are Finance Commission tax-sharing
+  material, pp. 76–79.) Ranged-GET probes for 9 further `{year}-{no}-Synop.pdf`
+  combos (1981-52, 1984-79/80/81, 1987-54/80/93, 1999-84, 1995-78): all 500 —
+  no other synopsis files exist.
+- RS `LXVI/1994` carries `billPassedInRSFile` + `billPassedInBothHousesFile` —
+  but that record is the already-integrated 76th act's bill. No action.
+- RS `XXVI/1989` (62nd), `XIV/1988` (59th), `XIV/1994` (78th): still zero
+  files; `XXX/1992` (70th) still absent from the RS DB; LS `80/1984`, `81/1984`
+  confirmed absent from the DB (name-pattern sweep of 1973–75/1984 ordinals
+  found nothing beyond the known file-less records 52/1981, 54/1987, 79/1984,
+  80/1987, 93/1987).
+- Full-file GETs re-verified dead (with a working 200-PDF control):
+  `41_2000.pdf`, `172_2000.pdf` (+ `_LS_Eng` variants), `31_2003_LS_Eng.pdf`,
+  `63_2003_LS_Eng.pdf`.
+
+### 1984 pilot: 1,650 issues scanned, 10 constitution-bill hits, 2 integrated
+
+- in.gazette.e.1984.368: Fifty-second Amendment Bill, 1984 (LS No. 80, Art 33
+  substitution, intro 22-08-1984, SOR P.V. Narasimha Rao) = **50th act's bill.
+  INTEGRATED** (`AMENDMENT_50_BILL.pdf` + `.txt`; CSV row 50 → OK).
+- in.gazette.e.1984.369: Fifty-third Amendment Bill, 1984 (LS No. 81, Arts
+  330/332 ST reservation, intro 23-08-1984; ACT 51's SOR names it verbatim) =
+  **51st act's bill. INTEGRATED** (`AMENDMENT_51_BILL.pdf` + `.txt`; CSV row
+  51 → OK).
+- .324/.333/.338/.345/.349/.354/.371: generic-titled private-member
+  Constitution (Amendment) Bills 1983/84 (Arts 124, 213, 200/201, 130, 51, 371,
+  169, 123, Seventh Schedule, 15A, Part XIA) — subjects match no act 01–106.
+  Rejected.
+- .340: 7-line fragment. Rejected.
+
+### Net effect
+
+Bill coverage: 85/106 → **87/106**. Still missing (19): 31, 32, 35, 36, 39, 46,
+48, 49, 56–59, 62, 70, 78–80, 84, 89. Next: roll `probe_ia/scan.mjs` over
+1981, 1987, 1988, 1989, 1992, 1994–95, 1999, 2000, 2002 and 1973–75
+(`in.gazette.e` + `in.gazette.csl_extraordinary` series).
+
+## IA gazette sweep, year 2: 1987 — bills 56 & 57 recovered (2026-10-04)
+
+`probe_ia/scan.mjs` over all 1,715 `in.gazette.e.1987.*` issues → 20 hits with
+"bill further to amend the Constitution" text; full texts pulled to
+`probe_ia/hit1987/`.
+
+### The 1987 rotation (act numbers follow passage order, not bill titles)
+
+1987's three acts were renumbered at passage, which is why the sansad record
+titles look shuffled. The sansad API's own passage dates settle it:
+- No. 54 "Fifty-seventh Amendment Bill", intro 08-05-1987, passed LS 11-05,
+  RS 12-05, assent 23-05-1987 = **56th ACT** (Goa, assent 23-05-1987)
+- No. 93 "Fifty-eighth Amendment Bill", intro 26-08-1987, passed 28/31-08,
+  assent 15-09-1987 = **57th ACT** (Art 332, assent 15-09-1987)
+- No. 80 "Fifty-sixth Amendment Bill", intro 24-11-1987, passed 24/26-11,
+  assent 09-12-1987 = **58th ACT** (Art 394A, assent 09-12-1987)
+
+### Integrated (2)
+
+- in.gazette.e.1987.420 (`E-0711-1987-0023-30882.pdf`, issue dated 08-05-1987):
+  Fifty-seventh Amendment Bill (LS **No. 54 of 1987**, confirmed on the page
+  image — the OCR reads "Sill l4o. 54"), Art 371-I Goa "not less than thirty
+  members", SOR Buta Singh 06-05-1987 — operative text **verbatim identical**
+  to the 56th ACT = **56th act's bill. INTEGRATED** (pp. 27–28 extracted →
+  `AMENDMENT_56_BILL.pdf` + `.txt`; CSV row 56 → OK).
+- in.gazette.e.1987.438 (`E-0712-1987-0041-30900.pdf`, issue dated 26-08-1987):
+  Fifty-eighth Amendment Bill (LS **No. 93 of 1987**), Art 332(3A) ST
+  reservation, SOR Buta Singh 25-08-1987 — operative text verbatim identical
+  to the 57th ACT = **57th act's bill. INTEGRATED** (pp. 1–3 extracted →
+  `AMENDMENT_57_BILL.pdf` + `.txt`; CSV row 57 → OK).
+
+### Rejected (predecessors and decoys)
+
+- .402's "Fifty-sixth Amendment" bill = **LS No. 8 of 1987** (intro 27-02-1987,
+  Art 394A Hindi) — a lapsed predecessor of the enacted No. 80 bill (sansad:
+  intro 24-11-1987, Passed/Assented 09-12-1987 = the 58th act's dates).
+  Rejected per the predecessor rule.
+- The other 17 hits: generic-titled private-member Constitution (Amendment)
+  Bills 1987 on unrelated subjects (Arts 124, 213, 200/201, 130, 51, 371,
+  169, 123, Seventh Schedule, Art 15A, Part XIA, RP Act §9A, etc.) — subjects
+  match no act 01–106. Rejected.
+
+### Net effect
+
+Bill coverage: 89/106 → **90/106**. Still missing (16): 31, 32, 35, 36, 39,
+46, 48, 49, 58, 62, 70, 78–80, 84, 89.
+
+## IA gazette sweep, year 4: 1988 — bill 59 recovered (2026-10-04)
+
+All 1,559 `in.gazette.e.1988.*` issues scanned → 10 hits; full texts in
+`probe_ia/hit1988/`.
+
+- in.gazette.e.1988.336 (`E-0657-1988-0009-28678.pdf`, single-bill Gazette
+  No. 9, 14 Mar 1988): Fifty-ninth Amendment Bill (**Rajya Sabha No. XIV of
+  1988**), Art 356(5) proviso (Punjab Proclamation 11 May 1987) + new Art 359A,
+  SOR Buta Singh — verbatim the 59th ACT = **59th act's bill. INTEGRATED**
+  (`AMENDMENT_59_BILL.pdf` + `.txt`; CSV row 59 → OK).
+- in.gazette.e.1988.357's "Sixty-first Amendment" bill = **LS No. 51 of 1988**
+  on **sports** (Seventh Schedule entry 33 → 25A) — same ordinal, unrelated
+  subject (the 61st ACT is the Art-326 voting-age act whose bill, the 62nd
+  Bill No. 129, is already integrated). Rejected: ordinal alone is not
+  identity.
+- The other 8 hits: generic-titled private-member Constitution (Amendment)
+  Bills on unrelated subjects. Rejected.
+
+## IA gazette sweep, year 3: 1981 — negative (2026-10-04)
+
+All 1,253 `in.gazette.e.1981.*` issues scanned → 2 hits, both generic-titled
+private-member Constitution (Amendment) Bills on unrelated subjects (Arts 368,
+51, 324, 171); no "Forty-sixth Amendment" text anywhere. The 46th act's bill
+(46th Bill 1981, No. 52, sales tax) is in neither issue. Rejected; full texts
+in `probe_ia/hit1981/`.
+
+## IA gazette sweep, year 5: 1989 — bill 62 recovered (2026-10-04)
+
+All 1,933 `in.gazette.e.1989.*` issues scanned → 10 hits; full texts in
+`probe_ia/hit1989/`.
+
+- in.gazette.e.1989.363 (`E-0616-1989-0041-26370.pdf`, single-bill Gazette
+  No. 41, 20 Dec 1989): Sixty-second Amendment Bill (**Rajya Sabha No. XXVI
+  of 1989**), Art 334 "forty years"→"fifty years", SOR Ram Vilas Paswan +
+  Financial Memorandum — verbatim the 62nd ACT = **62nd act's bill.
+  INTEGRATED** (`AMENDMENT_62_BILL.pdf` + `.txt`; CSV row 62 → OK).
+- in.gazette.e.1989.367's "Sixty-third Amendment" bill = **LS No. 100 of
+  1989** — the already-integrated 63rd act's bill (duplicate, not re-added).
+- in.gazette.e.1989.339's "Sixty-third Amendment" bill = **LS No. 45 of
+  1989** (Tripura Art 332) — the ledger-rejected lapsed predecessor.
+  Re-confirmed reject.
+- The other 7 hits: generic-titled private-member Constitution (Amendment)
+  Bills on unrelated subjects. Rejected.
+
+### Net effect
+
+Bill coverage: 90/106 → **91/106**. Still missing (15): 31, 32, 35, 36, 39,
+46, 48, 49, 58, 70, 78–80, 84, 89.
+
+## IA gazette sweep, year 6: 1994 — bill 78 recovered (2026-10-04)
+
+All 1,579 `in.gazette.e.1994.*` issues scanned → 6 hits; full texts in
+`probe_ia/hit1994/`.
+
+- in.gazette.e.1994.334 (`E-0393-1994-0008-15104.pdf`, single-bill Gazette
+  No. 8, 19 Apr 1994): Eighty-first Amendment Bill (**Rajya Sabha No. XIV of
+  1994**), Ninth Schedule entries 258–284 (land reforms), SOR Rameshwar
+  Thakur — entries verbatim identical to the 78th ACT = **78th act's bill.
+  INTEGRATED** (`AMENDMENT_78_BILL.pdf` + `.txt`; CSV row 78 → OK). (Note:
+  the sansad RS record for this bill carries the garbled name "Seventy-Eighth
+  Amendment Bill, 1995" — the gazette's own title page governs.)
+- The other 5 hits: generic-titled private-member Constitution (Amendment)
+  Bills on unrelated subjects. Rejected.
+
+### Net effect
+
+Bill coverage: 91/106 → **92/106**. Still missing (14): 31, 32, 35, 36, 39,
+46, 48, 49, 58, 70, 79, 80, 84, 89.
+
+## IA gazette sweep, year 7: 1992 — bill 70 recovered (2026-10-04)
+
+All 1,868 `in.gazette.e.1992.*` issues scanned → 15 hits; full texts in
+`probe_ia/hit1992/`.
+
+- in.gazette.e.1992.371 (`E-0496-1992-0023-19517.pdf`, single-bill Gazette
+  No. 23, 3 Apr 1992): Seventy-sixth Amendment Bill (**Rajya Sabha No. XXX
+  of 1992**), Art 54 Explanation (Delhi + Pondicherry in the presidential
+  electoral college) + Art 239AA(7)(b) retrospective to 21-12-1991, SOR
+  K. Vijaya Bhaskara Reddy — the ACT 70 SOR names "Seventy-sixth Amendment
+  Bill, 1992 (Bill No. XXX of 1992)" verbatim = **70th act's bill.
+  INTEGRATED** (`AMENDMENT_70_BILL.pdf` + `.txt`; CSV row 70 → OK).
+  Transcription note: the scan's SOR passage reads "would have necessitated
+  ratification of the bill" (OCR garbles it); confirmed against the page image.
+- in.gazette.e.1992.402's "Seventy-eighth Amendment" bill = **LS No. 138 of
+  1992** (Konkani/Manipuri/Nepali, Eighth Schedule) — a lapsed predecessor of
+  the integrated 71st act's bill (enacted LS No. 142 of 1992). Rejected per the
+  predecessor rule.
+- in.gazette.e.1992.411's "Seventy-ninth Amendment" bill = **RS No. LXXX of
+  1992** (Art 47A population-control/small-family-norm + disqualification
+  schedule) — a private-member bill on an unrelated subject. Rejected.
+- The other 12 hits: generic-titled private-member Constitution (Amendment)
+  Bills on unrelated subjects. Rejected.
+
+### Net effect
+
+Bill coverage: 92/106 → **93/106**. Still missing (13): 31, 32, 35, 36, 39,
+46, 48, 49, 58, 79, 80, 84, 89.
+
+## IA gazette sweep, year 8: 1995 — negative (2026-10-04)
+
+All 1,665 `in.gazette.e.1995.*` issues scanned → 8 hits; full texts in
+`probe_ia/hit1995/`. No missing bill is 1995-dated (the 78th's bill is 1994),
+and the scan confirms it:
+- .341's "Eighty-sixth Amendment" bill = **LS No. 43 of 1995** (Art 16(4A)) —
+  the already-integrated 77th act's bill (duplicate, not re-added).
+- The other 7 hits: generic-titled private-member Constitution (Amendment)
+  Bills on unrelated subjects (Arts 44, 164, 1B, 102, 174, 101). Rejected.

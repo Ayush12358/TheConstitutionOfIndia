@@ -3,6 +3,62 @@
 All notable changes to this repository, grouped by the working sessions recorded in git history
 (Keep a Changelog-inspired structure; no versioned releases exist — everything is on `master`).
 
+## 2026-10-03/04 — Bills 50, 51, 56, 57, 59, 62, 78, 70 recovered from IA gazettes
+
+### Added
+- `AMENDMENTS/AMENDMENT_50_BILL.pdf` + `.txt`: Constitution (Fifty-second Amendment)
+  Bill, 1984 (Bill No. 80 of 1984, LS, Art 33 substitution), from Gazette of India
+  Extraordinary Part II §2 No. 50, 22 Aug 1984
+  (`https://archive.org/download/in.gazette.e.1984.368/E-0870-1984-0050-37369.pdf`)
+- `AMENDMENTS/AMENDMENT_51_BILL.pdf` + `.txt`: Constitution (Fifty-third Amendment)
+  Bill, 1984 (Bill No. 81 of 1984, LS, Arts 330/332 ST reservation), from Gazette
+  No. 51, 23 Aug 1984
+  (`https://archive.org/download/in.gazette.e.1984.369/E-0870-1984-0051-37370.pdf`)
+- `AMENDMENTS/AMENDMENT_56_BILL.pdf` + `.txt`: Constitution (Fifty-seventh Amendment)
+  Bill, 1987 (Bill No. 54 of 1987, LS, Art 371-I Goa), pp. 27–28 of Gazette
+  No. 23, 8 May 1987
+  (`https://archive.org/download/in.gazette.e.1987.420/E-0711-1987-0023-30882.pdf`)
+- `AMENDMENTS/AMENDMENT_57_BILL.pdf` + `.txt`: Constitution (Fifty-eighth Amendment)
+  Bill, 1987 (Bill No. 93 of 1987, LS, Art 332(3A) ST reservation), pp. 1–3 of Gazette
+  No. 41, 26 Aug 1987
+  (`https://archive.org/download/in.gazette.e.1987.438/E-0712-1987-0041-30900.pdf`)
+- `AMENDMENTS/AMENDMENT_59_BILL.pdf` + `.txt`: Constitution (Fifty-ninth Amendment)
+  Bill, 1988 (Rajya Sabha Bill No. XIV of 1988, Art 356(5) proviso + Art 359A Punjab),
+  single-bill Gazette No. 9, 14 Mar 1988
+  (`https://archive.org/download/in.gazette.e.1988.336/E-0657-1988-0009-28678.pdf`)
+- `AMENDMENTS/AMENDMENT_62_BILL.pdf` + `.txt`: Constitution (Sixty-second Amendment)
+  Bill, 1989 (Rajya Sabha Bill No. XXVI of 1989, Art 334 forty→fifty years),
+  single-bill Gazette No. 41, 20 Dec 1989
+  (`https://archive.org/download/in.gazette.e.1989.363/E-0616-1989-0041-26370.pdf`)
+- `AMENDMENTS/AMENDMENT_78_BILL.pdf` + `.txt`: Constitution (Eighty-first Amendment)
+  Bill, 1994 (Rajya Sabha Bill No. XIV of 1994, Ninth Schedule entries 258–284),
+  single-bill Gazette No. 8, 19 Apr 1994
+  (`https://archive.org/download/in.gazette.e.1994.334/E-0393-1994-0008-15104.pdf`)
+- `AMENDMENTS/AMENDMENT_70_BILL.pdf` + `.txt`: Constitution (Seventy-sixth Amendment)
+  Bill, 1992 (Rajya Sabha Bill No. XXX of 1992, Art 54 Explanation + Art 239AA(7)(b)),
+  single-bill Gazette No. 23, 3 Apr 1992
+  (`https://archive.org/download/in.gazette.e.1992.371/E-0496-1992-0023-19517.pdf`)
+- `docs/PENDING.md`: pending-bill tracker (129th/130th in JPC, 131st negatived)
+  with verified bill-text links
+- `probe_ia/scan.mjs`: resumable IA `gazetteofindia` Extraordinary-issue scanner
+  (identifier enumeration → `_djvu.txt` → bill-marker grep); 1984 pilot: 1,650
+  issues scanned, 10 constitution-bill hits, 2 integrated (rest: private-member
+  bills on other subjects)
+
+### Changed
+- Bill coverage 85/106 → **93/106**; still missing: 31, 32, 35, 36, 39, 46, 48,
+  49, 58, 79, 80, 84, 89 (13 rows); PDF count 191 → 203
+- `docs/amendments.csv` rows 50/51 (+56/57/59/62/78/70) → `status=OK` with IA `bill_url`s;
+  `docs/amendments-table.md` rows updated; counts synced across READMEs,
+  `website/src/index.html` meta and `docs/INVENTORY.md`
+- README current state re-dated 2026-10-03 (129th/130th JPC correction,
+  Census 2027 dates)
+
+### Documented (not integrated — summaries, not bill text)
+- sansad `billSynopsisFile` PDFs for 41/2000, 172/2000, 94/2002 exist but are
+  Lok Sabha synopses (Objects & Reasons + history), not as-introduced bills;
+  no synopsis files exist for any other missing bill (ranged-GET probes)
+
 ## 2026-08-11 — Live-text and history-version integrity pass (pass 5)
 
 ### Fixed
@@ -183,4 +239,4 @@ All notable changes to this repository, grouped by the working sessions recorded
 
 ## Known limitations
 
-- **21 of 106 amendment bills are still missing** (31–32, 35–36, 39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89); the exact sources tried are documented with full provenance in `docs/bill_gaps.md` — nothing was ever fabricated.
+- **13 of 106 amendment bills are still missing** (31–32, 35–36, 39, 46, 48, 49, 58, 79, 80, 84, 89); the exact sources tried are documented with full provenance in `docs/bill_gaps.md` — nothing was ever fabricated.

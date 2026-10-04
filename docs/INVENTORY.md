@@ -368,11 +368,25 @@ above that predate them are superseded by the current state:
 
 - **Bill coverage: 85/106** (was 12/106). The 62 recovered bills came from the sansad.in LS/RS
   bills API, egazette.gov.in, eparlib and PRS (2026-08-08), with 11 more recovered afterwards;
-  the remaining **21** (31–32, 35–36, 39, 46, 48–51, 56–59, 62, 70, 78–80, 84, 89) are still
-  missing — `docs/bill_gaps.md` is the living ledger of what was tried and found.
-- **Bill text coverage: all 85 have text** — the scan-only bills transcribed via vision-model
+  the remaining **21** (31-32, 35-36, 39, 46, 48-51, 56-59, 62, 70, 78-80, 84, 89) are still
+  missing - `docs/bill_gaps.md` is the living ledger of what was tried and found.
+- **Bill text coverage: all 85 have text** - the scan-only bills transcribed via vision-model
   OCR (2026-08-08 onwards).
-- **Act text coverage: all 106 have text** — 93 from PDF text layers + 7 Indian Kanoon + 6
+- **Act text coverage: all 106 have text** - 93 from PDF text layers + 7 Indian Kanoon + 6
   vision-OCR (15, 26, 66, 69, 75, 93).
 - **PDF count: 191** = 106 acts + 85 bills.
+
+## 12. 2026-10-03/04 updates (bills 50, 51, 56, 57, 59, 62, 78, 70 recovered from IA gazettes)
+
+Seven more bills recovered from Internet Archive `gazetteofindia` Extraordinary
+issues (the 2026-08-09 IA scan had covered only 1966 + 1971–75; the collection
+holds ~1,000–2,000 issues per year through 2005):
+
+- **Bill coverage: 92/106**; still missing **13** (31–32, 35–36, 39, 46, 48, 49,
+  58, 79, 80, 84, 89).
+- **Bill text coverage: all 93 have text** (the new scan-only bills
+  transcribed from the gazette pages).
+- **PDF count: 203** = 106 acts + 93 bills.
+- Full provenance in `docs/bill_gaps.md` (2026-10-03/04 sections); manifest rows
+  50/51/56/57/59/62/78/70 now `OK`.
 
